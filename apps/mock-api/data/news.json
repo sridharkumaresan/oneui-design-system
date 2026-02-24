@@ -1,0 +1,37 @@
+[
+  {
+    "id": "news-001",
+    "headline": "Breaking: New developments in annual leave — Report 1",
+    "category": "Engineering",
+    "publishedAt": "2026-02-05",
+    "author": "Platform Team"
+  },
+  {
+    "id": "news-002",
+    "headline": "Breaking: New developments in annual leave — Report 2",
+    "category": "Company",
+    "publishedAt": "2026-02-11",
+    "author": "Internal Comms"
+  },
+  {
+    "id": "news-003",
+    "headline": "Breaking: New developments in annual leave — Report 3",
+    "category": "Security",
+    "publishedAt": "2026-02-02",
+    "author": "Security Office"
+  },
+  {
+    "id": "news-004",
+    "headline": "Breaking: New developments in annual leave — Report 4",
+    "category": "HR",
+    "publishedAt": "2026-01-22",
+    "author": "People Ops"
+  },
+  {
+    "id": "news-005",
+    "headline": "Breaking: New developments in annual leave — Report 5",
+    "category": "IT",
+    "publishedAt": "2026-02-18",
+    "author": "Infrastructure"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "kb-001",
+    "question": "How does annual leave work in relation to policy?",
+    "topic": "IT",
+    "lastReviewed": "2026-01-12"
+  },
+  {
+    "id": "kb-002",
+    "question": "Where can I find annual leave templates?",
+    "topic": "Design",
+    "lastReviewed": "2026-02-06"
+  },
+  {
+    "id": "kb-003",
+    "question": "How do I enroll annual leave carryover approvals?",
+    "topic": "HR",
+    "lastReviewed": "2026-01-29"
+  },
+  {
+    "id": "kb-004",
+    "question": "What is the annual leave escalation path?",
+    "topic": "Operations",
+    "lastReviewed": "2026-02-16"
+  },
+  {
+    "id": "kb-005",
+    "question": "How are annual leave docs versioned?",
+    "topic": "Engineering",
+    "lastReviewed": "2026-02-20"
+  }
+]

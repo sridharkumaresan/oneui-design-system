@@ -1,0 +1,37 @@
+[
+  {
+    "id": "sn-001",
+    "ticket": "INC0012451",
+    "summary": "Cannot connect to VPN",
+    "priority": "high",
+    "state": "in_progress"
+  },
+  {
+    "id": "sn-002",
+    "ticket": "REQ0009834",
+    "summary": "Access to analytics dashboard",
+    "priority": "medium",
+    "state": "open"
+  },
+  {
+    "id": "sn-003",
+    "ticket": "INC0012479",
+    "summary": "Email delivery delay",
+    "priority": "medium",
+    "state": "resolved"
+  },
+  {
+    "id": "sn-004",
+    "ticket": "CHG0003412",
+    "summary": "Planned patch deployment",
+    "priority": "low",
+    "state": "scheduled"
+  },
+  {
+    "id": "sn-005",
+    "ticket": "INC0012502",
+    "summary": "SSO sign-in loop",
+    "priority": "high",
+    "state": "open"
+  }
+]

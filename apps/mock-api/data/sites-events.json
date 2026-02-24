@@ -1,0 +1,37 @@
+[
+  {
+    "id": "site-event-001",
+    "title": "Sites: Result 1 for annual leave",
+    "site": "Seattle HQ",
+    "startAt": "2026-03-03T10:00:00Z",
+    "type": "safety"
+  },
+  {
+    "id": "site-event-002",
+    "title": "Sites: Result 2 for annual leave",
+    "site": "Austin Hub",
+    "startAt": "2026-03-08T16:00:00Z",
+    "type": "recruiting"
+  },
+  {
+    "id": "site-event-003",
+    "title": "Sites: Result 3 for annual leave",
+    "site": "Chicago Office",
+    "startAt": "2026-03-12T18:00:00Z",
+    "type": "wellness"
+  },
+  {
+    "id": "site-event-004",
+    "title": "Sites: Result 4 for annual leave",
+    "site": "Virtual",
+    "startAt": "2026-03-06T15:30:00Z",
+    "type": "community"
+  },
+  {
+    "id": "site-event-005",
+    "title": "Sites: Result 5 for annual leave",
+    "site": "Boston Office",
+    "startAt": "2026-03-14T13:00:00Z",
+    "type": "security"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "name": "@functions-oneui/storybook",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node ../../scripts/run-if-available.mjs storybook dev --config-dir .storybook --port 6006",
+    "build": "CI=1 node ../../scripts/run-if-available.mjs storybook build --config-dir .storybook --output-dir storybook-static",
+    "lint": "node ../../scripts/run-if-available.mjs eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "echo \"No TypeScript typecheck configured for Storybook JS config yet\"",
+    "test": "echo \"No tests in storybook scaffold yet\""
+  },
+  "dependencies": {
+    "@fluentui/react-components": "^9.0.0",
+    "@functions-oneui/theme": "workspace:*",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.5.2",
+    "@storybook/addon-essentials": "^8.5.2",
+    "@storybook/react": "^8.5.2",
+    "@storybook/react-vite": "^8.5.2",
+    "storybook": "^8.5.2"
+  }
+}

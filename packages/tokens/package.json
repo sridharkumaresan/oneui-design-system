@@ -1,0 +1,25 @@
+{
+  "name": "@functions-oneui/tokens",
+  "version": "0.0.0",
+  "description": "Design tokens for OneUI theming and components.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/run-if-available.mjs tsc -p tsconfig.json",
+    "lint": "node ../../scripts/run-if-available.mjs eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "node ../../scripts/run-if-available.mjs tsc -p tsconfig.json --noEmit",
+    "test": "pnpm run build && node --test tests/semantic-contract.test.mjs"
+  },
+  "dependencies": {},
+  "peerDependencies": {}
+}

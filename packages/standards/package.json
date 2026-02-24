@@ -1,0 +1,25 @@
+{
+  "name": "@functions-oneui/standards",
+  "version": "0.0.0",
+  "description": "Accessibility and design standards shared across the system.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/run-if-available.mjs tsc -p tsconfig.json",
+    "lint": "node ../../scripts/run-if-available.mjs eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "node ../../scripts/run-if-available.mjs tsc -p tsconfig.json --noEmit",
+    "test": "echo \"No tests for @functions-oneui/standards yet\""
+  },
+  "dependencies": {},
+  "peerDependencies": {}
+}

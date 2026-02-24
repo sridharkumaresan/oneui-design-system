@@ -1,0 +1,37 @@
+[
+  {
+    "id": "it-hr-001",
+    "title": "IT/HR: Result 1 for annual leave",
+    "ownerTeam": "IT",
+    "status": "active",
+    "updatedAt": "2026-01-18"
+  },
+  {
+    "id": "it-hr-002",
+    "title": "IT/HR: Result 2 for annual leave",
+    "ownerTeam": "HR",
+    "status": "active",
+    "updatedAt": "2026-02-07"
+  },
+  {
+    "id": "it-hr-003",
+    "title": "IT/HR: Result 3 for annual leave",
+    "ownerTeam": "IT",
+    "status": "active",
+    "updatedAt": "2026-02-10"
+  },
+  {
+    "id": "it-hr-004",
+    "title": "IT/HR: Result 4 for annual leave",
+    "ownerTeam": "HR",
+    "status": "active",
+    "updatedAt": "2026-01-25"
+  },
+  {
+    "id": "it-hr-005",
+    "title": "IT/HR: Result 5 for annual leave",
+    "ownerTeam": "IT",
+    "status": "active",
+    "updatedAt": "2026-02-21"
+  }
+]

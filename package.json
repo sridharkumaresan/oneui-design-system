@@ -1,0 +1,47 @@
+{
+  "name": "@functions-oneui/workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "OneUI Design System monorepo",
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "dev:api": "pnpm --filter @functions-oneui/mock-api run dev",
+    "dev:storybook": "pnpm --filter @functions-oneui/storybook run dev",
+    "dev:showcase": "pnpm --parallel --filter @functions-oneui/mock-api --filter @functions-oneui/storybook run dev",
+    "build": "node ./scripts/run-workspace-task.mjs build",
+    "lint": "node ./scripts/run-workspace-task.mjs lint",
+    "typecheck": "node ./scripts/run-workspace-task.mjs typecheck",
+    "test": "node ./scripts/run-workspace-task.mjs test",
+    "test:ui": "node ./scripts/run-vitest-ui.mjs",
+    "verify": "node ./scripts/run-verify.mjs",
+    "format": "node ./scripts/run-if-available.mjs prettier --check .",
+    "format:write": "node ./scripts/run-if-available.mjs prettier --write .",
+    "changeset": "node ./scripts/run-if-available.mjs changeset",
+    "version-packages": "node ./scripts/run-if-available.mjs changeset version",
+    "release": "node ./scripts/run-if-available.mjs changeset publish",
+    "prepare": "node ./scripts/run-if-available.mjs husky"
+  },
+  "lint-staged": {
+    "*.{js,cjs,mjs,ts,tsx}": [
+      "prettier --write",
+      "eslint --max-warnings=0 --fix"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@typescript-eslint/parser": "^8.46.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "@vitest/ui": "^2.1.9",
+    "eslint": "^9.18.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.4",
+    "typescript": "^5.7.3"
+  }
+}

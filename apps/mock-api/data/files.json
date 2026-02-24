@@ -1,0 +1,37 @@
+[
+  {
+    "id": "file-001",
+    "name": "annual leave Report 1.docx",
+    "owner": "Ava Patel",
+    "lastModified": "2026-01-10",
+    "kind": "docx"
+  },
+  {
+    "id": "file-002",
+    "name": "annual leave Report 2.pptx",
+    "owner": "Marcus Chen",
+    "lastModified": "2026-02-01",
+    "kind": "pptx"
+  },
+  {
+    "id": "file-003",
+    "name": "annual leave Report 3.xlsx",
+    "owner": "Leah Brooks",
+    "lastModified": "2026-01-15",
+    "kind": "xlsx"
+  },
+  {
+    "id": "file-004",
+    "name": "annual leave Report 4.pdf",
+    "owner": "Diego Martin",
+    "lastModified": "2026-02-12",
+    "kind": "pdf"
+  },
+  {
+    "id": "file-005",
+    "name": "annual leave Report 5.one",
+    "owner": "Nina Alvi",
+    "lastModified": "2026-02-19",
+    "kind": "one"
+  }
+]

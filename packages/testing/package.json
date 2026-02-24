@@ -1,0 +1,32 @@
+{
+  "name": "@functions-oneui/testing",
+  "version": "0.0.0",
+  "description": "Shared testing utilities and assertions for OneUI packages.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/run-if-available.mjs tsc -p tsconfig.json",
+    "lint": "node ../../scripts/run-if-available.mjs eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "node ../../scripts/run-if-available.mjs tsc -p tsconfig.json --noEmit",
+    "test": "echo \"No tests for @functions-oneui/testing yet\""
+  },
+  "dependencies": {
+    "@functions-oneui/react-utils": "workspace:*",
+    "axe-core": "^4.11.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}

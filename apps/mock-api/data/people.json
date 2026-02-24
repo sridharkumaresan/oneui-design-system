@@ -1,0 +1,37 @@
+[
+  {
+    "id": "person-001",
+    "name": "Ava Patel",
+    "title": "Senior annual leave Specialist",
+    "department": "Design",
+    "location": "Seattle"
+  },
+  {
+    "id": "person-002",
+    "name": "Marcus Chen",
+    "title": "Senior annual leave Specialist",
+    "department": "Platform",
+    "location": "Austin"
+  },
+  {
+    "id": "person-003",
+    "name": "Leah Brooks",
+    "title": "Senior annual leave Specialist",
+    "department": "HR",
+    "location": "Chicago"
+  },
+  {
+    "id": "person-004",
+    "name": "Diego Martin",
+    "title": "Senior annual leave Specialist",
+    "department": "Operations",
+    "location": "Remote"
+  },
+  {
+    "id": "person-005",
+    "name": "Nina Alvi",
+    "title": "Senior annual leave Specialist",
+    "department": "Analytics",
+    "location": "Boston"
+  }
+]

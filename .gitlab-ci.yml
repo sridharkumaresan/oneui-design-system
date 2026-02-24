@@ -1,0 +1,65 @@
+default:
+  image: node:22
+  interruptible: true
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store/
+
+variables:
+  PNPM_STORE_DIR: "$CI_PROJECT_DIR/.pnpm-store"
+  TURBO_TELEMETRY_DISABLED: "1"
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+
+stages:
+  - validate
+  - test
+  - build
+
+.pnpm_setup: &pnpm_setup
+  before_script:
+    - corepack enable
+    - pnpm config set store-dir "$PNPM_STORE_DIR"
+    - pnpm install --frozen-lockfile
+
+lint_typecheck:
+  stage: validate
+  <<: *pnpm_setup
+  script:
+    - pnpm run lint
+    - pnpm run typecheck
+
+unit_test:
+  stage: test
+  <<: *pnpm_setup
+  script:
+    - mkdir -p reports
+    - pnpm run test > reports/test-output.log 2>&1 || (cat reports/test-output.log && exit 1)
+    - cat reports/test-output.log
+  coverage: '/Lines\s*:\s*([0-9]+(?:\.[0-9]+)?)%/'
+  artifacts:
+    when: always
+    paths:
+      - reports/test-output.log
+      - packages/**/test-results/*.xml
+      - packages/**/coverage/
+      - packages/**/coverage/lcov.info
+    reports:
+      junit:
+        - packages/**/test-results/*.xml
+
+build:
+  stage: build
+  <<: *pnpm_setup
+  needs:
+    - lint_typecheck
+    - unit_test
+  script:
+    - pnpm run build

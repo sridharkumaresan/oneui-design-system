@@ -1,0 +1,32 @@
+[
+  {
+    "id": "rec-001",
+    "title": "Complete accessibility checklist",
+    "reason": "Matches your current Storybook review task",
+    "score": 0.96
+  },
+  {
+    "id": "rec-002",
+    "title": "Review latest token contract updates",
+    "reason": "Related to theme integration work",
+    "score": 0.91
+  },
+  {
+    "id": "rec-003",
+    "title": "Watch SmartSection usage demo",
+    "reason": "Frequently opened alongside organism docs",
+    "score": 0.89
+  },
+  {
+    "id": "rec-004",
+    "title": "Open release preparation guide",
+    "reason": "Changeset files were recently modified",
+    "score": 0.86
+  },
+  {
+    "id": "rec-005",
+    "title": "Run pre-push verify workflow",
+    "reason": "A package-level test file changed recently",
+    "score": 0.83
+  }
+]

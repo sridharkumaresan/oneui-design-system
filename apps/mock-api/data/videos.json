@@ -1,0 +1,37 @@
+[
+  {
+    "id": "video-001",
+    "title": "Annual leave policy explainer",
+    "duration": "08:14",
+    "channel": "Design System",
+    "publishedAt": "2026-01-28"
+  },
+  {
+    "id": "video-002",
+    "title": "Annual leave manager walkthrough",
+    "duration": "12:09",
+    "channel": "Engineering Enablement",
+    "publishedAt": "2026-01-30"
+  },
+  {
+    "id": "video-003",
+    "title": "Annual leave request lifecycle",
+    "duration": "10:47",
+    "channel": "Platform",
+    "publishedAt": "2026-02-03"
+  },
+  {
+    "id": "video-004",
+    "title": "Annual leave eligibility guide",
+    "duration": "06:58",
+    "channel": "OneUI",
+    "publishedAt": "2026-02-20"
+  },
+  {
+    "id": "video-005",
+    "title": "Annual leave reporting metrics",
+    "duration": "14:21",
+    "channel": "Operations",
+    "publishedAt": "2026-02-14"
+  }
+]

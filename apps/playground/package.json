@@ -1,0 +1,11 @@
+{
+  "name": "@functions-oneui/playground",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo \"Playground scaffold only (no implementation yet)\"",
+    "lint": "node ../../scripts/run-if-available.mjs eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "echo \"No TypeScript sources in playground scaffold yet\"",
+    "test": "echo \"No tests in playground scaffold yet\""
+  }
+}

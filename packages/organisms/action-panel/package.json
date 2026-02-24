@@ -1,0 +1,44 @@
+{
+  "name": "@functions-oneui/organism-action-panel",
+  "version": "0.1.0",
+  "description": "Composable action panel organism for OneUI.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && node ../../../scripts/run-if-available.mjs tsc -p tsconfig.json",
+    "lint": "node ../../../scripts/run-if-available.mjs eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "node ../../../scripts/run-if-available.mjs tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --filter @functions-oneui/testing run build && node ../../../scripts/run-if-available.mjs vitest run --config vitest.config.ts",
+    "test:ui": "pnpm --filter @functions-oneui/testing run build && node ../../../scripts/run-if-available.mjs vitest --config vitest.config.ts --ui"
+  },
+  "dependencies": {
+    "@functions-oneui/atoms": "workspace:*",
+    "@functions-oneui/theme": "workspace:*"
+  },
+  "peerDependencies": {
+    "@fluentui/react-components": "^9.0.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@fluentui/react-components": "^9.0.0",
+    "@functions-oneui/testing": "workspace:*",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "jsdom": "^25.0.1",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "vitest": "^2.1.9"
+  }
+}
