@@ -6,3 +6,4 @@ This directory contains architecture, contribution, and package-level documentat
 - `coding-standards.md`: implementation rules (token-first, accessibility, etc.)
 - `theming.md`: tokens -> theme -> components contract
 - `showcase.md`: SmartSection page integration and local mock API showcase flow
+- `local-publishing.md`: Verdaccio-based local publish + consumer smoke validation

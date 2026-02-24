@@ -19,6 +19,15 @@
     "changeset": "node ./scripts/run-if-available.mjs changeset",
     "version-packages": "node ./scripts/run-if-available.mjs changeset version",
     "release": "node ./scripts/run-if-available.mjs changeset publish",
+    "local-publish:start-registry": "node ./scripts/local-publish/start-registry.mjs",
+    "local-publish:login": "node ./scripts/local-publish/login-registry.mjs",
+    "local-publish:snapshot-version": "node ./scripts/local-publish/snapshot-version.mjs",
+    "local-publish:publish-local": "node ./scripts/local-publish/publish-local.mjs",
+    "local-publish:consumer-smoke": "node ./scripts/local-publish/run-consumer-smoke.mjs",
+    "local-publish:stop-registry": "node ./scripts/local-publish/stop-registry.mjs",
+    "local-publish:cleanup": "node ./scripts/local-publish/cleanup.mjs",
+    "local-publish:cleanup:hard": "node ./scripts/local-publish/cleanup.mjs --wipe-registry-storage",
+    "local-publish:all": "node ./scripts/local-publish/run-smoke-workflow.mjs",
     "prepare": "node ./scripts/run-if-available.mjs husky"
   },
   "lint-staged": {

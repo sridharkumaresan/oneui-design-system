@@ -23,3 +23,13 @@
 3. Publish with `pnpm release` from CI.
 
 Do not publish manually from local machines unless explicitly required.
+
+## Local Registry Validation
+
+Before cutting production releases, run local consumer validation against Verdaccio:
+
+1. `pnpm run local-publish:all`
+2. Review consumer smoke output for React 18 and React 19.
+3. `pnpm run local-publish:cleanup` when finished.
+
+Detailed workflow and troubleshooting: `docs/local-publishing.md`.

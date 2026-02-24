@@ -1,7 +1,7 @@
 node_modules
 .turbo
+.local
 dist
 coverage
 storybook-static
 *.tsbuildinfo
-
