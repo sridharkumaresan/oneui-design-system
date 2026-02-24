@@ -45,6 +45,8 @@ All local-publish artifacts are under `.local/local-publish/`:
 - `ONEUI_LOCAL_REGISTRY_URL` (default: `http://127.0.0.1:4873`)
 - `ONEUI_LOCAL_DIST_TAG` (default: `snapshot`)
 - `ONEUI_LOCAL_SNAPSHOT_TAG` (default: `local`)
+- `ONEUI_LOCAL_UPSTREAM_REGISTRY_URL` (default: `https://registry.npmjs.org/`)
+- `ONEUI_DEFAULT_REGISTRY_URL` (optional fallback for upstream registry)
 - `ONEUI_LOCAL_REGISTRY_USER` (default: `oneui-local`)
 - `ONEUI_LOCAL_REGISTRY_PASSWORD` (default: `oneui-local-pass`)
 - `ONEUI_LOCAL_REGISTRY_EMAIL` (default: `oneui-local@example.com`)

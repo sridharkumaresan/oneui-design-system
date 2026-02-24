@@ -30,6 +30,10 @@ export const DIST_TAG = process.env.ONEUI_LOCAL_DIST_TAG ?? "snapshot";
 export const SNAPSHOT_TAG = process.env.ONEUI_LOCAL_SNAPSHOT_TAG ?? "local";
 export const VERDACCIO_CONTAINER_NAME =
   process.env.ONEUI_VERDACCIO_CONTAINER_NAME ?? "oneui-verdaccio";
+export const UPSTREAM_REGISTRY_URL =
+  process.env.ONEUI_LOCAL_UPSTREAM_REGISTRY_URL ??
+  process.env.ONEUI_DEFAULT_REGISTRY_URL ??
+  "https://registry.npmjs.org/";
 
 export const SEED_RUNTIME_PACKAGES = [
   "@functions-oneui/tokens",
@@ -60,7 +64,7 @@ auth:
     max_users: 200
 uplinks:
   npmjs:
-    url: https://registry.npmjs.org/
+    url: ${UPSTREAM_REGISTRY_URL}
 packages:
   "@functions-oneui/*":
     access: $all
@@ -387,7 +391,7 @@ const ensureScopeRegistryLines = (existingContent) => {
     .filter(Boolean);
 
   const required = [
-    "registry=https://registry.npmjs.org/",
+    `registry=${UPSTREAM_REGISTRY_URL}`,
     `@functions-oneui:registry=${REGISTRY_URL}`,
     "always-auth=true"
   ];
@@ -916,7 +920,7 @@ const writeConsumerFiles = ({ consumerDir, reactVersion, reactDomVersion, oneuiV
     include: ["src/**/*", "scripts/**/*"]
   };
 
-  const npmrc = `registry=https://registry.npmjs.org/\n@functions-oneui:registry=${REGISTRY_URL}\nstrict-peer-dependencies=true\nauto-install-peers=false\n`;
+  const npmrc = `registry=${UPSTREAM_REGISTRY_URL}\n@functions-oneui:registry=${REGISTRY_URL}\nstrict-peer-dependencies=true\nauto-install-peers=false\n`;
 
   const entryFile = `import React from "react";
 import { FluentProvider } from "@fluentui/react-components";
