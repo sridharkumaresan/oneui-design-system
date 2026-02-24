@@ -39,6 +39,11 @@
       "prettier --write"
     ]
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "@commitlint/cli": "^19.7.1",
