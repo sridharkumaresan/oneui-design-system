@@ -1,7 +1,9 @@
 node_modules
+.pnpm-store
 .turbo
 dist
 coverage
 storybook-static
 pnpm-lock.yaml
-
+.DS_Store
+.agents

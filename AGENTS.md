@@ -6,7 +6,7 @@ You are working inside the OneUI Design System monorepo.
 
 Build and maintain a production-grade, enterprise React component ecosystem under the npm scope:
 
-@functions-oneui/*
+@functions-oneui/\*
 
 The system includes:
 
@@ -25,28 +25,33 @@ The system includes:
 ## Non-Negotiable Technical Constraints
 
 ### Package Management
+
 - Use pnpm workspaces ONLY
 - Do NOT use npm or yarn
 - Do NOT introduce Nx or Lerna
 
 ### Build & Orchestration
+
 - Use Turborepo for task orchestration
 - Use Changesets for versioning and publishing
 - Each package must build independently
 
 ### React & UI Stack
+
 - React 18+
 - Fluent UI v9 only (@fluentui/react-components)
 - Styling via Griffel only
 - No legacy Fabric UI or Fluent v8 components
 
 ### Theming
+
 - Token-driven theming
 - Support light and dark themes
 - No hardcoded colors inside components
 - All visual styles must derive from tokens or Fluent theme values
 
 ### Accessibility
+
 All interactive components MUST:
 
 - Be keyboard accessible
@@ -64,27 +69,27 @@ Accessibility regressions are considered blocking issues.
 ### Package Layout
 
 packages/
-  tokens/
-  theme/
-  standards/
-  utils/
-  react-utils/
-  testing/
-  atoms/
-  organisms/<name>/
-  data-access/ (optional)
-  telemetry/ (optional)
-  spfx-webparts/ (future)
+tokens/
+theme/
+standards/
+utils/
+react-utils/
+testing/
+atoms/
+organisms/<name>/
+data-access/ (optional)
+telemetry/ (optional)
+spfx-webparts/ (future)
 
 apps/
-  storybook/
-  playground/ (optional)
+storybook/
+playground/ (optional)
 
 configs/
-  shared configuration files
+shared configuration files
 
 docs/
-  architecture and contribution docs
+architecture and contribution docs
 
 ---
 

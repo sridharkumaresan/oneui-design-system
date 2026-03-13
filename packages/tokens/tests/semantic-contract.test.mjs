@@ -1,11 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  requiredSemanticTokenPaths,
-  semanticTokens,
-  tokenCategories
-} from "../dist/index.js";
+import { requiredSemanticTokenPaths, semanticTokens, tokenCategories } from "../dist/index.js";
 
 const getByPath = (source, path) => {
   return path.split(".").reduce((value, segment) => {

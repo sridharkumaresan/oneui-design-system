@@ -48,13 +48,34 @@ const mapSemanticTokensToFluentTheme = (tokens: SemanticTokenSet): OneUIFluentTh
     }
   }
 
-  mappedTheme.spacingVerticalXXS = assertThemeValue(mappedTheme.spacingHorizontalXXS, "spacingVerticalXXS");
-  mappedTheme.spacingVerticalXS = assertThemeValue(mappedTheme.spacingHorizontalXS, "spacingVerticalXS");
-  mappedTheme.spacingVerticalS = assertThemeValue(mappedTheme.spacingHorizontalS, "spacingVerticalS");
-  mappedTheme.spacingVerticalM = assertThemeValue(mappedTheme.spacingHorizontalM, "spacingVerticalM");
-  mappedTheme.spacingVerticalL = assertThemeValue(mappedTheme.spacingHorizontalL, "spacingVerticalL");
-  mappedTheme.spacingVerticalXL = assertThemeValue(mappedTheme.spacingHorizontalXL, "spacingVerticalXL");
-  mappedTheme.spacingVerticalXXL = assertThemeValue(mappedTheme.spacingHorizontalXXL, "spacingVerticalXXL");
+  mappedTheme.spacingVerticalXXS = assertThemeValue(
+    mappedTheme.spacingHorizontalXXS,
+    "spacingVerticalXXS"
+  );
+  mappedTheme.spacingVerticalXS = assertThemeValue(
+    mappedTheme.spacingHorizontalXS,
+    "spacingVerticalXS"
+  );
+  mappedTheme.spacingVerticalS = assertThemeValue(
+    mappedTheme.spacingHorizontalS,
+    "spacingVerticalS"
+  );
+  mappedTheme.spacingVerticalM = assertThemeValue(
+    mappedTheme.spacingHorizontalM,
+    "spacingVerticalM"
+  );
+  mappedTheme.spacingVerticalL = assertThemeValue(
+    mappedTheme.spacingHorizontalL,
+    "spacingVerticalL"
+  );
+  mappedTheme.spacingVerticalXL = assertThemeValue(
+    mappedTheme.spacingHorizontalXL,
+    "spacingVerticalXL"
+  );
+  mappedTheme.spacingVerticalXXL = assertThemeValue(
+    mappedTheme.spacingHorizontalXXL,
+    "spacingVerticalXXL"
+  );
   mappedTheme.strokeWidthThick = assertThemeValue(tokens.shadows.focusRing, "shadows.focusRing");
 
   return mappedTheme;
@@ -72,12 +93,16 @@ const validateSemanticCoverage = (tokens: SemanticTokenSet, mode: OneUIThemeMode
       const mappedThemeKey = categoryMap?.[requiredPath];
 
       if (!mappedThemeKey) {
-        throw new Error(`Missing theme mapping for semantic token: ${String(category)}.${requiredPath}`);
+        throw new Error(
+          `Missing theme mapping for semantic token: ${String(category)}.${requiredPath}`
+        );
       }
 
       const semanticValue = getByPath(tokenCategory, requiredPath);
       if (semanticValue === undefined) {
-        throw new Error(`Missing semantic token value for ${mode}: ${String(category)}.${requiredPath}`);
+        throw new Error(
+          `Missing semantic token value for ${mode}: ${String(category)}.${requiredPath}`
+        );
       }
     }
   }
@@ -86,7 +111,9 @@ const validateSemanticCoverage = (tokens: SemanticTokenSet, mode: OneUIThemeMode
 validateSemanticCoverage(semanticTokens.light, "light");
 validateSemanticCoverage(semanticTokens.dark, "dark");
 
-export const oneuiLightTheme: OneUIFluentTheme = mapSemanticTokensToFluentTheme(semanticTokens.light);
+export const oneuiLightTheme: OneUIFluentTheme = mapSemanticTokensToFluentTheme(
+  semanticTokens.light
+);
 export const oneuiDarkTheme: OneUIFluentTheme = mapSemanticTokensToFluentTheme(semanticTokens.dark);
 
 export const createOneuiTheme = (overrides: CreateOneuiThemeOptions = {}): OneUIFluentTheme => {
@@ -95,7 +122,10 @@ export const createOneuiTheme = (overrides: CreateOneuiThemeOptions = {}): OneUI
   const fluentThemeOverrides = (overrides.fluentTheme ?? {}) as UnknownRecord;
 
   const baseSemanticTokens = mode === "dark" ? semanticTokens.dark : semanticTokens.light;
-  const mergedSemanticTokens = deepMerge(baseSemanticTokens as UnknownRecord, semanticOverrides) as SemanticTokenSet;
+  const mergedSemanticTokens = deepMerge(
+    baseSemanticTokens as UnknownRecord,
+    semanticOverrides
+  ) as SemanticTokenSet;
   const mappedTheme = mapSemanticTokensToFluentTheme(mergedSemanticTokens);
 
   return deepMerge(mappedTheme as UnknownRecord, fluentThemeOverrides) as OneUIFluentTheme;

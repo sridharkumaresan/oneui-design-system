@@ -7,4 +7,9 @@ export {
   oneuiThemeModes,
   semanticPathToThemeKeyMap
 } from "./theme.js";
-export type { CreateOneuiThemeOptions, OneUIFluentTheme, OneUIThemeMode, SemanticTokenSet } from "./theme.js";
+export type {
+  CreateOneuiThemeOptions,
+  OneUIFluentTheme,
+  OneUIThemeMode,
+  SemanticTokenSet
+} from "./theme.js";

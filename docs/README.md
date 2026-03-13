@@ -1,9 +1,9 @@
 # OneUI Documentation
 
-This directory contains architecture, contribution, and package-level documentation for the OneUI Design System.
+This directory contains architecture, contribution, and package-level documentation for the phase-1 OneUI workspace.
 
-- `architecture.md`: dependency direction and layer responsibilities
-- `coding-standards.md`: implementation rules (token-first, accessibility, etc.)
+- `architecture.md`: dependency direction, active package surface, and deferred layers
+- `coding-standards.md`: implementation rules (token-first, accessibility, and script policy)
+- `contributing.md`: local validation and dependency update workflow
+- `releasing.md`: Changesets-based release model for the current package set
 - `theming.md`: tokens -> theme -> components contract
-- `showcase.md`: SmartSection page integration and local mock API showcase flow
-- `local-publishing.md`: Verdaccio-based local publish + consumer smoke validation

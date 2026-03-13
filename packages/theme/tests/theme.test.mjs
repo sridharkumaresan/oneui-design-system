@@ -43,7 +43,11 @@ test("maps all required semantic token paths into theme keys for light and dark"
         assert.ok(themeKey, `${mode}: no mapped theme key for '${category}.${path}'`);
 
         const semanticValue = getByPath(semanticSet[category], path);
-        assert.notEqual(semanticValue, undefined, `${mode}: missing semantic value '${category}.${path}'`);
+        assert.notEqual(
+          semanticValue,
+          undefined,
+          `${mode}: missing semantic value '${category}.${path}'`
+        );
         assert.equal(
           mappedTheme[themeKey],
           semanticValue,

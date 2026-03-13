@@ -1,5 +1,5 @@
 default:
-  image: node:22
+  image: node:22.22.0
   interruptible: true
   cache:
     key:
@@ -9,14 +9,16 @@ default:
       - .pnpm-store/
 
 variables:
+  NPM_CONFIG_AUDIT: "false"
+  NPM_CONFIG_FUND: "false"
   PNPM_STORE_DIR: "$CI_PROJECT_DIR/.pnpm-store"
   TURBO_TELEMETRY_DISABLED: "1"
 
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
+    - if: "$CI_COMMIT_BRANCH"
+    - if: "$CI_COMMIT_TAG"
 
 stages:
   - validate
@@ -25,7 +27,7 @@ stages:
 
 .pnpm_setup: &pnpm_setup
   before_script:
-    - corepack enable
+    - npm install --global pnpm@10.0.0
     - pnpm config set store-dir "$PNPM_STORE_DIR"
     - pnpm install --frozen-lockfile
 
@@ -63,3 +65,4 @@ build:
     - unit_test
   script:
     - pnpm run build
+    - pnpm --filter @functions-oneui/storybook run build

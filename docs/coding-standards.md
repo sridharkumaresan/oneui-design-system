@@ -16,3 +16,9 @@
 
 - Ensure color and state styling remains compatible with focus visibility and contrast requirements.
 - Theme changes that impact interaction states should be covered by tests and Storybook verification.
+
+## Script Policy
+
+- Use direct local binaries through `pnpm run`.
+- Do not rely on `corepack`, `cross-env`, inline POSIX environment assignment, or required `.sh` / `.bat` scripts in the workspace execution path.
+- Missing required tooling is a failure that must be fixed, not skipped.

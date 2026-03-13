@@ -32,14 +32,7 @@ const getToneStyles = (theme, tone) => {
 };
 
 export const OneUIButton = React.forwardRef(function OneUIButton(props, ref) {
-  const {
-    tone = "brand",
-    stretch = false,
-    className,
-    style,
-    children,
-    ...buttonProps
-  } = props;
+  const { tone = "brand", stretch = false, className, style, children, ...buttonProps } = props;
 
   const styles = useStyles();
   const fluent = useFluent();

@@ -23,11 +23,7 @@ const preview = {
     (Story, context) => {
       const mode = context.globals.themeMode === "dark" ? "dark" : "light";
 
-      return React.createElement(
-        OneUIProvider,
-        { mode },
-        React.createElement(Story)
-      );
+      return React.createElement(OneUIProvider, { mode }, React.createElement(Story));
     }
   ],
   parameters: {
