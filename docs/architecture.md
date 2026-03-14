@@ -17,6 +17,8 @@
   - Maps semantic tokens to Fluent UI v9 theme objects and exports `OneUIProvider`.
 - `@functions-oneui/testing`
   - Provides shared accessibility helpers for Vitest + React Testing Library.
+- `@functions-oneui/react-utils`
+  - Hosts React-specific helpers that sit above core utilities, including the structured logging provider/hooks layer exposed from `@functions-oneui/react-utils/logging`.
 - `@functions-oneui/atoms`
   - Hosts the first publishable UI layer and reference atom patterns.
 
@@ -29,7 +31,7 @@
 
 ## Phase-1 Scope
 
-- Active publishable packages: `tokens`, `theme`, `testing`, `atoms`
+- Active publishable packages: `tokens`, `theme`, `testing`, `react-utils`, `atoms`
 - Active app: `storybook`
 - Deferred until the base workspace passes on macOS and native Windows:
   - organism packages

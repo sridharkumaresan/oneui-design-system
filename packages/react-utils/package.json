@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -12,16 +13,30 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./logging": {
+      "types": "./dist/logging/index.d.ts",
+      "import": "./dist/logging/index.js"
     }
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "echo \"No tests for @functions-oneui/react-utils yet\""
+    "test": "vitest run --config vitest.config.ts",
+    "test:ui": "vitest --config vitest.config.ts --ui"
   },
   "dependencies": {
     "@functions-oneui/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/react": "16.3.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "jsdom": "25.0.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "vitest": "2.1.9"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

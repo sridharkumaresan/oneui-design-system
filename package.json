@@ -16,10 +16,20 @@
     "test": "turbo run test",
     "test:ui": "node ./scripts/run-vitest-ui.mjs",
     "verify": "node ./scripts/run-verify.mjs",
+    "release:verify": "node ./scripts/run-release-verify.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
     "audit:scripts": "node ./scripts/audit-scripts.mjs",
     "audit:registry": "node ./scripts/audit-registry-bom.mjs",
+    "registry:local:start": "node ./scripts/local-registry.mjs start",
+    "registry:local:stop": "node ./scripts/local-registry.mjs stop",
+    "registry:local:status": "node ./scripts/local-registry.mjs status",
+    "registry:local:login": "node ./scripts/local-registry.mjs login",
+    "registry:local:whoami": "node ./scripts/local-registry.mjs whoami",
+    "registry:local:publish:snapshot": "node ./scripts/local-registry.mjs publish-snapshot",
+    "registry:local:publish:stable": "node ./scripts/local-registry.mjs publish-stable",
+    "registry:local:print-consumer-config": "node ./scripts/local-registry.mjs print-consumer-config",
+    "registry:local:reset": "node ./scripts/local-registry.mjs reset",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish"
@@ -51,6 +61,7 @@
     "prettier": "3.8.1",
     "turbo": "2.8.16",
     "typescript": "5.9.3",
+    "verdaccio": "6.3.1",
     "vitest": "2.1.9"
   }
 }

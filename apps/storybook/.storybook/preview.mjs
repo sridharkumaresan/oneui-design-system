@@ -33,6 +33,12 @@ const preview = {
         date: /Date$/i
       }
     },
+    docs: {
+      codePanel: true,
+      canvas: {
+        sourceState: "shown"
+      }
+    },
     layout: "centered"
   }
 };

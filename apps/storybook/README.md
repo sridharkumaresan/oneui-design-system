@@ -14,6 +14,12 @@ Both commands are supported from native Windows `cmd` or PowerShell without help
 - Storybook exposes a global `Theme` toolbar with `light` and `dark` modes.
 - `.storybook/preview.mjs` wraps all stories in `OneUIProvider` so package stories inherit the same theme contract as apps.
 
+## Logging Demo
+
+- Storybook includes a `Foundation/Logging` page for the structured logging subsystem.
+- The demo shows root provider setup, component-scoped logging, abort handling, and memory transport capture.
+- Use this page as documentation and verification, not as a pattern for logging every render.
+
 ## Story Contribution
 
 - Add colocated `*.stories.*` files under `packages/*/src/**`.

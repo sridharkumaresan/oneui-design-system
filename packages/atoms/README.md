@@ -2,13 +2,13 @@
 
 Atomic building blocks for OneUI.
 
-## Structure
+## Current Atoms
 
-Atoms live in `src/components/<atom-name>/`.
-
-Current reference implementation:
-
-- `src/components/oneui-button/`
+- `OneUIButton`
+- `OneUIText`
+- `OneUIHeading`
+- `OneUIStack`
+- `OneUICard`
 
 Golden template (not exported):
 
@@ -21,7 +21,13 @@ Use `_template` as the copy source when creating new atoms.
 Import from package root only:
 
 ```ts
-import { OneUIButton } from "@functions-oneui/atoms";
+import {
+  OneUIButton,
+  OneUICard,
+  OneUIHeading,
+  OneUIStack,
+  OneUIText
+} from "@functions-oneui/atoms";
 ```
 
 Do not rely on deep imports.
@@ -29,19 +35,20 @@ Do not rely on deep imports.
 ## Add a New Atom
 
 1. Copy `src/components/_template` into a new component folder.
-2. Implement component logic with Fluent UI v9 and Griffel.
-3. Export the component in `src/components/index.ts` and `src/index.ts`.
+2. Implement component logic with Griffel and OneUI theme-driven tokens.
+3. Export the component from `src/components/index.ts` and `src/index.ts`.
 4. Add required tests:
-   - Unit behavior test (Vitest + React Testing Library)
+   - Render and behavior tests with Vitest + React Testing Library
    - Accessibility test using `expectNoAxeViolations` from `@functions-oneui/testing`
-5. Add a colocated Storybook story for the public atom.
+5. Add colocated Storybook stories for defaults, variants, and key states.
 
-## Token and Theme Rules
+## Professional Rules
 
 - No hardcoded colors in atom components.
-- Prefer values from Fluent theme context (produced by `@functions-oneui/theme`).
-- Use semantic token fallbacks from `@functions-oneui/tokens` only when needed.
-- Keep component styling token-first and theme-driven.
+- Prefer Fluent theme tokens from `@functions-oneui/theme` through Fluent v9 token variables.
+- Keep APIs small and composable.
+- Avoid deep imports and internal helper exports.
+- New atoms must ship with stories and automated accessibility checks.
 
 ## Test Commands
 
