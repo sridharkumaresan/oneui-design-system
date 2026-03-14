@@ -35,11 +35,12 @@ const localWorkspaceDirectories = [
 const localPackageDirectories = [path.join(workspaceRoot, "packages")];
 const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
-const verdaccioBinary = path.join(
+const verdaccioEntrypoint = path.join(
   workspaceRoot,
   "node_modules",
-  ".bin",
-  process.platform === "win32" ? "verdaccio.cmd" : "verdaccio"
+  "verdaccio",
+  "bin",
+  "verdaccio"
 );
 const changesetEntrypoint = path.join(
   workspaceRoot,
@@ -338,7 +339,7 @@ async function ensureRegistryRunning() {
 }
 
 function ensureVerdaccioInstalled() {
-  if (!existsSync(verdaccioBinary)) {
+  if (!existsSync(verdaccioEntrypoint)) {
     throw new Error("Verdaccio is not installed. Run pnpm install first.");
   }
 }
@@ -393,11 +394,15 @@ async function startRegistry() {
   removePidFile();
 
   const logFd = openSync(logPath, "a");
-  const child = spawn(verdaccioBinary, ["--config", configPath, "--listen", registryHost], {
-    cwd: workspaceRoot,
-    detached: true,
-    stdio: ["ignore", logFd, logFd]
-  });
+  const child = spawn(
+    process.execPath,
+    [verdaccioEntrypoint, "--config", configPath, "--listen", registryHost],
+    {
+      cwd: workspaceRoot,
+      detached: true,
+      stdio: ["ignore", logFd, logFd]
+    }
+  );
 
   writeFileSync(pidPath, `${child.pid}\n`, "utf8");
   child.unref();
