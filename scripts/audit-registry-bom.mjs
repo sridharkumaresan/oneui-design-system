@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 
 const ignoredDirectoryNames = new Set([
   ".git",
@@ -87,9 +88,11 @@ if (failures.length > 0) {
 
 const runRegistryLookup = (dependencySpec, expectedVersion) =>
   new Promise((resolve) => {
-    const child = spawn("pnpm", ["view", dependencySpec, "version"], {
+    const child = spawn(pnpmCommand, ["view", dependencySpec, "version"], {
       cwd: workspaceRoot,
-      stdio: ["ignore", "pipe", "pipe"]
+      stdio: ["ignore", "pipe", "pipe"],
+      shell: process.platform === "win32",
+      windowsHide: true
     });
 
     let stdout = "";

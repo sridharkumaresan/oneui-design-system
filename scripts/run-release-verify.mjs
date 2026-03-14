@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 
 const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+const shouldUseShell = process.platform === "win32";
 
 const steps = [
   ["run", "lint"],
@@ -14,7 +15,9 @@ for (const args of steps) {
   console.log(`[release:verify] ${label}`);
 
   const result = spawnSync(pnpmCommand, args, {
-    stdio: "inherit"
+    stdio: "inherit",
+    shell: shouldUseShell,
+    windowsHide: true
   });
 
   if (result.status !== 0) {

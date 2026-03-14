@@ -50,6 +50,7 @@ const changesetEntrypoint = path.join(
   "bin.js"
 );
 const snapshotNote = "Temporary local Verdaccio smoke-test release. Do not commit.";
+const shouldUseShell = (command) => process.platform === "win32" && /\.(cmd|bat)$/i.test(command);
 
 const command = process.argv[2];
 
@@ -107,7 +108,9 @@ function runCommand(executable, args, options = {}) {
     cwd: workspaceRoot,
     stdio: options.stdio ?? "inherit",
     env: options.env ?? process.env,
-    input: options.input
+    input: options.input,
+    shell: options.shell ?? shouldUseShell(executable),
+    windowsHide: true
   });
 
   if (result.status !== 0) {
@@ -357,7 +360,9 @@ function ensureLoggedIn() {
     {
       cwd: workspaceRoot,
       encoding: "utf8",
-      env: getLocalRegistryEnvironment()
+      env: getLocalRegistryEnvironment(),
+      shell: shouldUseShell(npmCommand),
+      windowsHide: true
     }
   );
 
@@ -479,7 +484,9 @@ async function loginToRegistry() {
     {
       cwd: workspaceRoot,
       stdio: "inherit",
-      env: getLocalRegistryEnvironment()
+      env: getLocalRegistryEnvironment(),
+      shell: shouldUseShell(npmCommand),
+      windowsHide: true
     }
   );
 
@@ -500,7 +507,9 @@ async function printWhoAmI() {
     {
       cwd: workspaceRoot,
       encoding: "utf8",
-      env: getLocalRegistryEnvironment()
+      env: getLocalRegistryEnvironment(),
+      shell: shouldUseShell(npmCommand),
+      windowsHide: true
     }
   );
 
