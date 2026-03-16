@@ -1,6 +1,23 @@
-export { OneUIButton, OneUICard, OneUIHeading, OneUIStack, OneUIText } from "./components/index.js";
+export {
+  OneUIBadge,
+  OneUIButton,
+  OneUICombobox,
+  OneUICard,
+  OneUIHeading,
+  OneUIInput,
+  OneUILink,
+  OneUIStack,
+  OneUIText
+} from "./components/index.js";
 export type {
+  OneUIBadgeAppearance,
+  OneUIBadgeProps,
+  OneUIBadgeShape,
+  OneUIBadgeSize,
+  OneUIBadgeTone,
   OneUIButtonProps,
+  OneUIComboboxOption,
+  OneUIComboboxProps,
   OneUICardAccent,
   OneUICardElevation,
   OneUICardPadding,
@@ -8,6 +25,11 @@ export type {
   OneUIHeadingAlign,
   OneUIHeadingProps,
   OneUIHeadingTone,
+  OneUIInputProps,
+  OneUILinkIconPosition,
+  OneUILinkProps,
+  OneUILinkTone,
+  OneUILinkUnderline,
   OneUIStackAlign,
   OneUIStackDirection,
   OneUIStackGap,

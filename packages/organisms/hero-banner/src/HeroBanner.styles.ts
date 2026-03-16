@@ -1,10 +1,10 @@
 import { makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
+import { createOneUIMediaQueryDown } from "@functions-oneui/theme";
 
-import type {
-  HeroBannerContentTone,
-  HeroBannerHeight,
-  HeroBannerImagePosition
-} from "./HeroBanner.types.js";
+import type { HeroBannerContentTone, HeroBannerHeight } from "./HeroBanner.types.js";
+
+const compactHeroBannerQuery = createOneUIMediaQueryDown("md");
+const stackAsideHeroBannerQuery = createOneUIMediaQueryDown("lg");
 
 const useStyles = makeStyles({
   root: {
@@ -15,77 +15,67 @@ const useStyles = makeStyles({
     width: "100%"
   },
   inner: {
-    alignItems: "stretch",
-    display: "flex",
-    minWidth: 0,
-    width: "100%",
-    "@media (max-width: 768px)": {
-      flexDirection: "column"
-    }
-  },
-  content: {
-    alignItems: "center",
     boxSizing: "border-box",
-    display: "flex",
-    flex: "1 1 56%",
+    display: "grid",
+    gap: tokens.spacingVerticalXL,
+    marginInline: "auto",
+    maxWidth: "90rem",
     minWidth: 0,
     paddingBlock: tokens.spacingVerticalXXL,
     paddingInline: tokens.spacingHorizontalXXL,
-    "@media (max-width: 768px)": {
-      order: 0,
+    width: "100%",
+    [compactHeroBannerQuery]: {
+      gap: tokens.spacingVerticalL,
       paddingBlock: tokens.spacingVerticalXL,
       paddingInline: tokens.spacingHorizontalL
     }
   },
-  contentBody: {
+  topRow: {
+    alignItems: "start",
     display: "flex",
-    flexDirection: "column",
-    gap: tokens.spacingVerticalM,
-    maxWidth: "36rem",
+    flexWrap: "wrap",
+    gap: tokens.spacingHorizontalM,
+    justifyContent: "space-between"
+  },
+  mainGrid: {
+    alignItems: "center",
+    display: "grid",
+    gap: tokens.spacingHorizontalXXL,
+    gridTemplateColumns: "minmax(0, 1fr)",
+    minWidth: 0,
+    [compactHeroBannerQuery]: {
+      gap: tokens.spacingVerticalL
+    }
+  },
+  mainGridWithAside: {
+    gridTemplateColumns: "minmax(0, 1.1fr) minmax(18rem, 0.9fr)",
+    [stackAsideHeroBannerQuery]: {
+      gridTemplateColumns: "1fr"
+    }
+  },
+  contentColumn: {
+    display: "grid",
+    gap: tokens.spacingVerticalL,
+    maxWidth: "48rem",
     minWidth: 0
   },
-  contentStart: {
-    order: 1,
-    "@media (max-width: 768px)": {
-      order: 0
-    }
+  textBlock: {
+    display: "grid",
+    gap: tokens.spacingVerticalM,
+    minWidth: 0
   },
-  contentEnd: {
-    order: 0,
-    "@media (max-width: 768px)": {
-      order: 0
-    }
-  },
-  media: {
-    alignSelf: "stretch",
-    display: "flex",
-    flex: "1 1 44%",
-    justifyContent: "flex-end",
-    minHeight: "16rem",
+  supportingContent: {
     minWidth: 0,
-    overflow: "hidden",
-    "@media (max-width: 768px)": {
-      minHeight: "12rem",
-      order: 1,
-      width: "100%"
-    }
+    width: "100%"
   },
-  mediaStart: {
-    order: 0,
-    "@media (max-width: 768px)": {
-      order: 1
-    }
+  aside: {
+    justifySelf: "end",
+    maxWidth: "100%",
+    minWidth: 0,
+    width: "100%"
   },
-  mediaEnd: {
-    order: 1,
-    "@media (max-width: 768px)": {
-      order: 1
-    }
-  },
-  image: {
-    display: "block",
-    height: "100%",
-    objectFit: "cover",
+  footer: {
+    minWidth: 0,
     width: "100%"
   },
   toneDefault: {
@@ -95,32 +85,16 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForegroundInverted
   },
   heightComfortable: {
-    minHeight: "22rem"
+    minHeight: "20rem"
   },
   heightImmersive: {
-    minHeight: "28rem"
+    minHeight: "26rem"
   }
 });
 
 const contentToneClassMap: Record<HeroBannerContentTone, keyof ReturnType<typeof useStyles>> = {
   default: "toneDefault",
   inverse: "toneInverse"
-};
-
-const imagePositionContentClassMap: Record<
-  HeroBannerImagePosition,
-  keyof ReturnType<typeof useStyles>
-> = {
-  start: "contentStart",
-  end: "contentEnd"
-};
-
-const imagePositionMediaClassMap: Record<
-  HeroBannerImagePosition,
-  keyof ReturnType<typeof useStyles>
-> = {
-  start: "mediaStart",
-  end: "mediaEnd"
 };
 
 const heightClassMap: Record<HeroBannerHeight, keyof ReturnType<typeof useStyles>> = {
@@ -131,24 +105,20 @@ const heightClassMap: Record<HeroBannerHeight, keyof ReturnType<typeof useStyles
 export const useHeroBannerClassNames = (options: {
   className?: string;
   contentTone: HeroBannerContentTone;
+  hasAside: boolean;
   height: HeroBannerHeight;
-  imagePosition: HeroBannerImagePosition;
 }) => {
   const styles = useStyles();
 
   return {
-    root: mergeClasses(
-      styles.root,
-      styles[contentToneClassMap[options.contentTone]],
-      options.className
-    ),
+    aside: styles.aside,
+    contentColumn: styles.contentColumn,
+    footer: styles.footer,
     inner: mergeClasses(styles.inner, styles[heightClassMap[options.height]]),
-    content: mergeClasses(
-      styles.content,
-      styles[imagePositionContentClassMap[options.imagePosition]]
-    ),
-    contentBody: styles.contentBody,
-    media: mergeClasses(styles.media, styles[imagePositionMediaClassMap[options.imagePosition]]),
-    image: styles.image
+    mainGrid: mergeClasses(styles.mainGrid, options.hasAside ? styles.mainGridWithAside : undefined),
+    root: mergeClasses(styles.root, styles[contentToneClassMap[options.contentTone]], options.className),
+    supportingContent: styles.supportingContent,
+    textBlock: styles.textBlock,
+    topRow: styles.topRow
   };
 };

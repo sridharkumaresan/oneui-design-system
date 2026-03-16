@@ -1,5 +1,15 @@
 export { OneUIButton } from "./oneui-button/index.js";
 export type { OneUIButtonProps } from "./oneui-button/index.js";
+export { OneUIBadge } from "./oneui-badge/index.js";
+export type {
+  OneUIBadgeAppearance,
+  OneUIBadgeProps,
+  OneUIBadgeShape,
+  OneUIBadgeSize,
+  OneUIBadgeTone
+} from "./oneui-badge/index.js";
+export { OneUICombobox } from "./oneui-combobox/index.js";
+export type { OneUIComboboxOption, OneUIComboboxProps } from "./oneui-combobox/index.js";
 export { OneUICard } from "./oneui-card/index.js";
 export type {
   OneUICardAccent,
@@ -13,6 +23,15 @@ export type {
   OneUIHeadingProps,
   OneUIHeadingTone
 } from "./oneui-heading/index.js";
+export { OneUIInput } from "./oneui-input/index.js";
+export type { OneUIInputProps } from "./oneui-input/index.js";
+export { OneUILink } from "./oneui-link/index.js";
+export type {
+  OneUILinkIconPosition,
+  OneUILinkProps,
+  OneUILinkTone,
+  OneUILinkUnderline
+} from "./oneui-link/index.js";
 export { OneUIStack } from "./oneui-stack/index.js";
 export type {
   OneUIStackAlign,

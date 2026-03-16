@@ -6,43 +6,78 @@ Full-width hero banner organism for landing surfaces, portal headers, and future
 
 `HeroBanner` is a publishable organism for high-visibility page messaging with:
 
-- configurable background color
-- primary image slot
+- solid or semantic gradient surface variants
 - title and optional description
-- left or right image placement
-- default or inverse content tone for contrast
+- named composition slots for breadcrumb, widgets, search, aside content, and footer content
+- a layout that spans the host width without relying on embedded hero artwork
 
 ## Usage
 
 ```tsx
+import { OneUICard, OneUIStack, OneUIText } from "@functions-oneui/atoms";
 import { HeroBanner } from "@functions-oneui/organism-hero-banner";
+import { SearchAutocomplete } from "@functions-oneui/organism-search-autocomplete";
+import { SmartBreadcrumb } from "@functions-oneui/organism-smart-breadcrumb";
 
 <HeroBanner
-  title="Good morning, Sridhar"
   description="Welcome to Connections, how can we help you today?"
-  backgroundColor="#14006d"
-  contentTone="inverse"
-  imageSrc="/assets/hero-banner.png"
-  imageAlt="Employee using a laptop"
+  eyebrow={
+    <SmartBreadcrumb
+      items={[
+        { href: "/", id: "home", label: "Connections" },
+        { id: "current", label: "Hub sites" }
+      ]}
+    />
+  }
+  footer={
+    <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
+      <OneUICard elevation="raised" padding="md">
+        <OneUIStack gap="xs">
+          <OneUIText size="bodySmall" tone="secondary" weight="semibold">
+            Priorities
+          </OneUIText>
+          <OneUIText block size="bodyLarge" tone="inverse" weight="semibold">
+            3 items need attention
+          </OneUIText>
+        </OneUIStack>
+      </OneUICard>
+    </div>
+  }
+  gradientRole="heroPrimary"
+  supportingContent={<SearchAutocomplete scopeOptions={[{ label: "All", value: "all" }]} />}
+  title="Good morning, Sridhar"
+  topStart={
+    <OneUICard elevation="raised" padding="sm">
+      <OneUIText size="bodySmall" tone="inverse" weight="semibold">
+        22°C · Mostly cloudy
+      </OneUIText>
+    </OneUICard>
+  }
 />;
 ```
+
+## Slot Model
+
+Use the named slots to compose content without coupling features into the banner itself:
+
+- `eyebrow`
+- `topStart`
+- `topEnd`
+- `supportingContent`
+- `aside`
+- `footer`
 
 ## Recommended Standards
 
 - Keep the component `width: 100%` and place it inside a true full-width host region instead of forcing `100vw` from the component.
-- In SPFx, map `backgroundColor` to a tenant-approved palette or site theme setting instead of arbitrary author-entered colors when governance matters.
-- Provide `imageAlt` only when the image conveys information. Leave it empty for decorative imagery.
+- In SPFx, expose structured property-pane fields and let the web part map those fields into slot content.
+- Prefer semantic gradient roles for branded hero moments and use solid surfaces when the page needs a simpler banner treatment.
 - Keep titles short and descriptions to one or two lines for responsive stability.
-- Prefer `contentTone="inverse"` for dark or saturated backgrounds.
+- Prefer `contentTone="inverse"` for dark or saturated surfaces.
+- Do not add feature-specific banner props for search, widgets, or cards. Those belong in slot content.
 
 ## Accessibility Notes
 
 - The banner renders as a labeled region using the title.
-- Decorative images are hidden from assistive technologies when `imageAlt` is omitted.
-- No motion is required for comprehension, which keeps the organism SPFx-safe and reduced-motion friendly.
-
-## Development Commands
-
-- `pnpm --filter @functions-oneui/organism-hero-banner build`
-- `pnpm --filter @functions-oneui/organism-hero-banner test`
-- `pnpm --filter @functions-oneui/organism-hero-banner typecheck`
+- Decorative gradients should not communicate status on their own.
+- Slot content remains responsible for its own keyboard and ARIA behavior.

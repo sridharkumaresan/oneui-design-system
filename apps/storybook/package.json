@@ -3,16 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "storybook dev --config-dir .storybook --port 6006",
-    "build": "storybook build --config-dir .storybook --output-dir storybook-static",
+    "dev": "node ../../scripts/run-storybook.mjs dev",
+    "build": "node ../../scripts/run-storybook.mjs build",
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
     "typecheck": "echo \"No TypeScript typecheck configured for Storybook JS config yet\"",
     "test": "echo \"No tests in storybook scaffold yet\""
   },
   "dependencies": {
     "@fluentui/react-components": "9.73.0",
+    "@functions-oneui/organism-action-panel": "workspace:*",
+    "@functions-oneui/organism-hero-banner": "workspace:*",
+    "@functions-oneui/organism-search-autocomplete": "workspace:*",
+    "@functions-oneui/organism-smart-breadcrumb": "workspace:*",
     "@functions-oneui/react-utils": "workspace:*",
     "@functions-oneui/theme": "workspace:*",
+    "@functions-oneui/tokens": "workspace:*",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },

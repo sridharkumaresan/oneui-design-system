@@ -2,32 +2,56 @@
 
 ## Layering
 
-The theming system follows this flow:
+The theming system now follows this flow:
 
-`tokens -> theme -> components`
+`raw gradient tokens + semantic tokens -> theme adapters -> components`
 
-- `tokens`: semantic token contract + light/dark token values
-- `theme`: maps semantic tokens into Fluent UI v9-compatible theme keys
-- `components`: consume theme values (not raw token internals)
+- `@functions-oneui/tokens`
+  - owns semantic tokens for color, typography, spacing, radius, shadows, and breakpoints
+  - owns raw branded gradient definitions as structured data
+- `@functions-oneui/theme`
+  - maps semantic tokens into Fluent UI v9 theme keys
+  - maps raw gradients into semantic gradient roles for component usage
+- components
+  - consume Fluent theme values and named gradient roles
+  - should not assemble raw gradients inline as the default pattern
 
 ## Semantic Token Rules
 
 - Use semantic names (`color.text.primary`, `spacing.md`) instead of raw palette references.
-- Keep required semantic categories complete:
+- Keep the required semantic categories complete:
   - `color`
   - `typography`
   - `spacing`
   - `radius`
   - `shadows`
   - `breakpoints`
+- Keep gradients separate from the semantic token contract. Raw gradients are design primitives; semantic gradient roles live in `@functions-oneui/theme`.
 - Token changes must preserve contract stability for downstream packages.
+
+## Gradient Rules
+
+Use semantic gradient roles for:
+
+- hero and branded banner backgrounds
+- icon chips, backplates, and decorative accent containers
+- section/header accent bars or low-density promotional surfaces
+
+Avoid gradients for:
+
+- body text backgrounds
+- dense content surfaces and default card bodies
+- default interactive state communication
+- focus, error, success, warning, or other accessibility-critical state cues
+
+If a component needs a gradient variant, add component-level semantic/state tokens first. Do not reuse raw gradients ad hoc inside atoms or organisms.
 
 ## Adding Tokens Safely
 
-1. Add/adjust semantic keys in `@functions-oneui/tokens`.
-2. Update token contract validation/tests in `@functions-oneui/tokens`.
-3. Map new semantic keys in `@functions-oneui/theme`.
-4. Update theme tests to verify mapping coverage for light and dark.
-5. Release with Changesets when runtime behavior changes.
-
-Avoid introducing component-level assumptions directly in tokens. Keep tokens semantic and reusable.
+1. Add or update semantic tokens in `@functions-oneui/tokens` when the change is part of the shared semantic contract.
+2. Add raw gradient tokens in `@functions-oneui/tokens` when the change is a brand gradient primitive.
+3. Update validation/tests in `@functions-oneui/tokens`.
+4. Map new semantic keys or gradient roles in `@functions-oneui/theme`.
+5. Update theme tests to verify coverage for light and dark.
+6. Update Storybook docs/showcases to demonstrate approved usage.
+7. Release with Changesets when runtime behavior changes.

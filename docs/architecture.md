@@ -6,21 +6,31 @@
 
 - Lower layers must not depend on higher layers.
 - `tokens` has no UI-layer dependency.
-- `theme` depends on `tokens` and exposes Fluent UI v9-compatible theme objects.
+- `theme` depends on `tokens` and exposes Fluent UI v9-compatible theme objects plus semantic gradient roles.
 - Internal utilities (`utils`, `react-utils`, `testing`, `standards`) can be consumed across layers.
 
 ## Package Responsibilities
 
 - `@functions-oneui/tokens`
-  - Owns semantic token contract and token values.
+  - Owns the semantic token contract and light/dark token values.
+  - Owns raw branded gradient token definitions as structured data.
 - `@functions-oneui/theme`
-  - Maps semantic tokens to Fluent UI v9 theme objects and exports `OneUIProvider`.
+  - Maps semantic tokens to Fluent UI v9 theme objects.
+  - Maps raw gradient tokens into semantic gradient roles for component usage.
+  - Exports `OneUIProvider` and gradient-role access for React consumers.
 - `@functions-oneui/testing`
   - Provides shared accessibility helpers for Vitest + React Testing Library.
 - `@functions-oneui/react-utils`
   - Hosts React-specific helpers that sit above core utilities, including the structured logging provider/hooks layer exposed from `@functions-oneui/react-utils/logging`.
 - `@functions-oneui/atoms`
   - Hosts the first publishable UI layer and reference atom patterns.
+
+## Gradient Architecture
+
+- Raw gradients belong in `tokens` because they are brand primitives shared across platforms.
+- Semantic gradient roles belong in `theme` because usage meaning is platform and component-facing.
+- Components should consume named gradient roles rather than importing raw gradient definitions directly.
+- Future platform adapters can reuse the same raw gradient definitions without inheriting the Fluent theme shape.
 
 ## Workspace Layout
 
@@ -34,6 +44,6 @@
 - Active publishable packages: `tokens`, `theme`, `testing`, `react-utils`, `atoms`
 - Active app: `storybook`
 - Deferred until the base workspace passes on macOS and native Windows:
-  - organism packages
+  - additional organism packages beyond the current validated set
   - mock/demo apps beyond Storybook
-  - local publish smoke tooling
+  - production registry publish automation beyond the local/Nexus release flow

@@ -52,7 +52,7 @@ const radiusScale = {
   full: "9999px"
 };
 
-const breakpoints = {
+export const oneuiBreakpoints = {
   xs: "360px",
   sm: "480px",
   md: "768px",
@@ -110,7 +110,7 @@ export const lightThemeTokens = {
     xl: "0 16px 28px -4px rgba(0, 0, 0, 0.22)",
     focusRing: `0 0 0 2px ${rawPalette.brand[500]}`
   },
-  breakpoints
+  breakpoints: oneuiBreakpoints
 };
 
 export const darkThemeTokens = {
@@ -162,10 +162,12 @@ export const darkThemeTokens = {
     xl: "0 16px 28px -4px rgba(0, 0, 0, 0.42)",
     focusRing: `0 0 0 2px ${rawPalette.brand[400]}`
   },
-  breakpoints
+  breakpoints: oneuiBreakpoints
 };
 
 export const semanticTokens = {
   light: lightThemeTokens,
   dark: darkThemeTokens
 };
+
+export type OneUIBreakpointName = keyof typeof oneuiBreakpoints;

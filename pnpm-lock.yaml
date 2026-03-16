@@ -56,12 +56,27 @@ importers:
       '@fluentui/react-components':
         specifier: 9.73.0
         version: 9.73.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(scheduler@0.27.0)
+      '@functions-oneui/organism-action-panel':
+        specifier: workspace:*
+        version: link:../../packages/organisms/action-panel
+      '@functions-oneui/organism-hero-banner':
+        specifier: workspace:*
+        version: link:../../packages/organisms/hero-banner
+      '@functions-oneui/organism-search-autocomplete':
+        specifier: workspace:*
+        version: link:../../packages/organisms/search-autocomplete
+      '@functions-oneui/organism-smart-breadcrumb':
+        specifier: workspace:*
+        version: link:../../packages/organisms/smart-breadcrumb
       '@functions-oneui/react-utils':
         specifier: workspace:*
         version: link:../../packages/react-utils
       '@functions-oneui/theme':
         specifier: workspace:*
         version: link:../../packages/theme
+      '@functions-oneui/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -170,6 +185,83 @@ importers:
       '@functions-oneui/atoms':
         specifier: workspace:*
         version: link:../../atoms
+      '@functions-oneui/theme':
+        specifier: workspace:*
+        version: link:../../theme
+    devDependencies:
+      '@fluentui/react-components':
+        specifier: 9.73.0
+        version: 9.73.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(scheduler@0.27.0)
+      '@functions-oneui/organism-search-autocomplete':
+        specifier: workspace:*
+        version: link:../search-autocomplete
+      '@functions-oneui/organism-smart-breadcrumb':
+        specifier: workspace:*
+        version: link:../smart-breadcrumb
+      '@functions-oneui/testing':
+        specifier: workspace:*
+        version: link:../../testing
+      '@testing-library/react':
+        specifier: 16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      jsdom:
+        specifier: 25.0.1
+        version: 25.0.1
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
+      vitest:
+        specifier: 2.1.9
+        version: 2.1.9(@types/node@25.3.0)(@vitest/ui@2.1.9)(jsdom@25.0.1)
+
+  packages/organisms/search-autocomplete:
+    dependencies:
+      '@functions-oneui/atoms':
+        specifier: workspace:*
+        version: link:../../atoms
+      '@functions-oneui/theme':
+        specifier: workspace:*
+        version: link:../../theme
+    devDependencies:
+      '@fluentui/react-components':
+        specifier: 9.73.0
+        version: 9.73.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(scheduler@0.27.0)
+      '@functions-oneui/testing':
+        specifier: workspace:*
+        version: link:../../testing
+      '@testing-library/react':
+        specifier: 16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      jsdom:
+        specifier: 25.0.1
+        version: 25.0.1
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
+      vitest:
+        specifier: 2.1.9
+        version: 2.1.9(@types/node@25.3.0)(@vitest/ui@2.1.9)(jsdom@25.0.1)
+
+  packages/organisms/smart-breadcrumb:
+    dependencies:
       '@functions-oneui/theme':
         specifier: workspace:*
         version: link:../../theme

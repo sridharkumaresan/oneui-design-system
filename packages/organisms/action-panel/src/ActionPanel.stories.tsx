@@ -79,10 +79,6 @@ const meta = {
       description: {
         component:
           "ActionPanel is a publishable organism for concise callouts that combine structured content with primary and secondary actions."
-      },
-      source: {
-        code: actionPanelDefaultCode,
-        language: "tsx"
       }
     }
   },
@@ -109,9 +105,27 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: actionPanelDefaultCode,
+        language: "tsx"
+      }
+    }
+  }
+};
 
-export const WithSecondaryAction: Story = {};
+export const WithSecondaryAction: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: actionPanelDefaultCode,
+        language: "tsx"
+      }
+    }
+  }
+};
 
 export const StackedLayout: Story = {
   args: {
