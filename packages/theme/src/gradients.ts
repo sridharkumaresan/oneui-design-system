@@ -1,23 +1,16 @@
 import {
+  rawGradientTokenNames,
   rawGradientTokens,
   type RawGradientStop,
   type RawGradientToken,
   type RawGradientTokenName
 } from "@functions-oneui/tokens";
 
-export const oneuiGradientRoleNames = [
-  "heroPrimary",
-  "heroSecondary",
-  "featureSurface",
-  "softPromotionalSurface",
-  "iconAccent",
-  "decorativePastelSurface"
-] as const;
+export const oneuiGradientNames = rawGradientTokenNames;
 
-export type OneUIGradientRoleName = (typeof oneuiGradientRoleNames)[number];
-export type OneUIGradientRole = {
-  role: OneUIGradientRoleName;
-  gradientId: RawGradientTokenName;
+export type OneUIGradientName = (typeof oneuiGradientNames)[number];
+export type OneUIGradient = {
+  name: OneUIGradientName;
   type: RawGradientToken["type"];
   direction: RawGradientToken["direction"];
   angle: RawGradientToken["angle"];
@@ -25,32 +18,19 @@ export type OneUIGradientRole = {
   css: string;
   fallbackSolidColor: string;
 };
-export type OneUIGradientRoles = Record<OneUIGradientRoleName, OneUIGradientRole>;
-
-type OneUIGradientRoleMapping = Record<OneUIGradientRoleName, RawGradientTokenName>;
-
-const defaultGradientRoleMapping: OneUIGradientRoleMapping = {
-  heroPrimary: "deepSpectrum",
-  heroSecondary: "midnightBlue",
-  featureSurface: "limeSky",
-  softPromotionalSurface: "softAqua",
-  iconAccent: "tealShift",
-  decorativePastelSurface: "pastelHorizon"
-};
+export type OneUIGradients = Record<OneUIGradientName, OneUIGradient>;
 
 const cloneStops = (stops: RawGradientStop[]): RawGradientStop[] => {
   return stops.map((stop) => ({ ...stop }));
 };
 
-const resolveGradientRoles = (mapping: OneUIGradientRoleMapping): OneUIGradientRoles => {
+const resolveGradients = (): OneUIGradients => {
   return Object.fromEntries(
-    oneuiGradientRoleNames.map((role) => {
-      const gradientId = mapping[role];
-      const gradientToken = rawGradientTokens[gradientId];
+    oneuiGradientNames.map((name) => {
+      const gradientToken = rawGradientTokens[name];
 
-      const resolvedRole: OneUIGradientRole = {
-        role,
-        gradientId,
+      const resolvedGradient: OneUIGradient = {
+        name,
         type: gradientToken.type,
         direction: gradientToken.direction,
         angle: gradientToken.angle,
@@ -59,18 +39,27 @@ const resolveGradientRoles = (mapping: OneUIGradientRoleMapping): OneUIGradientR
         fallbackSolidColor: gradientToken.fallbackSolidColor
       };
 
-      return [role, resolvedRole];
+      return [name, resolvedGradient];
     })
-  ) as OneUIGradientRoles;
+  ) as OneUIGradients;
 };
 
 const normalizeMode = (mode: string | undefined): "light" | "dark" => {
   return mode === "dark" ? "dark" : "light";
 };
 
-export const oneuiLightGradientRoles = resolveGradientRoles(defaultGradientRoleMapping);
-export const oneuiDarkGradientRoles = resolveGradientRoles(defaultGradientRoleMapping);
+export const oneuiLightGradients = resolveGradients();
+export const oneuiDarkGradients = resolveGradients();
 
-export const createOneuiGradientRoles = (mode?: string): OneUIGradientRoles => {
-  return normalizeMode(mode) === "dark" ? oneuiDarkGradientRoles : oneuiLightGradientRoles;
+export const createOneuiGradients = (mode?: string): OneUIGradients => {
+  return normalizeMode(mode) === "dark" ? oneuiDarkGradients : oneuiLightGradients;
 };
+
+// Backward-compatible aliases while the workspace migrates to canonical gradient names.
+export const oneuiGradientRoleNames = oneuiGradientNames;
+export type OneUIGradientRoleName = OneUIGradientName;
+export type OneUIGradientRole = OneUIGradient;
+export type OneUIGradientRoles = OneUIGradients;
+export const oneuiLightGradientRoles = oneuiLightGradients;
+export const oneuiDarkGradientRoles = oneuiDarkGradients;
+export const createOneuiGradientRoles = createOneuiGradients;

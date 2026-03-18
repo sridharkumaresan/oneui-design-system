@@ -59,7 +59,7 @@ export function PortalHero(): JSX.Element {
           </OneUICard>
         </div>
       }
-      gradientRole="heroPrimary"
+      gradientName="deepSpectrum"
       supportingContent={
         <SearchAutocomplete
           scopeOptions={[
@@ -84,7 +84,7 @@ export function LandingHero(): JSX.Element {
     <HeroBanner
       contentTone="inverse"
       description="Welcome to Connections, how can we help you today?"
-      gradientRole="heroPrimary"
+      gradientName="deepSpectrum"
       height="immersive"
       surfaceVariant="gradient"
       title="Good morning, Sridhar"
@@ -118,7 +118,7 @@ export function HeroWithAside(): JSX.Element {
       contentTone="inverse"
       description="Composed hero surfaces can place supporting media or panels in the aside slot."
       eyebrow={<OneUIText size="bodySmall">Composed hero surface</OneUIText>}
-      gradientRole="heroPrimary"
+      gradientName="deepSpectrum"
       surfaceVariant="gradient"
       title="Keep the banner generic and place supporting content alongside it"
       aside={
@@ -171,7 +171,7 @@ const meta = {
     title: "Good morning, Sridhar",
     description: "Welcome to Connections, how can we help you today?",
     surfaceVariant: "gradient",
-    gradientRole: "heroPrimary",
+    gradientName: "deepSpectrum",
     contentTone: "inverse",
     height: "immersive"
   },
@@ -184,15 +184,15 @@ const meta = {
       control: "inline-radio",
       options: ["solid", "gradient"]
     },
-    gradientRole: {
+    gradientName: {
       control: "select",
       options: [
-        "heroPrimary",
-        "heroSecondary",
-        "featureSurface",
-        "softPromotionalSurface",
-        "iconAccent",
-        "decorativePastelSurface"
+        "deepSpectrum",
+        "midnightBlue",
+        "limeSky",
+        "softAqua",
+        "tealShift",
+        "pastelHorizon"
       ]
     },
     height: {
@@ -357,7 +357,7 @@ export const WithAsideContent: Story = {
 
 export const FeatureSurface: Story = {
   args: {
-    gradientRole: "featureSurface",
+    gradientName: "limeSky",
     contentTone: "default",
     title: "Approved semantic gradients can support feature spotlights",
     description:

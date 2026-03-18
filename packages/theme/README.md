@@ -6,7 +6,7 @@ Fluent UI v9 compatible OneUI theme composition built from semantic tokens in `@
 
 - Map semantic token names to Fluent UI theme keys
 - Provide ready-to-use light and dark theme objects
-- Expose semantic gradient roles for branded decorative usage
+- Expose canonical gradient names for branded decorative usage
 - Enable safe theme customization without deep imports
 
 ## Public API
@@ -14,13 +14,13 @@ Fluent UI v9 compatible OneUI theme composition built from semantic tokens in `@
 - `oneuiLightTheme`
 - `oneuiDarkTheme`
 - `createOneuiTheme(overrides?)`
-- `oneuiLightGradientRoles`
-- `oneuiDarkGradientRoles`
-- `createOneuiGradientRoles(mode?)`
+- `oneuiLightGradients`
+- `oneuiDarkGradients`
+- `createOneuiGradients(mode?)`
 - `useOneUIGradients()`
 - `OneUIProvider`
 - `oneuiThemeModes`
-- `oneuiGradientRoleNames`
+- `oneuiGradientNames`
 - `oneuiBreakpoints`
 - `createOneUIMediaQueryUp()` / `createOneUIMediaQueryDown()`
 - `createOneUIContainerQueryUp()` / `createOneUIContainerQueryDown()`
@@ -67,20 +67,44 @@ import { useOneUIGradients } from "@functions-oneui/theme";
 
 function HeroSurface(): JSX.Element {
   const gradients = useOneUIGradients();
-  const heroPrimary = gradients.heroPrimary;
+  const deepSpectrum = gradients.deepSpectrum;
 
   return (
     <section
       style={{
-        backgroundColor: heroPrimary.fallbackSolidColor,
-        backgroundImage: heroPrimary.css
+        backgroundColor: deepSpectrum.fallbackSolidColor,
+        backgroundImage: deepSpectrum.css
       }}
     />
   );
 }
 ```
 
-Use gradient roles for decorative hero surfaces, icon backplates, and section accents. Do not introduce raw gradient strings directly in atoms or organisms as the default styling pattern.
+Use the canonical gradients for decorative hero surfaces, icon backplates, and section accents. Do not introduce raw gradient strings directly in atoms or organisms as the default styling pattern.
+
+## SPFx Host Bridge
+
+Use the SPFx bridge helpers when a SharePoint host theme needs to influence compatible OneUI theme values without replacing the OneUI brand surface contract.
+
+```ts
+import {
+  OneUISpfxProvider,
+  createOneuiThemeFromSpfxTheme
+} from "@functions-oneui/theme";
+```
+
+- `createOneuiThemeOverridesFromSpfxTheme(spfxTheme)`
+  - maps a SharePoint-style palette/semantic color input into safe OneUI Fluent overrides
+- `createOneuiThemeFromSpfxTheme(spfxTheme, overrides?)`
+  - returns a full OneUI theme using the SPFx host theme as an override source
+- `OneUISpfxProvider`
+  - composes the host theme bridge into `OneUIProvider`
+
+Recommended rule:
+
+- let the SharePoint host theme influence compatible neutral and brand-adjacent Fluent values
+- keep canonical OneUI gradients such as `deepSpectrum` and `midnightBlue` as OneUI-owned brand surfaces
+- do not let arbitrary host colors replace the approved hero gradient shell
 
 ## Responsive Helpers
 
@@ -93,7 +117,7 @@ Switch by selecting `mode: "light" | "dark"` with `OneUIProvider`, or by passing
 ## Adding New Tokens Safely
 
 1. Add semantic tokens or raw gradient primitives in `@functions-oneui/tokens` first.
-2. Add Fluent mappings or semantic gradient-role mappings in `@functions-oneui/theme`.
+2. Add Fluent mappings and expose the new gradient name in `@functions-oneui/theme`.
 3. Keep gradients out of the flat Fluent theme key map.
 4. Run `pnpm --filter @functions-oneui/theme test` to confirm contract coverage for light and dark.
 

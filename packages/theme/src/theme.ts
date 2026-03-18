@@ -1,3 +1,4 @@
+import * as fluentReactComponents from "@fluentui/react-components";
 import { requiredSemanticTokenPaths, semanticTokens } from "@functions-oneui/tokens";
 
 import { semanticPathToThemeKeyMap } from "./internal/mapping.js";
@@ -21,6 +22,26 @@ export type CreateOneuiThemeOptions = {
 
 const normalizeMode = (mode: string | undefined): OneUIThemeMode => {
   return mode === "dark" ? "dark" : "light";
+};
+
+const getBaseFluentTheme = (mode: OneUIThemeMode): OneUIFluentTheme => {
+  const fluentModule = fluentReactComponents as {
+    webDarkTheme?: unknown;
+    webLightTheme?: unknown;
+    default?: {
+      webDarkTheme?: unknown;
+      webLightTheme?: unknown;
+    };
+  };
+  const darkTheme = fluentModule.webDarkTheme ?? fluentModule.default?.webDarkTheme;
+  const lightTheme = fluentModule.webLightTheme ?? fluentModule.default?.webLightTheme;
+  const resolvedTheme = mode === "dark" ? darkTheme : lightTheme;
+
+  if (!resolvedTheme || typeof resolvedTheme !== "object") {
+    throw new Error(`Failed to resolve the base Fluent ${mode} theme`);
+  }
+
+  return resolvedTheme as OneUIFluentTheme;
 };
 
 const assertThemeValue = (value: unknown, keyName: string): string | number => {
@@ -111,10 +132,14 @@ const validateSemanticCoverage = (tokens: SemanticTokenSet, mode: OneUIThemeMode
 validateSemanticCoverage(semanticTokens.light, "light");
 validateSemanticCoverage(semanticTokens.dark, "dark");
 
-export const oneuiLightTheme: OneUIFluentTheme = mapSemanticTokensToFluentTheme(
-  semanticTokens.light
-);
-export const oneuiDarkTheme: OneUIFluentTheme = mapSemanticTokensToFluentTheme(semanticTokens.dark);
+export const oneuiLightTheme: OneUIFluentTheme = deepMerge(
+  getBaseFluentTheme("light"),
+  mapSemanticTokensToFluentTheme(semanticTokens.light) as UnknownRecord
+) as OneUIFluentTheme;
+export const oneuiDarkTheme: OneUIFluentTheme = deepMerge(
+  getBaseFluentTheme("dark"),
+  mapSemanticTokensToFluentTheme(semanticTokens.dark) as UnknownRecord
+) as OneUIFluentTheme;
 
 export const createOneuiTheme = (overrides: CreateOneuiThemeOptions = {}): OneUIFluentTheme => {
   const mode = normalizeMode(overrides.mode);
@@ -127,8 +152,10 @@ export const createOneuiTheme = (overrides: CreateOneuiThemeOptions = {}): OneUI
     semanticOverrides
   ) as SemanticTokenSet;
   const mappedTheme = mapSemanticTokensToFluentTheme(mergedSemanticTokens);
+  const baseFluentTheme = getBaseFluentTheme(mode);
+  const resolvedTheme = deepMerge(baseFluentTheme as UnknownRecord, mappedTheme as UnknownRecord);
 
-  return deepMerge(mappedTheme as UnknownRecord, fluentThemeOverrides) as OneUIFluentTheme;
+  return deepMerge(resolvedTheme as UnknownRecord, fluentThemeOverrides) as OneUIFluentTheme;
 };
 
 export const oneuiThemeModes = ["light", "dark"] as const;

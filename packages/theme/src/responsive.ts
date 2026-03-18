@@ -1,4 +1,8 @@
-import { oneuiBreakpoints, type OneUIBreakpointName } from "@functions-oneui/tokens";
+import {
+  oneuiActionCardContainerBreakpoints,
+  oneuiBreakpoints,
+  type OneUIBreakpointName
+} from "@functions-oneui/tokens";
 
 const resolveBreakpoint = (breakpoint: OneUIBreakpointName): string => {
   return oneuiBreakpoints[breakpoint];
@@ -31,4 +35,5 @@ export const createOneUIContainerQueryDown = (
 };
 
 export { oneuiBreakpoints };
+export { oneuiActionCardContainerBreakpoints };
 export type { OneUIBreakpointName };

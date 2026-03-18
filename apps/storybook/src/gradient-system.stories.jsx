@@ -3,56 +3,55 @@ import React from "react";
 import { useFluent } from "@fluentui/react-components";
 import {
   useOneUIGradients,
-  oneuiGradientRoleNames
+  oneuiGradientNames
 } from "@functions-oneui/theme";
 import { HeroBanner as OneUIHeroBanner } from "@functions-oneui/organism-hero-banner";
 
-const gradientRoleNotes = {
-  heroPrimary: {
+const gradientNameNotes = {
+  deepSpectrum: {
     title: "Hero primary",
     usage: "Primary branded hero surfaces and high-visibility landing moments.",
     approved: "Hero banner, marquee surfaces, large campaign headers."
   },
-  heroSecondary: {
+  midnightBlue: {
     title: "Hero secondary",
     usage: "Darker branded hero or compact branded panel surfaces.",
     approved: "Secondary hero moments, compact stock/weather overlays, dark branded promo panels."
   },
-  featureSurface: {
+  limeSky: {
     title: "Feature surface",
     usage: "Lighter feature and campaign surfaces with lower visual weight.",
     approved: "Section accents, promotional strips, low-density highlight bands."
   },
-  softPromotionalSurface: {
+  softAqua: {
     title: "Soft promotional surface",
     usage: "Soft branded surfaces for promotional or supportive content.",
     approved: "Promo cards, onboarding callouts, optional decorative panels."
   },
-  iconAccent: {
+  tealShift: {
     title: "Icon accent",
     usage: "Compact decorative accents around icon or metric containers.",
     approved: "Icon backplates, compact indicator containers, branded mini-panels."
   },
-  decorativePastelSurface: {
+  pastelHorizon: {
     title: "Decorative pastel surface",
     usage: "Art-directed decorative surfaces with a softer tone.",
     approved: "Decorative side panels, supporting feature surfaces, non-critical visual flourish."
   }
 };
 
-const gradientSourceCode = `import { oneuiGradientRoleNames, useOneUIGradients } from "@functions-oneui/theme";
+const gradientSourceCode = `import { oneuiGradientNames, useOneUIGradients } from "@functions-oneui/theme";
 
 function GradientCatalog() {
   const gradients = useOneUIGradients();
 
-  return oneuiGradientRoleNames.map((role) => {
-    const gradient = gradients[role];
+  return oneuiGradientNames.map((name) => {
+    const gradient = gradients[name];
 
     return {
-      role,
+      name,
       css: gradient.css,
-      fallbackSolidColor: gradient.fallbackSolidColor,
-      gradientId: gradient.gradientId
+      fallbackSolidColor: gradient.fallbackSolidColor
     };
   });
 }`;
@@ -64,7 +63,7 @@ const meta = {
     docs: {
       description: {
         story:
-          "Approved gradient usage patterns for OneUI. This page catalogs every semantic gradient role and shows where gradients are appropriate without implying that standard buttons should default to gradient styling."
+          "Approved gradient usage patterns for OneUI. This page catalogs every canonical gradient name and shows where gradients are appropriate without implying that standard buttons should default to gradient styling."
       },
       source: {
         code: gradientSourceCode,
@@ -76,12 +75,12 @@ const meta = {
 
 export default meta;
 
-const applyGradientSurface = (gradientRole) => ({
-  backgroundColor: gradientRole.fallbackSolidColor,
-  backgroundImage: gradientRole.css
+const applyGradientSurface = (gradient) => ({
+  backgroundColor: gradient.fallbackSolidColor,
+  backgroundImage: gradient.css
 });
 
-const GradientRoleCard = ({ note, role, theme }) => {
+const GradientCard = ({ gradient, note, theme }) => {
   return (
     <article
       style={{
@@ -95,7 +94,7 @@ const GradientRoleCard = ({ note, role, theme }) => {
     >
       <div
         style={{
-          ...applyGradientSurface(role),
+          ...applyGradientSurface(gradient),
           borderRadius: theme?.borderRadiusLarge ?? "0.75rem",
           minHeight: "6rem",
           padding: theme?.spacingHorizontalM ?? "0.75rem"
@@ -110,9 +109,7 @@ const GradientRoleCard = ({ note, role, theme }) => {
             fontSize: theme?.fontSizeBase200
           }}
         >
-          {role.role}
-          {" -> "}
-          {role.gradientId}
+          {gradient.name}
         </code>
         <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>{note.usage}</p>
         <p style={{ color: theme?.colorNeutralForeground3, lineHeight: 1.5, margin: 0 }}>
@@ -162,16 +159,16 @@ const GradientShowcase = () => {
             Gradients are named surfaces, not free-form decoration.
           </h1>
           <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0, maxWidth: "72ch" }}>
-            Every available semantic gradient role is cataloged here. Consumers should use these named roles through the theme layer instead of authoring raw gradient strings directly inside atoms or organisms.
+            Every available gradient name is cataloged here. Consumers should use these named gradients through the theme layer instead of authoring raw gradient strings directly inside atoms or organisms.
           </p>
         </div>
       </section>
 
       <section style={{ display: "grid", gap: theme?.spacingVerticalL ?? "1rem" }}>
         <div>
-          <h2 style={{ margin: 0 }}>Role catalog</h2>
+          <h2 style={{ margin: 0 }}>Gradient catalog</h2>
           <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-            These are the six approved semantic gradient roles currently exposed by the design system.
+            These are the six approved gradients currently exposed by the design system.
           </p>
         </div>
         <div
@@ -181,11 +178,11 @@ const GradientShowcase = () => {
             gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))"
           }}
         >
-          {oneuiGradientRoleNames.map((roleName) => (
-            <GradientRoleCard
-              key={roleName}
-              note={gradientRoleNotes[roleName]}
-              role={gradients[roleName]}
+          {oneuiGradientNames.map((gradientName) => (
+            <GradientCard
+              key={gradientName}
+              gradient={gradients[gradientName]}
+              note={gradientNameNotes[gradientName]}
               theme={theme}
             />
           ))}
@@ -196,25 +193,25 @@ const GradientShowcase = () => {
         <div>
           <h2 style={{ margin: 0 }}>Hero variants</h2>
           <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-            The hero roles are available here directly, not only inside the HeroBanner organism story pages.
+            The hero gradients are available here directly, not only inside the HeroBanner organism story pages.
           </p>
         </div>
         <div style={{ display: "grid", gap: theme?.spacingVerticalL ?? "1rem" }}>
           <OneUIHeroBanner
             contentTone="inverse"
             description="Primary branded hero treatment for prominent landing experiences."
-            gradientRole="heroPrimary"
+            gradientName="deepSpectrum"
             height="comfortable"
             surfaceVariant="gradient"
-            title="heroPrimary"
+            title="deepSpectrum"
           />
           <OneUIHeroBanner
             contentTone="inverse"
             description="Darker alternative for secondary hero and compact branded panel moments."
-            gradientRole="heroSecondary"
+            gradientName="midnightBlue"
             height="comfortable"
             surfaceVariant="gradient"
-            title="heroSecondary"
+            title="midnightBlue"
           />
         </div>
       </section>
@@ -235,7 +232,7 @@ const GradientShowcase = () => {
         >
           <article
             style={{
-              ...applyGradientSurface(gradients.heroSecondary),
+              ...applyGradientSurface(gradients.midnightBlue),
               borderRadius: theme?.borderRadiusXLarge ?? "1rem",
               color: theme?.colorNeutralForegroundOnBrand ?? theme?.colorNeutralForegroundInverted,
               display: "grid",
@@ -263,7 +260,7 @@ const GradientShowcase = () => {
           >
             <div
               style={{
-                ...applyGradientSurface(gradients.iconAccent),
+                ...applyGradientSurface(gradients.tealShift),
                 alignItems: "center",
                 borderRadius: theme?.borderRadiusCircular ?? "9999px",
                 color: theme?.colorNeutralForegroundOnBrand ?? theme?.colorNeutralForegroundInverted,
@@ -280,7 +277,7 @@ const GradientShowcase = () => {
             <div>
               <strong>Decorative icon backplate</strong>
               <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-                Use iconAccent for compact decorative emphasis around icons or small branded indicators.
+                Use tealShift for compact decorative emphasis around icons or small branded indicators.
               </p>
             </div>
           </article>
@@ -297,7 +294,7 @@ const GradientShowcase = () => {
           >
             <div
               style={{
-                ...applyGradientSurface(gradients.featureSurface),
+                ...applyGradientSurface(gradients.limeSky),
                 borderRadius: theme?.borderRadiusCircular ?? "9999px",
                 height: "0.375rem",
                 width: "6rem"

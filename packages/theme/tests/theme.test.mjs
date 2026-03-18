@@ -8,32 +8,27 @@ import {
   createOneUIContainerQueryUp,
   createOneUIMediaQueryDown,
   createOneUIMediaQueryUp,
-  createOneuiGradientRoles,
+  createOneuiGradients,
+  createOneuiThemeFromSpfxTheme,
+  createOneuiThemeOverridesFromSpfxTheme,
   createOneuiTheme,
   OneUIProvider,
-  oneuiDarkGradientRoles,
+  OneUISpfxProvider,
+  oneuiDarkGradients,
   oneuiDarkTheme,
-  oneuiGradientRoleNames,
-  oneuiLightGradientRoles,
+  oneuiGradientNames,
+  oneuiLightGradients,
   oneuiLightTheme,
   oneuiThemeModes,
   semanticPathToThemeKeyMap,
   useOneUIGradients
 } from "../dist/index.js";
 import {
+  rawGradientTokenNames,
   rawGradientTokens,
   requiredSemanticTokenPaths,
   semanticTokens
 } from "../../tokens/dist/index.js";
-
-const expectedGradientMapping = {
-  heroPrimary: "deepSpectrum",
-  heroSecondary: "midnightBlue",
-  featureSurface: "limeSky",
-  softPromotionalSurface: "softAqua",
-  iconAccent: "tealShift",
-  decorativePastelSurface: "pastelHorizon"
-};
 
 const getByPath = (source, path) => {
   return path.split(".").reduce((value, segment) => {
@@ -121,37 +116,75 @@ test("createOneuiTheme defaults to light mode for invalid mode values", () => {
   assert.equal(themed.colorNeutralBackground1, oneuiLightTheme.colorNeutralBackground1);
 });
 
-test("exports semantic gradient roles for light and dark themes", () => {
-  assert.deepEqual(oneuiGradientRoleNames, [
-    "heroPrimary",
-    "heroSecondary",
-    "featureSurface",
-    "softPromotionalSurface",
-    "iconAccent",
-    "decorativePastelSurface"
-  ]);
+test("maps SharePoint theme input into safe OneUI theme overrides", () => {
+  const overrides = createOneuiThemeOverridesFromSpfxTheme({
+    palette: {
+      neutralLight: "#dddddd",
+      neutralPrimary: "#111111",
+      themeDark: "#003f9a",
+      themeDarkAlt: "#0058c9",
+      themePrimary: "#0078d4",
+      white: "#ffffff"
+    },
+    semanticColors: {
+      bodyBackground: "#fafafa",
+      bodyText: "#1a1a1a",
+      link: "#0f6cbd",
+      primaryButtonBackground: "#115ea3",
+      primaryButtonText: "#ffffff"
+    }
+  });
 
-  for (const gradientRoles of [oneuiLightGradientRoles, oneuiDarkGradientRoles]) {
-    for (const roleName of oneuiGradientRoleNames) {
-      const resolvedRole = gradientRoles[roleName];
-      const expectedGradientId = expectedGradientMapping[roleName];
-      const rawGradient = rawGradientTokens[expectedGradientId];
+  assert.equal(overrides.fluentTheme.colorNeutralBackground1, "#fafafa");
+  assert.equal(overrides.fluentTheme.colorNeutralForeground1, "#1a1a1a");
+  assert.equal(overrides.fluentTheme.colorBrandBackground, "#115ea3");
+  assert.equal(overrides.fluentTheme.colorBrandForegroundLink, "#0f6cbd");
+  assert.equal(overrides.fluentTheme.colorNeutralStroke1, "#dddddd");
+});
 
-      assert.equal(resolvedRole.role, roleName);
-      assert.equal(resolvedRole.gradientId, expectedGradientId);
-      assert.equal(resolvedRole.type, rawGradient.type);
-      assert.equal(resolvedRole.direction, rawGradient.direction);
-      assert.equal(resolvedRole.angle, rawGradient.angle);
-      assert.equal(resolvedRole.css, rawGradient.css);
-      assert.equal(resolvedRole.fallbackSolidColor, rawGradient.fallbackSolidColor);
-      assert.deepEqual(resolvedRole.stops, rawGradient.stops);
+test("createOneuiThemeFromSpfxTheme resolves mode from the host theme inversion flag", () => {
+  const themed = createOneuiThemeFromSpfxTheme(
+    {
+      isInverted: true,
+      palette: {
+        neutralPrimary: "#ffffff",
+        themePrimary: "#00aeef",
+        white: "#000063"
+      },
+      semanticColors: {
+        bodyBackground: "#000063",
+        bodyText: "#ffffff"
+      }
+    },
+    {}
+  );
+
+  assert.equal(themed.colorNeutralBackground1, "#000063");
+  assert.equal(themed.colorNeutralForeground1, "#ffffff");
+});
+
+test("exports canonical gradients for light and dark themes", () => {
+  assert.deepEqual(oneuiGradientNames, rawGradientTokenNames);
+
+  for (const gradients of [oneuiLightGradients, oneuiDarkGradients]) {
+    for (const gradientName of oneuiGradientNames) {
+      const resolvedGradient = gradients[gradientName];
+      const rawGradient = rawGradientTokens[gradientName];
+
+      assert.equal(resolvedGradient.name, gradientName);
+      assert.equal(resolvedGradient.type, rawGradient.type);
+      assert.equal(resolvedGradient.direction, rawGradient.direction);
+      assert.equal(resolvedGradient.angle, rawGradient.angle);
+      assert.equal(resolvedGradient.css, rawGradient.css);
+      assert.equal(resolvedGradient.fallbackSolidColor, rawGradient.fallbackSolidColor);
+      assert.deepEqual(resolvedGradient.stops, rawGradient.stops);
     }
   }
 });
 
-test("createOneuiGradientRoles defaults to light mode for invalid values", () => {
-  assert.deepEqual(createOneuiGradientRoles("dark"), oneuiDarkGradientRoles);
-  assert.deepEqual(createOneuiGradientRoles("unknown"), oneuiLightGradientRoles);
+test("createOneuiGradients defaults to light mode for invalid values", () => {
+  assert.deepEqual(createOneuiGradients("dark"), oneuiDarkGradients);
+  assert.deepEqual(createOneuiGradients("unknown"), oneuiLightGradients);
 });
 
 test("useOneUIGradients follows OneUIProvider mode and defaults to light gradients", () => {
@@ -163,8 +196,8 @@ test("useOneUIGradients follows OneUIProvider mode and defaults to light gradien
 
   renderToStaticMarkup(React.createElement(OutsideProbe));
   assert.equal(
-    outsideProviderGradients.heroPrimary.css,
-    oneuiLightGradientRoles.heroPrimary.css
+    outsideProviderGradients.deepSpectrum.css,
+    oneuiLightGradients.deepSpectrum.css
   );
 
   let darkModeGradients;
@@ -177,9 +210,54 @@ test("useOneUIGradients follows OneUIProvider mode and defaults to light gradien
     React.createElement(OneUIProvider, { mode: "dark" }, React.createElement(DarkProbe))
   );
 
-  assert.equal(darkModeGradients.heroPrimary.css, oneuiDarkGradientRoles.heroPrimary.css);
+  assert.equal(darkModeGradients.deepSpectrum.css, oneuiDarkGradients.deepSpectrum.css);
   assert.equal(
-    darkModeGradients.decorativePastelSurface.fallbackSolidColor,
-    oneuiDarkGradientRoles.decorativePastelSurface.fallbackSolidColor
+    darkModeGradients.pastelHorizon.fallbackSolidColor,
+    oneuiDarkGradients.pastelHorizon.fallbackSolidColor
   );
+});
+
+test("OneUISpfxProvider applies SharePoint theme overrides while preserving OneUI gradients", () => {
+  let themedBackground;
+  let gradientName;
+
+  const Probe = () => {
+    const gradients = useOneUIGradients();
+    const theme = createOneuiThemeFromSpfxTheme({
+      palette: {
+        themePrimary: "#0078d4",
+        white: "#ffffff"
+      },
+      semanticColors: {
+        bodyBackground: "#f5f5f5",
+        bodyText: "#222222"
+      }
+    });
+
+    themedBackground = theme.colorNeutralBackground1;
+    gradientName = gradients.deepSpectrum.name;
+    return React.createElement("div", null, "spfx-provider");
+  };
+
+  renderToStaticMarkup(
+    React.createElement(
+      OneUISpfxProvider,
+      {
+        spfxTheme: {
+          palette: {
+            themePrimary: "#0078d4",
+            white: "#ffffff"
+          },
+          semanticColors: {
+            bodyBackground: "#f5f5f5",
+            bodyText: "#222222"
+          }
+        }
+      },
+      React.createElement(Probe)
+    )
+  );
+
+  assert.equal(themedBackground, "#f5f5f5");
+  assert.equal(gradientName, "deepSpectrum");
 });

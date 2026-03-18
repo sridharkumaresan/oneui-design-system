@@ -1,11 +1,11 @@
 import React from "react";
 
-import { oneuiLightGradientRoles, type OneUIGradientRoles } from "./gradients.js";
+import { oneuiLightGradients, type OneUIGradients } from "./gradients.js";
 
-export const OneUIGradientContext = React.createContext<OneUIGradientRoles>(
-  oneuiLightGradientRoles
+export const OneUIGradientContext = React.createContext<OneUIGradients>(
+  oneuiLightGradients
 );
 
-export const useOneUIGradients = (): OneUIGradientRoles => {
+export const useOneUIGradients = (): OneUIGradients => {
   return React.useContext(OneUIGradientContext);
 };

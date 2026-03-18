@@ -11,9 +11,9 @@ The theming system now follows this flow:
   - owns raw branded gradient definitions as structured data
 - `@functions-oneui/theme`
   - maps semantic tokens into Fluent UI v9 theme keys
-  - maps raw gradients into semantic gradient roles for component usage
+  - exposes the canonical gradient names for component usage
 - components
-  - consume Fluent theme values and named gradient roles
+  - consume Fluent theme values and canonical gradient names
   - should not assemble raw gradients inline as the default pattern
 
 ## Semantic Token Rules
@@ -26,12 +26,13 @@ The theming system now follows this flow:
   - `radius`
   - `shadows`
   - `breakpoints`
-- Keep gradients separate from the semantic token contract. Raw gradients are design primitives; semantic gradient roles live in `@functions-oneui/theme`.
+- Keep gradients separate from the semantic token contract. Raw gradients are design primitives, and `@functions-oneui/theme` exposes those canonical names for component usage.
+- Use canonical names such as `deepSpectrum` and `midnightBlue` in component APIs and documentation. Do not invent secondary aliases for the public contract.
 - Token changes must preserve contract stability for downstream packages.
 
 ## Gradient Rules
 
-Use semantic gradient roles for:
+Use the canonical gradient names for:
 
 - hero and branded banner backgrounds
 - icon chips, backplates, and decorative accent containers

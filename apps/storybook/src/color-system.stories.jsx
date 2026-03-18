@@ -19,8 +19,9 @@ const panelStyle = {
 
 const colorUsageRules = [
   "Use semantic color roles from @functions-oneui/tokens or @functions-oneui/theme instead of raw hex values inside components.",
-  "Background, text, border, icon, and status roles are separate on purpose. Do not repurpose status colors for layout surfaces.",
+  "Background, text, border, interaction, and feedback roles are separate on purpose. Do not repurpose status fills for layout surfaces or button states.",
   "Inverse text roles belong on dark or saturated surfaces only.",
+  "Interactive controls should consume the semantic interaction roles so hover and pressed states stay consistent across atoms and organisms.",
   "Gradient usage is documented separately under Foundation/Gradient System and should not replace the solid semantic contract by default."
 ];
 
@@ -46,13 +47,31 @@ const backgroundRoles = [
   {
     key: "brand",
     label: "Brand",
-    usage: "High-emphasis branded surfaces and primary accents.",
+    usage: "Brand-owned cyan accents and low-ceremony brand surfaces.",
+    kind: "fill"
+  },
+  {
+    key: "brandStrong",
+    label: "Brand strong",
+    usage: "Solid high-contrast brand surfaces such as fallback hero shells.",
     kind: "fill"
   },
   {
     key: "dangerSubtle",
     label: "Danger subtle",
     usage: "Subtle critical-state backgrounds where full danger surfaces would be too strong.",
+    kind: "fill"
+  },
+  {
+    key: "warningSubtle",
+    label: "Warning subtle",
+    usage: "Low-emphasis warning backgrounds, due-date chips, and caution summaries.",
+    kind: "fill"
+  },
+  {
+    key: "infoSubtle",
+    label: "Info subtle",
+    usage: "Low-emphasis informational backgrounds and branded summary panels.",
     kind: "fill"
   },
   {
@@ -85,7 +104,19 @@ const textRoles = [
   {
     key: "brand",
     label: "Brand text",
-    usage: "Brand-linked emphasis such as selected states or emphasized links.",
+    usage: "Branded emphasis where standard primary text hierarchy is not enough.",
+    kind: "text"
+  },
+  {
+    key: "link",
+    label: "Link text",
+    usage: "Default interactive link and tertiary text action color.",
+    kind: "text"
+  },
+  {
+    key: "linkHover",
+    label: "Link hover",
+    usage: "Interactive hover state for links and text actions.",
     kind: "text"
   },
   {
@@ -99,6 +130,18 @@ const textRoles = [
     label: "Success text",
     usage: "Positive confirmation and success emphasis.",
     kind: "text"
+  },
+  {
+    key: "warning",
+    label: "Warning text",
+    usage: "Readable warning emphasis on pale caution surfaces.",
+    kind: "text"
+  },
+  {
+    key: "onBrand",
+    label: "On-brand text",
+    usage: "Text placed on strong brand interaction or banner surfaces.",
+    kind: "textInverse"
   }
 ];
 
@@ -138,6 +181,12 @@ const borderRoles = [
     label: "Danger border",
     usage: "Critical state outlines and validation emphasis.",
     kind: "border"
+  },
+  {
+    key: "warning",
+    label: "Warning border",
+    usage: "Warning chip outlines and caution-state separators.",
+    kind: "border"
   }
 ];
 
@@ -164,6 +213,12 @@ const statusRoles = [
     key: "info",
     label: "Info status",
     usage: "Informational notices and non-blocking highlights.",
+    kind: "status"
+  },
+  {
+    key: "neutral",
+    label: "Neutral status",
+    usage: "Filled neutral metadata chips and low-priority state markers.",
     kind: "status"
   }
 ];
@@ -192,6 +247,114 @@ const iconRoles = [
     label: "Inverse icon",
     usage: "Iconography on dark or saturated surfaces.",
     kind: "iconInverse"
+  },
+  {
+    key: "danger",
+    label: "Danger icon",
+    usage: "Critical-state iconography and warning triangles.",
+    kind: "icon"
+  },
+  {
+    key: "info",
+    label: "Info icon",
+    usage: "Informational iconography and branded directional cues.",
+    kind: "icon"
+  }
+];
+
+const interactionPrimaryRoles = [
+  {
+    key: "background",
+    label: "Primary background",
+    usage: "Default filled primary action state.",
+    kind: "fill"
+  },
+  {
+    key: "backgroundHover",
+    label: "Primary hover",
+    usage: "Hovered primary action surface.",
+    kind: "fill"
+  },
+  {
+    key: "backgroundPressed",
+    label: "Primary pressed",
+    usage: "Pressed primary action surface.",
+    kind: "fill"
+  },
+  {
+    key: "foreground",
+    label: "Primary foreground",
+    usage: "Text and icon color placed on primary actions.",
+    kind: "textInverse"
+  }
+];
+
+const interactionSecondaryRoles = [
+  {
+    key: "background",
+    label: "Secondary background",
+    usage: "Default secondary action surface.",
+    kind: "fill"
+  },
+  {
+    key: "backgroundHover",
+    label: "Secondary hover",
+    usage: "Hovered secondary action surface.",
+    kind: "fill"
+  },
+  {
+    key: "border",
+    label: "Secondary border",
+    usage: "Default outlined secondary action border.",
+    kind: "border"
+  },
+  {
+    key: "foreground",
+    label: "Secondary foreground",
+    usage: "Text and icon color placed on secondary actions.",
+    kind: "text"
+  }
+];
+
+const interactionSubtleRoles = [
+  {
+    key: "background",
+    label: "Subtle background",
+    usage: "Default low-emphasis action surface used for quiet but still discoverable actions.",
+    kind: "fill"
+  },
+  {
+    key: "backgroundHover",
+    label: "Subtle hover",
+    usage: "Hovered subtle action surface.",
+    kind: "fill"
+  },
+  {
+    key: "foreground",
+    label: "Subtle foreground",
+    usage: "Text and icon color for subtle actions.",
+    kind: "text"
+  }
+];
+
+const interactionTransparentRoles = [
+  {
+    key: "background",
+    label: "Transparent background",
+    usage: "Default tertiary action background. Usually transparent at rest.",
+    kind: "fill"
+  },
+  {
+    key: "backgroundHover",
+    label: "Transparent hover",
+    usage: "Hovered transparent action surface for discoverability without a full button shell.",
+    kind: "fill"
+  },
+  {
+    key: "foreground",
+    label: "Transparent foreground",
+    usage: "Text and icon color for transparent and text-like actions.",
+    kind: "text"
   }
 ];
 
@@ -215,11 +378,12 @@ const meta = {
 export default meta;
 
 const ColorPage = ({ mode }) => {
-  const { theme } = useFluent();
+  const fluent = useFluent();
+  const theme = fluent.theme;
   const colorTokens = semanticTokens[mode].color;
 
   const pageStyle = {
-    background: theme?.colorNeutralBackground1,
+    background: theme?.oneuiColorBackgroundCanvas ?? theme?.colorNeutralBackground2,
     color: theme?.colorNeutralForeground1,
     display: "grid",
     gap: theme?.spacingVerticalXXL ?? "2rem",
@@ -239,8 +403,8 @@ const ColorPage = ({ mode }) => {
   };
 
   const panelStyle = {
-    background: theme?.colorNeutralBackground2,
-    border: `1px solid ${theme?.colorNeutralStroke2}`,
+    background: theme?.colorNeutralBackground1,
+    border: `1px solid ${theme?.colorNeutralStroke1}`,
     borderRadius: theme?.borderRadiusXLarge ?? "1rem",
     padding: theme?.spacingHorizontalXL ?? "1.5rem"
   };
@@ -287,10 +451,14 @@ const ColorPage = ({ mode }) => {
             ? value
             : item.kind === "fill"
               ? item.key === "brand"
-                ? colorTokens.text.inverse
+                ? colorTokens.text.onBrand
                 : colorTokens.text.primary
               : item.kind === "status"
-                ? colorTokens.text.inverse
+                ? item.key === "warning"
+                  ? colorTokens.text.onWarning
+                  : item.key === "neutral"
+                    ? colorTokens.text.onNeutral
+                    : colorTokens.text.inverse
               : colorTokens.text.primary,
       display: "flex",
       fontSize: theme?.fontSizeBase400,
@@ -377,6 +545,34 @@ const ColorPage = ({ mode }) => {
         "Use these roles for layout and surface hierarchy. They define where content sits, not what workflow state it represents.",
         backgroundRoles,
         colorTokens.background
+      )}
+
+      {renderSection(
+        "Interaction roles · Primary",
+        "Primary interactive colors are a solid blue system. They are not gradient-driven and should back all default high-emphasis actions.",
+        interactionPrimaryRoles,
+        colorTokens.interaction.primary
+      )}
+
+      {renderSection(
+        "Interaction roles · Secondary",
+        "Secondary interaction roles keep outline and neutral action surfaces consistent across responsive patterns such as ActionCard and search flows.",
+        interactionSecondaryRoles,
+        colorTokens.interaction.secondary
+      )}
+
+      {renderSection(
+        "Interaction roles · Subtle",
+        "Subtle actions use a light informational tint with branded text. They should feel quieter than secondary actions without disappearing into plain white surfaces.",
+        interactionSubtleRoles,
+        colorTokens.interaction.subtle
+      )}
+
+      {renderSection(
+        "Interaction roles · Transparent",
+        "Transparent actions are text-like by default and only pick up a light surface on hover or press.",
+        interactionTransparentRoles,
+        colorTokens.interaction.transparent
       )}
 
       {renderSection(

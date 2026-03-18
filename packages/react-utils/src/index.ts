@@ -1,1 +1,1 @@
-export {};
+export { useOneUIId } from "./useOneUIId.js";

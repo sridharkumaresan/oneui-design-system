@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import type { FluentProviderProps } from "@fluentui/react-components";
 
 import { OneUIGradientContext } from "./gradient-context.js";
-import { createOneuiGradientRoles } from "./gradients.js";
+import { createOneuiGradients } from "./gradients.js";
 import { createOneuiTheme } from "./theme.js";
 import type { CreateOneuiThemeOptions, OneUIThemeMode } from "./theme.js";
 
@@ -37,7 +37,7 @@ export const OneUIProvider = (props: OneUIProviderProps): React.JSX.Element => {
     });
   }, [mode, themeOverrides]);
   const gradients = React.useMemo(() => {
-    return createOneuiGradientRoles(mode);
+    return createOneuiGradients(mode);
   }, [mode]);
 
   return React.createElement(

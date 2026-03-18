@@ -27,7 +27,10 @@ describe("OneUIBadge", () => {
       </OneUIBadge>
     );
 
-    expect(document.querySelector("[data-oneui-badge]")).toBeTruthy();
+    const badge = document.querySelector("[data-oneui-badge]");
+
+    expect(badge).toBeTruthy();
+    expect(badge?.getAttribute("style")).toContain("--oneui-badge-background");
   });
 
   it("has no obvious axe violations", async () => {

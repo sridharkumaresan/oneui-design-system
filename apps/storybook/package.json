@@ -3,14 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "node ../../scripts/run-storybook.mjs dev",
-    "build": "node ../../scripts/run-storybook.mjs build",
+    "dev": "pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-action-panel run build && pnpm --filter @functions-oneui/organism-search-autocomplete run build && pnpm --filter @functions-oneui/organism-smart-breadcrumb run build && node ../../scripts/run-storybook.mjs dev",
+    "build": "pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-action-panel run build && pnpm --filter @functions-oneui/organism-search-autocomplete run build && pnpm --filter @functions-oneui/organism-smart-breadcrumb run build && node ../../scripts/run-storybook.mjs build",
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
     "typecheck": "echo \"No TypeScript typecheck configured for Storybook JS config yet\"",
     "test": "echo \"No tests in storybook scaffold yet\""
   },
   "dependencies": {
     "@fluentui/react-components": "9.73.0",
+    "@functions-oneui/organism-action-card": "workspace:*",
     "@functions-oneui/organism-action-panel": "workspace:*",
     "@functions-oneui/organism-hero-banner": "workspace:*",
     "@functions-oneui/organism-search-autocomplete": "workspace:*",

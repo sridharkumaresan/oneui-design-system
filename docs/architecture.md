@@ -6,7 +6,7 @@
 
 - Lower layers must not depend on higher layers.
 - `tokens` has no UI-layer dependency.
-- `theme` depends on `tokens` and exposes Fluent UI v9-compatible theme objects plus semantic gradient roles.
+- `theme` depends on `tokens` and exposes Fluent UI v9-compatible theme objects plus canonical gradient names.
 - Internal utilities (`utils`, `react-utils`, `testing`, `standards`) can be consumed across layers.
 
 ## Package Responsibilities
@@ -16,8 +16,8 @@
   - Owns raw branded gradient token definitions as structured data.
 - `@functions-oneui/theme`
   - Maps semantic tokens to Fluent UI v9 theme objects.
-  - Maps raw gradient tokens into semantic gradient roles for component usage.
-  - Exports `OneUIProvider` and gradient-role access for React consumers.
+  - Exposes raw gradient tokens through canonical gradient names for component usage.
+  - Exports `OneUIProvider` and gradient access for React consumers.
 - `@functions-oneui/testing`
   - Provides shared accessibility helpers for Vitest + React Testing Library.
 - `@functions-oneui/react-utils`
@@ -28,8 +28,8 @@
 ## Gradient Architecture
 
 - Raw gradients belong in `tokens` because they are brand primitives shared across platforms.
-- Semantic gradient roles belong in `theme` because usage meaning is platform and component-facing.
-- Components should consume named gradient roles rather than importing raw gradient definitions directly.
+- Canonical gradient names belong in `theme` because usage meaning is platform and component-facing.
+- Components should consume named gradients rather than importing raw gradient definitions directly.
 - Future platform adapters can reuse the same raw gradient definitions without inheriting the Fluent theme shape.
 
 ## Workspace Layout

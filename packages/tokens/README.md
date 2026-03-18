@@ -49,7 +49,7 @@ Each raw gradient includes:
 
 ## Consumption Guidance
 
-- Theme package usage: map semantic tokens into Fluent UI v9 theme slots and raw gradients into semantic gradient roles
+- Theme package usage: map semantic tokens into Fluent UI v9 theme slots and expose raw gradients through canonical gradient names
 - Component package usage: consume semantic names from theme output, not raw token internals
 - Cross-platform usage: future adapters for Angular, Vue, Swift, or CSS output should consume the same raw gradient definitions from this package
 - Avoid importing private internals (raw palette or helper files); only use exports from the package root

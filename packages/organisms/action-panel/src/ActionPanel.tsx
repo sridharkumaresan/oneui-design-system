@@ -7,6 +7,7 @@ import {
   OneUIStack,
   OneUIText
 } from "@functions-oneui/atoms";
+import { useOneUIId } from "@functions-oneui/react-utils";
 
 import { useActionPanelClassNames } from "./ActionPanel.styles.js";
 import type { ActionPanelAction, ActionPanelProps } from "./ActionPanel.types.js";
@@ -45,8 +46,10 @@ export const ActionPanel = (props: ActionPanelProps): React.JSX.Element => {
     ...restProps
   } = props;
   const classNames = useActionPanelClassNames(layout, className);
-  const titleId = React.useId();
-  const descriptionId = description ? React.useId() : undefined;
+  const titleId = useOneUIId("oneui-action-panel-title");
+  const descriptionId = description
+    ? useOneUIId("oneui-action-panel-description")
+    : undefined;
   const stretchActions = layout === "stacked";
 
   return (

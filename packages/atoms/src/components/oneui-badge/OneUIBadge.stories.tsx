@@ -13,7 +13,7 @@ const meta = {
   component: OneUIBadge,
   args: {
     children: "Due 16 Apr 2025",
-    appearance: "soft",
+    appearance: "filled",
     tone: "warning",
     size: "md",
     shape: "pill"

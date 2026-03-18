@@ -3,22 +3,27 @@ import { makeStyles, mergeClasses, shorthands, tokens } from "@fluentui/react-co
 import type {
   OneUIBadgeAppearance,
   OneUIBadgeShape,
-  OneUIBadgeSize,
-  OneUIBadgeTone
+  OneUIBadgeSize
 } from "./OneUIBadge.types.js";
 
 const useStyles = makeStyles({
   root: {
-    ...shorthands.border("1px", "solid", "transparent"),
+    ...shorthands.border("1px", "solid", "var(--oneui-badge-border, transparent)"),
     alignItems: "center",
+    backgroundColor: "var(--oneui-badge-background, transparent)",
+    boxSizing: "border-box",
+    color: "var(--oneui-badge-foreground, inherit)",
+    columnGap: "0.375rem",
     display: "inline-flex",
-    fontWeight: tokens.fontWeightSemibold,
-    gap: tokens.spacingHorizontalXXS,
+    fontWeight: tokens.fontWeightBold,
+    letterSpacing: "0.03em",
+    lineHeight: 1,
     maxWidth: "100%",
     whiteSpace: "nowrap"
   },
   icon: {
     alignItems: "center",
+    color: "inherit",
     display: "inline-flex",
     flexShrink: 0,
     justifyContent: "center"
@@ -26,17 +31,18 @@ const useStyles = makeStyles({
   content: {
     minWidth: 0,
     overflow: "hidden",
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
+    textTransform: "uppercase"
   },
   sizeSm: {
-    ...shorthands.padding(tokens.spacingVerticalXXS, tokens.spacingHorizontalS),
+    ...shorthands.padding("0.1875rem", "0.75rem"),
     fontSize: tokens.fontSizeBase100,
-    lineHeight: tokens.lineHeightBase200
+    minHeight: "1.75rem"
   },
   sizeMd: {
-    ...shorthands.padding(tokens.spacingVerticalXS, tokens.spacingHorizontalM),
+    ...shorthands.padding("0.3125rem", "0.8125rem"),
     fontSize: tokens.fontSizeBase200,
-    lineHeight: tokens.lineHeightBase200
+    minHeight: "1.875rem"
   },
   shapeRounded: {
     borderRadius: tokens.borderRadiusMedium
@@ -44,83 +50,14 @@ const useStyles = makeStyles({
   shapePill: {
     borderRadius: tokens.borderRadiusCircular
   },
-  filledNeutral: {
-    backgroundColor: tokens.colorNeutralBackground4,
-    color: tokens.colorNeutralForeground1
+  filled: {
+    boxShadow: "none"
   },
-  softNeutral: {
-    backgroundColor: tokens.colorNeutralBackground3,
-    color: tokens.colorNeutralForeground2
+  soft: {
+    boxShadow: "none"
   },
-  outlinedNeutral: {
-    ...shorthands.border("1px", "solid", tokens.colorNeutralStrokeAccessible),
-    backgroundColor: tokens.colorTransparentBackground,
-    color: tokens.colorNeutralForeground2
-  },
-  filledBrand: {
-    backgroundColor: tokens.colorBrandBackground,
-    color: tokens.colorNeutralForegroundOnBrand
-  },
-  softBrand: {
-    backgroundColor: tokens.colorBrandBackground2,
-    color: tokens.colorNeutralForegroundOnBrand
-  },
-  outlinedBrand: {
-    ...shorthands.border("1px", "solid", tokens.colorBrandStroke1),
-    backgroundColor: tokens.colorTransparentBackground,
-    color: tokens.colorBrandForeground1
-  },
-  filledSuccess: {
-    backgroundColor: tokens.colorPaletteGreenBackground3,
-    color: tokens.colorNeutralForegroundOnBrand
-  },
-  softSuccess: {
-    backgroundColor: tokens.colorPaletteGreenBackground1,
-    color: tokens.colorPaletteGreenForeground1
-  },
-  outlinedSuccess: {
-    ...shorthands.border("1px", "solid", tokens.colorPaletteGreenBorder2),
-    backgroundColor: tokens.colorTransparentBackground,
-    color: tokens.colorPaletteGreenForeground2
-  },
-  filledWarning: {
-    backgroundColor: tokens.colorPaletteDarkOrangeBackground3,
-    color: tokens.colorNeutralForegroundOnBrand
-  },
-  softWarning: {
-    backgroundColor: tokens.colorPaletteDarkOrangeBackground1,
-    color: tokens.colorPaletteDarkOrangeForeground1
-  },
-  outlinedWarning: {
-    ...shorthands.border("1px", "solid", tokens.colorPaletteDarkOrangeBorder2),
-    backgroundColor: tokens.colorTransparentBackground,
-    color: tokens.colorPaletteDarkOrangeForeground2
-  },
-  filledDanger: {
-    backgroundColor: tokens.colorPaletteRedBackground3,
-    color: tokens.colorNeutralForegroundOnBrand
-  },
-  softDanger: {
-    backgroundColor: tokens.colorPaletteRedBackground1,
-    color: tokens.colorPaletteRedForeground1
-  },
-  outlinedDanger: {
-    ...shorthands.border("1px", "solid", tokens.colorPaletteRedBorder2),
-    backgroundColor: tokens.colorTransparentBackground,
-    color: tokens.colorPaletteRedForeground2
-  },
-  filledInfo: {
-    backgroundColor: tokens.colorBrandBackground2,
-    color: tokens.colorNeutralForegroundOnBrand
-  },
-  softInfo: {
-    backgroundColor: tokens.colorNeutralBackground3,
-    color: tokens.colorBrandForeground2
-  },
-  outlinedInfo: {
-    ...shorthands.border("1px", "solid", tokens.colorBrandStroke1),
-    backgroundColor: tokens.colorTransparentBackground,
-    color: tokens.colorBrandForeground2
+  outlined: {
+    boxShadow: "none"
   }
 });
 
@@ -134,34 +71,10 @@ const shapeClassMap: Record<OneUIBadgeShape, keyof ReturnType<typeof useStyles>>
   rounded: "shapeRounded"
 };
 
-const appearanceToneClassMap: Record<
-  OneUIBadgeAppearance,
-  Record<OneUIBadgeTone, keyof ReturnType<typeof useStyles>>
-> = {
-  filled: {
-    brand: "filledBrand",
-    danger: "filledDanger",
-    info: "filledInfo",
-    neutral: "filledNeutral",
-    success: "filledSuccess",
-    warning: "filledWarning"
-  },
-  outlined: {
-    brand: "outlinedBrand",
-    danger: "outlinedDanger",
-    info: "outlinedInfo",
-    neutral: "outlinedNeutral",
-    success: "outlinedSuccess",
-    warning: "outlinedWarning"
-  },
-  soft: {
-    brand: "softBrand",
-    danger: "softDanger",
-    info: "softInfo",
-    neutral: "softNeutral",
-    success: "softSuccess",
-    warning: "softWarning"
-  }
+const appearanceClassMap: Record<OneUIBadgeAppearance, keyof ReturnType<typeof useStyles>> = {
+  filled: "filled",
+  outlined: "outlined",
+  soft: "soft"
 };
 
 export const useOneUIBadgeClassNames = (options: {
@@ -169,7 +82,6 @@ export const useOneUIBadgeClassNames = (options: {
   className?: string;
   shape: OneUIBadgeShape;
   size: OneUIBadgeSize;
-  tone: OneUIBadgeTone;
 }) => {
   const styles = useStyles();
 
@@ -180,7 +92,7 @@ export const useOneUIBadgeClassNames = (options: {
       styles.root,
       styles[sizeClassMap[options.size]],
       styles[shapeClassMap[options.shape]],
-      styles[appearanceToneClassMap[options.appearance][options.tone]],
+      styles[appearanceClassMap[options.appearance]],
       options.className
     )
   };

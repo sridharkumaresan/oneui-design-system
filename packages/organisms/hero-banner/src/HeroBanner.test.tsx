@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { OneUICard, OneUIText } from "@functions-oneui/atoms";
-import { oneuiLightGradientRoles } from "@functions-oneui/theme";
+import { oneuiLightGradients } from "@functions-oneui/theme";
 
 import { expectNoAxeViolations } from "@functions-oneui/testing";
 
@@ -45,16 +45,16 @@ describe("HeroBanner", () => {
     expect(document.querySelector("[data-oneui-hero-banner-footer]")?.textContent).toContain("Footer");
   });
 
-  it("applies the configured semantic gradient role", () => {
+  it("applies the configured canonical gradient name", () => {
     renderWithOneUIProvider(
-      <HeroBanner gradientRole="heroSecondary" surfaceVariant="gradient" title="Gradient" />
+      <HeroBanner gradientName="midnightBlue" surfaceVariant="gradient" title="Gradient" />
     );
 
     const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
-    const gradient = oneuiLightGradientRoles.heroSecondary;
+    const gradient = oneuiLightGradients.midnightBlue;
 
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
-    expect(banner.dataset.oneuiHeroBannerGradientRole).toBe("heroSecondary");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("midnightBlue");
     const colorProbe = document.createElement("div");
     colorProbe.style.backgroundColor = gradient.fallbackSolidColor;
 
@@ -66,7 +66,7 @@ describe("HeroBanner", () => {
     const { container } = renderWithOneUIProvider(
       <HeroBanner
         description="Welcome to Connections, how can we help you today?"
-        gradientRole="heroPrimary"
+        gradientName="deepSpectrum"
         surfaceVariant="gradient"
         title="Good morning, Sridhar"
       />

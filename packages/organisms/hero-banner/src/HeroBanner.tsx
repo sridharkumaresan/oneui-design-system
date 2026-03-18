@@ -1,7 +1,8 @@
 import React from "react";
-import { tokens } from "@fluentui/react-components";
+import { useFluent } from "@fluentui/react-components";
 
 import { OneUIHeading, OneUIText } from "@functions-oneui/atoms";
+import { useOneUIId } from "@functions-oneui/react-utils";
 import { useOneUIGradients } from "@functions-oneui/theme";
 
 import { useHeroBannerClassNames } from "./HeroBanner.styles.js";
@@ -17,7 +18,7 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     description,
     eyebrow,
     footer,
-    gradientRole = "heroPrimary",
+    gradientName = "deepSpectrum",
     headingLevel = 2,
     height = "immersive",
     style,
@@ -35,12 +36,15 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     height
   });
   const gradients = useOneUIGradients();
-  const titleId = React.useId();
-  const descriptionId = description ? React.useId() : undefined;
+  const theme = ((useFluent() as unknown as { theme?: Record<string, string | number | undefined> })
+    .theme ?? {}) as Record<string, string | number | undefined>;
+  const titleId = useOneUIId("oneui-hero-banner-title");
+  const descriptionId = description
+    ? useOneUIId("oneui-hero-banner-description")
+    : undefined;
   const titleTone = contentTone === "inverse" ? "inverse" : "default";
   const descriptionTone = contentTone === "inverse" ? "inverse" : "secondary";
-  const resolvedGradient = gradients[gradientRole];
-
+  const resolvedGradient = gradients[gradientName];
   const surfaceStyle =
     surfaceVariant === "gradient"
       ? {
@@ -51,8 +55,16 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
           backgroundColor:
             backgroundColor ??
             (contentTone === "inverse"
-              ? tokens.colorBrandBackground
-              : tokens.colorNeutralBackground2)
+              ? String(
+                  theme.oneuiColorBackgroundBrandStrong ??
+                    theme.colorBrandBackground ??
+                    ""
+                )
+              : String(
+                  theme.colorNeutralBackground1 ??
+                    theme.oneuiColorBackgroundCanvas ??
+                    ""
+                ))
         };
 
   const resolvedStyle = {
@@ -68,7 +80,7 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
       "aria-labelledby": titleId,
       className: classNames.root,
       "data-oneui-hero-banner": "",
-      "data-oneui-hero-banner-gradient-role": surfaceVariant === "gradient" ? gradientRole : undefined,
+      "data-oneui-hero-banner-gradient-name": surfaceVariant === "gradient" ? gradientName : undefined,
       "data-oneui-hero-banner-surface-variant": surfaceVariant,
       role: "region",
       style: resolvedStyle

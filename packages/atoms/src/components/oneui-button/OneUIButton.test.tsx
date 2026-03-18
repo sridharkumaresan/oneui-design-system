@@ -36,6 +36,34 @@ describe("OneUIButton", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  it("applies semantic styles for all supported appearances", () => {
+    const { rerender } = renderWithOneUIProvider(
+      <OneUIButton appearance="primary">Primary</OneUIButton>
+    );
+    const primaryButton = screen.getByRole("button", { name: "Primary" });
+
+    expect(primaryButton).toBeTruthy();
+    expect(primaryButton.getAttribute("data-oneui-button-appearance")).toBe("primary");
+    expect(primaryButton.getAttribute("style")).toContain("--oneui-button-background");
+
+    rerender(
+      <OneUIButton appearance="secondary">Secondary</OneUIButton>
+    );
+    const secondaryButton = screen.getByRole("button", { name: "Secondary" });
+    expect(secondaryButton).toBeTruthy();
+    expect(secondaryButton.getAttribute("data-oneui-button-appearance")).toBe("secondary");
+
+    rerender(<OneUIButton appearance="subtle">Subtle</OneUIButton>);
+    const subtleButton = screen.getByRole("button", { name: "Subtle" });
+    expect(subtleButton).toBeTruthy();
+    expect(subtleButton.getAttribute("data-oneui-button-appearance")).toBe("subtle");
+
+    rerender(<OneUIButton appearance="transparent">Transparent</OneUIButton>);
+    const transparentButton = screen.getByRole("button", { name: "Transparent" });
+    expect(transparentButton).toBeTruthy();
+    expect(transparentButton.getAttribute("data-oneui-button-appearance")).toBe("transparent");
+  });
+
   it("has no obvious axe violations", async () => {
     const { container } = renderWithOneUIProvider(<OneUIButton>Accessible</OneUIButton>);
 

@@ -5,7 +5,7 @@
 - Prefer token/theme values for all visual styles.
 - Components should consume theme outputs, not raw token internals.
 - New styling primitives must be introduced in tokens/theme before component usage.
-- Branded gradients must flow through named semantic gradient roles from `@functions-oneui/theme`.
+- Branded gradients must flow through the named gradients exported from `@functions-oneui/theme`.
 
 ## No Hardcoded Colors
 
@@ -16,7 +16,7 @@
 ## No Arbitrary Raw Gradients
 
 - Do not author raw CSS gradient strings directly in atoms or organisms as the default pattern.
-- Approved gradient usage should reference semantic gradient roles such as `heroPrimary` or `iconAccent`.
+- Approved gradient usage should reference canonical gradient names such as `deepSpectrum` or `tealShift`.
 - If a new component needs a gradient variant, extend the design contract first instead of embedding gradient literals in the component.
 
 ## Responsive Layout Rules

@@ -27,6 +27,7 @@ test("exports the required semantic token categories", () => {
     "spacing",
     "radius",
     "shadows",
+    "components",
     "breakpoints"
   ]);
 });
