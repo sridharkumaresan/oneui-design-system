@@ -6,12 +6,12 @@ import type {
   BrandedHeroBannerVariant
 } from "./HeroBanner.types.js";
 
-const brandedHeroVariantToGradientName: Record<
+const brandedHeroVariantToSurfaceKey: Record<
   BrandedHeroBannerVariant,
-  "deepSpectrum" | "midnightBlue"
+  "heroPrimary" | "heroSecondary"
 > = {
-  primary: "deepSpectrum",
-  secondary: "midnightBlue"
+  primary: "heroPrimary",
+  secondary: "heroSecondary"
 };
 
 export const BrandedHeroBanner = (
@@ -25,8 +25,7 @@ export const BrandedHeroBanner = (
       contentTone="inverse"
       data-oneui-branded-hero-banner=""
       data-oneui-branded-hero-banner-variant={variant}
-      gradientName={brandedHeroVariantToGradientName[variant]}
-      surfaceVariant="gradient"
+      surfaceKey={brandedHeroVariantToSurfaceKey[variant]}
     />
   );
 };

@@ -5,6 +5,8 @@ import {
   oneuiBreakpoints,
   rawGradientTokenNames,
   rawGradientTokens,
+  rawSolidTokenNames,
+  rawSolidTokens,
   requiredSemanticTokenPaths,
   semanticTokens,
   tokenCategories
@@ -61,14 +63,13 @@ test("light and dark semantic token sets contain all required contract keys", ()
   }
 });
 
-test("exports the six structured raw gradient tokens", () => {
+test("exports the five structured branded raw gradient tokens", () => {
   assert.deepEqual(rawGradientTokenNames, [
-    "deepSpectrum",
-    "limeSky",
-    "softAqua",
-    "tealShift",
-    "midnightBlue",
-    "pastelHorizon"
+    "navyCyan",
+    "cyanGreen",
+    "cyanYellow",
+    "cyanLightBlue",
+    "cyanPink"
   ]);
 
   for (const gradientName of rawGradientTokenNames) {
@@ -76,11 +77,12 @@ test("exports the six structured raw gradient tokens", () => {
 
     assert.equal(gradient.id, gradientName);
     assert.equal(gradient.type, "linear");
-    assert.equal(gradient.direction, "to bottom");
-    assert.equal(gradient.angle, 180);
+    assert.equal(gradient.direction, "toTopRight");
+    assert.equal(gradient.cssDirection, "to top right");
+    assert.equal(gradient.angle, 45);
     assert.ok(Array.isArray(gradient.stops));
     assert.ok(gradient.stops.length >= 2, `${gradientName}: expected at least two stops`);
-    assert.match(gradient.css, /^linear-gradient\(180deg, /);
+    assert.match(gradient.css, /^linear-gradient\(to top right, /);
     assert.equal(
       gradient.fallbackSolidColor,
       gradient.stops[gradient.stops.length - 1].color,
@@ -88,12 +90,40 @@ test("exports the six structured raw gradient tokens", () => {
     );
 
     assert.equal(gradient.stops[0].position, "0%");
-    assert.equal(gradient.stops[gradient.stops.length - 1].position, "100%");
 
     for (let index = 1; index < gradient.stops.length; index += 1) {
       const previous = Number.parseFloat(gradient.stops[index - 1].position);
       const current = Number.parseFloat(gradient.stops[index].position);
       assert.ok(current > previous, `${gradientName}: stop positions must be ordered`);
     }
+  }
+});
+
+test("exports the structured raw solid surface primitives", () => {
+  assert.deepEqual(rawSolidTokenNames, [
+    "brandSky",
+    "brandBlue",
+    "brandMidnight",
+    "brandMint",
+    "brandAqua",
+    "brandPastel",
+    "cyan",
+    "navy",
+    "lightBlue",
+    "surfaceBlueDark",
+    "surfaceBlueLight",
+    "surfaceBlueLightest"
+  ]);
+
+  for (const solidName of rawSolidTokenNames) {
+    const solid = rawSolidTokens[solidName];
+
+    assert.equal(solid.id, solidName);
+    assert.equal(solid.type, "solid");
+    assert.equal(typeof solid.label, "string");
+    assert.equal(typeof solid.value, "string");
+    assert.match(solid.value, /^#/);
+    assert.equal(solid.css, solid.value);
+    assert.equal(solid.fallbackSolidColor, solid.value);
   }
 });

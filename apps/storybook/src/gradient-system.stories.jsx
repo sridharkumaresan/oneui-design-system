@@ -7,33 +7,42 @@ import {
 } from "@functions-oneui/theme";
 import { HeroBanner as OneUIHeroBanner } from "@functions-oneui/organism-hero-banner";
 
+const playgroundDirections = [
+  "toTopRight",
+  "toTopLeft",
+  "toBottomRight",
+  "toBottomLeft"
+];
+
+const playgroundDirectionToCssMap = {
+  toTopRight: "to top right",
+  toTopLeft: "to top left",
+  toBottomRight: "to bottom right",
+  toBottomLeft: "to bottom left"
+};
+
 const gradientNameNotes = {
-  deepSpectrum: {
-    title: "Hero primary",
-    usage: "Primary branded hero surfaces and high-visibility landing moments.",
-    approved: "Hero banner, marquee surfaces, large campaign headers."
-  },
-  midnightBlue: {
+  navyCyan: {
     title: "Hero secondary",
     usage: "Darker branded hero or compact branded panel surfaces.",
     approved: "Secondary hero moments, compact stock/weather overlays, dark branded promo panels."
   },
-  limeSky: {
+  cyanYellow: {
     title: "Feature surface",
     usage: "Lighter feature and campaign surfaces with lower visual weight.",
     approved: "Section accents, promotional strips, low-density highlight bands."
   },
-  softAqua: {
+  cyanLightBlue: {
     title: "Soft promotional surface",
     usage: "Soft branded surfaces for promotional or supportive content.",
     approved: "Promo cards, onboarding callouts, optional decorative panels."
   },
-  tealShift: {
+  cyanGreen: {
     title: "Icon accent",
     usage: "Compact decorative accents around icon or metric containers.",
     approved: "Icon backplates, compact indicator containers, branded mini-panels."
   },
-  pastelHorizon: {
+  cyanPink: {
     title: "Decorative pastel surface",
     usage: "Art-directed decorative surfaces with a softer tone.",
     approved: "Decorative side panels, supporting feature surfaces, non-critical visual flourish."
@@ -79,6 +88,15 @@ const applyGradientSurface = (gradient) => ({
   backgroundColor: gradient.fallbackSolidColor,
   backgroundImage: gradient.css
 });
+
+const buildGradientCss = (gradient, direction) => {
+  const cssDirection = playgroundDirectionToCssMap[direction];
+  const stopList = gradient.stops
+    .map((stop) => `${stop.color} ${stop.position}`)
+    .join(", ");
+
+  return `linear-gradient(${cssDirection}, ${stopList})`;
+};
 
 const GradientCard = ({ gradient, note, theme }) => {
   return (
@@ -168,7 +186,7 @@ const GradientShowcase = () => {
         <div>
           <h2 style={{ margin: 0 }}>Gradient catalog</h2>
           <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-            These are the six approved gradients currently exposed by the design system.
+            These are the five approved branded gradients currently exposed by the design system.
           </p>
         </div>
         <div
@@ -200,18 +218,18 @@ const GradientShowcase = () => {
           <OneUIHeroBanner
             contentTone="inverse"
             description="Primary branded hero treatment for prominent landing experiences."
-            gradientName="deepSpectrum"
+            gradientName="cyanGreen"
             height="comfortable"
             surfaceVariant="gradient"
-            title="deepSpectrum"
+            title="cyanGreen"
           />
           <OneUIHeroBanner
             contentTone="inverse"
             description="Darker alternative for secondary hero and compact branded panel moments."
-            gradientName="midnightBlue"
+            gradientName="navyCyan"
             height="comfortable"
             surfaceVariant="gradient"
-            title="midnightBlue"
+            title="navyCyan"
           />
         </div>
       </section>
@@ -232,7 +250,7 @@ const GradientShowcase = () => {
         >
           <article
             style={{
-              ...applyGradientSurface(gradients.midnightBlue),
+              ...applyGradientSurface(gradients.navyCyan),
               borderRadius: theme?.borderRadiusXLarge ?? "1rem",
               color: theme?.colorNeutralForegroundOnBrand ?? theme?.colorNeutralForegroundInverted,
               display: "grid",
@@ -260,7 +278,7 @@ const GradientShowcase = () => {
           >
             <div
               style={{
-                ...applyGradientSurface(gradients.tealShift),
+                ...applyGradientSurface(gradients.cyanGreen),
                 alignItems: "center",
                 borderRadius: theme?.borderRadiusCircular ?? "9999px",
                 color: theme?.colorNeutralForegroundOnBrand ?? theme?.colorNeutralForegroundInverted,
@@ -277,7 +295,7 @@ const GradientShowcase = () => {
             <div>
               <strong>Decorative icon backplate</strong>
               <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-                Use tealShift for compact decorative emphasis around icons or small branded indicators.
+                Use cyanGreen for compact decorative emphasis around icons or small branded indicators.
               </p>
             </div>
           </article>
@@ -294,7 +312,7 @@ const GradientShowcase = () => {
           >
             <div
               style={{
-                ...applyGradientSurface(gradients.limeSky),
+                ...applyGradientSurface(gradients.cyanYellow),
                 borderRadius: theme?.borderRadiusCircular ?? "9999px",
                 height: "0.375rem",
                 width: "6rem"
@@ -331,4 +349,109 @@ const GradientShowcase = () => {
 
 export const ApprovedUsage = {
   render: () => <GradientShowcase />
+};
+
+const GradientDirectionPlayground = ({ direction, gradientName }) => {
+  const { theme } = useFluent();
+  const gradients = useOneUIGradients();
+  const gradient = gradients[gradientName];
+  const experimentalCss = buildGradientCss(gradient, direction);
+
+  return (
+    <div
+      style={{
+        background: theme?.colorNeutralBackground1,
+        color: theme?.colorNeutralForeground1,
+        display: "grid",
+        gap: theme?.spacingVerticalXL ?? "1.5rem",
+        minHeight: "100vh",
+        padding: theme?.spacingHorizontalXXL ?? "2rem"
+      }}
+    >
+      <section style={{ display: "grid", gap: theme?.spacingVerticalL ?? "1rem" }}>
+        <div>
+          <p
+            style={{
+              color: theme?.colorNeutralForeground3,
+              fontSize: theme?.fontSizeBase200,
+              letterSpacing: "0.04em",
+              margin: 0,
+              textTransform: "uppercase"
+            }}
+          >
+            Experimental preview
+          </p>
+          <h1 style={{ margin: 0 }}>Gradient direction playground</h1>
+          <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0, maxWidth: "72ch" }}>
+            This story lets you preview alternate directions without changing the canonical token definitions.
+            The approved shipped variants still come from the token package exactly as defined by the brand spec.
+          </p>
+        </div>
+      </section>
+
+      <section
+        style={{
+          background: theme?.colorNeutralBackground2,
+          border: `1px solid ${theme?.colorNeutralStroke2}`,
+          borderRadius: theme?.borderRadiusXLarge ?? "1rem",
+          display: "grid",
+          gap: theme?.spacingVerticalL ?? "1rem",
+          padding: theme?.spacingHorizontalXL ?? "1.5rem"
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: gradient.fallbackSolidColor,
+            backgroundImage: experimentalCss,
+            borderRadius: theme?.borderRadiusLarge ?? "0.75rem",
+            minHeight: "14rem"
+          }}
+        />
+        <div style={{ display: "grid", gap: theme?.spacingVerticalXS ?? "0.25rem" }}>
+          <strong>
+            {gradient.label} · {direction}
+          </strong>
+          <code
+            style={{
+              color: theme?.colorNeutralForeground3,
+              fontFamily: theme?.fontFamilyMonospace,
+              fontSize: theme?.fontSizeBase200,
+              overflowWrap: "anywhere"
+            }}
+          >
+            {experimentalCss}
+          </code>
+          <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
+            Token default direction: <code>{gradient.direction}</code>. This preview overrides the direction in Storybook only.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export const DirectionPlayground = {
+  args: {
+    gradientName: "cyanGreen",
+    direction: "toTopRight"
+  },
+  argTypes: {
+    gradientName: {
+      control: { type: "select" },
+      options: oneuiGradientNames
+    },
+    direction: {
+      control: { type: "inline-radio" },
+      options: playgroundDirections
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Experimental Storybook-only playground for trying alternate gradient directions. This does not modify the canonical token definitions or imply that all directions are brand-approved."
+      }
+    }
+  },
+  render: (args) => <GradientDirectionPlayground {...args} />
 };

@@ -6,18 +6,18 @@
 
 - Lower layers must not depend on higher layers.
 - `tokens` has no UI-layer dependency.
-- `theme` depends on `tokens` and exposes Fluent UI v9-compatible theme objects plus canonical gradient names.
+- `theme` depends on `tokens` and exposes Fluent UI v9-compatible theme objects plus semantic surface recipes and raw gradient families.
 - Internal utilities (`utils`, `react-utils`, `testing`, `standards`) can be consumed across layers.
 
 ## Package Responsibilities
 
 - `@functions-oneui/tokens`
   - Owns the semantic token contract and light/dark token values.
-  - Owns raw branded gradient token definitions as structured data.
+  - Owns raw branded gradient and solid surface primitive definitions as structured data.
 - `@functions-oneui/theme`
   - Maps semantic tokens to Fluent UI v9 theme objects.
-  - Exposes raw gradient tokens through canonical gradient names for component usage.
-  - Exports `OneUIProvider` and gradient access for React consumers.
+  - Exposes raw gradient families plus semantic reusable surface recipes, policies, and resolvers.
+  - Exports `OneUIProvider`, gradient access, and surface access for React consumers.
 - `@functions-oneui/testing`
   - Provides shared accessibility helpers for Vitest + React Testing Library.
 - `@functions-oneui/react-utils`
@@ -27,9 +27,9 @@
 
 ## Gradient Architecture
 
-- Raw gradients belong in `tokens` because they are brand primitives shared across platforms.
-- Canonical gradient names belong in `theme` because usage meaning is platform and component-facing.
-- Components should consume named gradients rather than importing raw gradient definitions directly.
+- Raw gradients and solids belong in `tokens` because they are brand primitives shared across platforms.
+- Semantic surface roles belong in `theme` because usage meaning is platform and component-facing.
+- Components should consume semantic surface roles rather than importing raw gradient definitions directly.
 - Future platform adapters can reuse the same raw gradient definitions without inheriting the Fluent theme shape.
 
 ## Workspace Layout

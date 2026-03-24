@@ -1,9 +1,11 @@
 import React from "react";
-import { useFluent } from "@fluentui/react-components";
 
 import { OneUIHeading, OneUIText } from "@functions-oneui/atoms";
 import { useOneUIId } from "@functions-oneui/react-utils";
-import { useOneUIGradients } from "@functions-oneui/theme";
+import {
+  resolveOneUISurfaceVariantKey,
+  useOneUISurfaces
+} from "@functions-oneui/theme";
 
 import { useHeroBannerClassNames } from "./HeroBanner.styles.js";
 import type { HeroBannerProps } from "./HeroBanner.types.js";
@@ -14,13 +16,14 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     aside,
     backgroundColor,
     className,
-    contentTone = "inverse",
+    contentTone,
     description,
     eyebrow,
     footer,
-    gradientName = "deepSpectrum",
+    gradientName = "cyanGreen",
     headingLevel = 2,
     height = "immersive",
+    surfaceKey,
     style,
     supportingContent,
     surfaceVariant = "solid",
@@ -29,43 +32,44 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     topStart,
     ...restProps
   } = props;
-  const classNames = useHeroBannerClassNames({
-    className,
-    contentTone,
-    hasAside: Boolean(aside),
-    height
-  });
-  const gradients = useOneUIGradients();
-  const theme = ((useFluent() as unknown as { theme?: Record<string, string | number | undefined> })
-    .theme ?? {}) as Record<string, string | number | undefined>;
+  const surfaces = useOneUISurfaces();
   const titleId = useOneUIId("oneui-hero-banner-title");
   const descriptionId = description
     ? useOneUIId("oneui-hero-banner-description")
     : undefined;
-  const titleTone = contentTone === "inverse" ? "inverse" : "default";
-  const descriptionTone = contentTone === "inverse" ? "inverse" : "secondary";
-  const resolvedGradient = gradients[gradientName];
-  const surfaceStyle =
-    surfaceVariant === "gradient"
-      ? {
-          backgroundColor: resolvedGradient.fallbackSolidColor,
-          backgroundImage: resolvedGradient.css
-        }
-      : {
-          backgroundColor:
-            backgroundColor ??
-            (contentTone === "inverse"
-              ? String(
-                  theme.oneuiColorBackgroundBrandStrong ??
-                    theme.colorBrandBackground ??
-                    ""
-                )
-              : String(
-                  theme.colorNeutralBackground1 ??
-                    theme.oneuiColorBackgroundCanvas ??
-                    ""
-                ))
-        };
+  const inferredSurfaceSelectionKey =
+    surfaceKey ??
+    (surfaceVariant === "gradient"
+      ? gradientName
+      : backgroundColor
+        ? undefined
+        : "accentStrong");
+  const resolvedSurfaceKey = resolveOneUISurfaceVariantKey(
+    inferredSurfaceSelectionKey
+  );
+  const resolvedSurface = surfaces[resolvedSurfaceKey];
+  const resolvedContentTone =
+    contentTone ??
+    (resolvedSurface.recommendedForeground === "inverse" ? "inverse" : "default");
+  const classNames = useHeroBannerClassNames({
+    className,
+    contentTone: resolvedContentTone,
+    hasAside: Boolean(aside),
+    height
+  });
+  const titleTone = resolvedContentTone === "inverse" ? "inverse" : "default";
+  const descriptionTone = resolvedContentTone === "inverse" ? "inverse" : "secondary";
+  const surfaceStyle = backgroundColor
+    ? {
+        backgroundColor
+      }
+    : {
+        backgroundColor: resolvedSurface.background.backgroundColor,
+        backgroundImage: resolvedSurface.background.backgroundImage,
+        border: resolvedSurface.borderColor
+          ? `1px solid ${resolvedSurface.borderColor}`
+          : undefined
+      };
 
   const resolvedStyle = {
     ...surfaceStyle,
@@ -80,8 +84,10 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
       "aria-labelledby": titleId,
       className: classNames.root,
       "data-oneui-hero-banner": "",
-      "data-oneui-hero-banner-gradient-name": surfaceVariant === "gradient" ? gradientName : undefined,
-      "data-oneui-hero-banner-surface-variant": surfaceVariant,
+      "data-oneui-hero-banner-gradient-name": resolvedSurface.rawGradientName,
+      "data-oneui-hero-banner-selected-surface-key": inferredSurfaceSelectionKey,
+      "data-oneui-hero-banner-surface-key": resolvedSurface.key,
+      "data-oneui-hero-banner-surface-variant": resolvedSurface.type,
       role: "region",
       style: resolvedStyle
     },

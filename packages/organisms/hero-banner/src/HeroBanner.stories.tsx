@@ -2,6 +2,7 @@ import { tokens } from "@fluentui/react-components";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { OneUIButton, OneUICard, OneUIStack, OneUIText } from "@functions-oneui/atoms";
+import { defineOneUISurfacePolicy } from "@functions-oneui/theme";
 import { SearchAutocomplete } from "@functions-oneui/organism-search-autocomplete";
 import { SmartBreadcrumb } from "@functions-oneui/organism-smart-breadcrumb";
 
@@ -22,6 +23,22 @@ const footerGridStyle = {
   gap: tokens.spacingHorizontalL,
   gridTemplateColumns: "repeat(auto-fit, minmax(14rem, 1fr))"
 } as const;
+
+const heroBannerStoryPolicy = defineOneUISurfacePolicy({
+  label: "HeroBanner story policy",
+  allowedVariantKeys: [
+    "heroPrimary",
+    "heroSecondary",
+    "heroSoft",
+    "heroFresh",
+    "heroDeep",
+    "heroBlue",
+    "heroLight",
+    "heroPastel"
+  ],
+  allowedTypes: ["gradient", "solid"],
+  defaultVariantKey: "heroPrimary"
+});
 
 const heroBannerComposedCode = `
 import { OneUICard, OneUIStack, OneUIText } from "@functions-oneui/atoms";
@@ -59,7 +76,7 @@ export function PortalHero(): JSX.Element {
           </OneUICard>
         </div>
       }
-      gradientName="deepSpectrum"
+      surfaceKey="heroPrimary"
       supportingContent={
         <SearchAutocomplete
           scopeOptions={[
@@ -82,11 +99,9 @@ import { HeroBanner } from "@functions-oneui/organism-hero-banner";
 export function LandingHero(): JSX.Element {
   return (
     <HeroBanner
-      contentTone="inverse"
       description="Welcome to Connections, how can we help you today?"
-      gradientName="deepSpectrum"
       height="immersive"
-      surfaceVariant="gradient"
+      surfaceKey="heroPrimary"
       title="Good morning, Sridhar"
     />
   );
@@ -99,9 +114,8 @@ import { HeroBanner } from "@functions-oneui/organism-hero-banner";
 export function BrandHero(): JSX.Element {
   return (
     <HeroBanner
-      contentTone="inverse"
       description="Use the solid variant when a page needs a simpler branded surface without the extra visual weight of a gradient."
-      surfaceVariant="solid"
+      surfaceKey="heroDeep"
       title="Solid primary brand surfaces still handle the default banner use case"
     />
   );
@@ -115,11 +129,9 @@ import { HeroBanner } from "@functions-oneui/organism-hero-banner";
 export function HeroWithAside(): JSX.Element {
   return (
     <HeroBanner
-      contentTone="inverse"
       description="Composed hero surfaces can place supporting media or panels in the aside slot."
       eyebrow={<OneUIText size="bodySmall">Composed hero surface</OneUIText>}
-      gradientName="deepSpectrum"
-      surfaceVariant="gradient"
+      surfaceKey="heroPrimary"
       title="Keep the banner generic and place supporting content alongside it"
       aside={
         <OneUICard elevation="raised" padding="lg">
@@ -170,30 +182,13 @@ const meta = {
   args: {
     title: "Good morning, Sridhar",
     description: "Welcome to Connections, how can we help you today?",
-    surfaceVariant: "gradient",
-    gradientName: "deepSpectrum",
-    contentTone: "inverse",
+    surfaceKey: "heroPrimary",
     height: "immersive"
   },
   argTypes: {
-    contentTone: {
-      control: "inline-radio",
-      options: ["default", "inverse"]
-    },
-    surfaceVariant: {
-      control: "inline-radio",
-      options: ["solid", "gradient"]
-    },
-    gradientName: {
+    surfaceKey: {
       control: "select",
-      options: [
-        "deepSpectrum",
-        "midnightBlue",
-        "limeSky",
-        "softAqua",
-        "tealShift",
-        "pastelHorizon"
-      ]
+      options: heroBannerStoryPolicy.allowedVariantKeys
     },
     height: {
       control: "inline-radio",
@@ -205,7 +200,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "HeroBanner is a full-width organism for prominent page messaging with either solid or semantic gradient surfaces. Named slots keep the banner generic while allowing search, breadcrumb, summary panels, and other consumer-provided content to be composed around it."
+          "HeroBanner is a full-width organism for prominent page messaging that now consumes the shared semantic surface system from @functions-oneui/theme. Named slots keep the banner generic while allowing search, breadcrumb, summary panels, and other consumer-provided content to be composed around it."
       }
     }
   }
@@ -227,10 +222,10 @@ export const GradientPrimary: Story = {
 
 export const SolidBrand: Story = {
   args: {
-    surfaceVariant: "solid",
+    surfaceKey: "heroDeep",
     title: "Solid primary brand surfaces still handle the default banner use case",
     description:
-      "Use the solid variant when a page needs a simpler branded surface without the extra visual weight of a gradient. This story relies on the component's default inverse solid surface, so no manual color-picker step is required."
+      "Use a semantic solid hero surface when a page needs a simpler branded treatment without the extra visual weight of a gradient."
   },
   parameters: {
     docs: {
@@ -357,8 +352,7 @@ export const WithAsideContent: Story = {
 
 export const FeatureSurface: Story = {
   args: {
-    gradientName: "limeSky",
-    contentTone: "default",
+    surfaceKey: "heroFresh",
     title: "Approved semantic gradients can support feature spotlights",
     description:
       "This variant demonstrates a lighter gradient role for low-density promotional surfaces and campaign headers."

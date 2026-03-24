@@ -5,6 +5,8 @@ import type { FluentProviderProps } from "@fluentui/react-components";
 
 import { OneUIGradientContext } from "./gradient-context.js";
 import { createOneuiGradients } from "./gradients.js";
+import { OneUISurfaceContext } from "./surface-context.js";
+import { createOneUISurfaceRecipes } from "./surfaces.js";
 import { createOneuiTheme } from "./theme.js";
 import type { CreateOneuiThemeOptions, OneUIThemeMode } from "./theme.js";
 
@@ -39,10 +41,20 @@ export const OneUIProvider = (props: OneUIProviderProps): React.JSX.Element => {
   const gradients = React.useMemo(() => {
     return createOneuiGradients(mode);
   }, [mode]);
+  const surfaces = React.useMemo(() => {
+    return createOneUISurfaceRecipes({
+      mode,
+      theme
+    });
+  }, [mode, theme]);
 
   return React.createElement(
     OneUIGradientContext.Provider,
     { value: gradients },
-    React.createElement(FluentProvider, { ...providerProps, theme }, children)
+    React.createElement(
+      OneUISurfaceContext.Provider,
+      { value: surfaces },
+      React.createElement(FluentProvider, { ...providerProps, theme }, children)
+    )
   );
 };

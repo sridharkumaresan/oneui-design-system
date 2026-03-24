@@ -1,6 +1,9 @@
 import type { HTMLAttributes, JSX, ReactNode } from "react";
 
-import type { OneUIGradientName } from "@functions-oneui/theme";
+import type {
+  OneUIResolvableGradientName,
+  OneUIResolvableSurfaceVariantKey
+} from "@functions-oneui/theme";
 
 export type HeroBannerContentTone = "default" | "inverse";
 export type HeroBannerHeight = "comfortable" | "immersive";
@@ -25,7 +28,8 @@ export type HeroBannerProps = HTMLAttributes<HTMLElement> &
   HeroBannerSlots & {
     backgroundColor?: string;
     contentTone?: HeroBannerContentTone;
-    gradientName?: OneUIGradientName;
+    gradientName?: OneUIResolvableGradientName;
+    surfaceKey?: OneUIResolvableSurfaceVariantKey;
     surfaceVariant?: HeroBannerSurfaceVariant;
   };
 

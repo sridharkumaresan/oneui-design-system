@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { OneUICard, OneUIText } from "@functions-oneui/atoms";
-import { oneuiLightGradients } from "@functions-oneui/theme";
+import { oneuiLightSurfaceRecipes } from "@functions-oneui/theme";
 
 import { expectNoAxeViolations } from "@functions-oneui/testing";
 
@@ -45,21 +45,33 @@ describe("HeroBanner", () => {
     expect(document.querySelector("[data-oneui-hero-banner-footer]")?.textContent).toContain("Footer");
   });
 
-  it("applies the configured canonical gradient name", () => {
+  it("applies the configured semantic surface key", () => {
     renderWithOneUIProvider(
-      <HeroBanner gradientName="midnightBlue" surfaceVariant="gradient" title="Gradient" />
+      <HeroBanner surfaceKey="heroSecondary" title="Gradient" />
     );
 
     const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
-    const gradient = oneuiLightGradients.midnightBlue;
+    const surface = oneuiLightSurfaceRecipes.heroSecondary;
 
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
-    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("midnightBlue");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("navyCyan");
     const colorProbe = document.createElement("div");
-    colorProbe.style.backgroundColor = gradient.fallbackSolidColor;
+    colorProbe.style.backgroundColor = surface.background.backgroundColor;
 
     expect(banner.style.backgroundColor).toBe(colorProbe.style.backgroundColor);
     expect(banner.style.backgroundImage).toContain("linear-gradient");
+  });
+
+  it("keeps resolving legacy gradient selections through the shared surface system", () => {
+    renderWithOneUIProvider(
+      <HeroBanner gradientName="midnightBlue" surfaceVariant="gradient" title="Legacy gradient" />
+    );
+
+    const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
+
+    expect(banner.dataset.oneuiHeroBannerSelectedSurfaceKey).toBe("midnightBlue");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
   });
 
   it("has no obvious axe violations", async () => {

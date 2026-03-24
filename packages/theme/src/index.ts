@@ -1,6 +1,19 @@
 export { useOneUIGradients } from "./gradient-context.js";
 export { OneUIProvider } from "./provider.js";
 export type { OneUIProviderProps } from "./provider.js";
+export { useOneUISurfaces } from "./surface-context.js";
+export {
+  buildOneUIBannerSurfacePickerOptions,
+  getOneUIBannerSurfaceEffectiveKey,
+  getOneUIBannerSurfaceStyle,
+  oneuiBannerSurfaceAvailabilityModes
+} from "./banner-surface-picker.js";
+export type {
+  OneUIBannerSurfaceAvailabilityMode,
+  OneUIBannerSurfacePickerConfig,
+  OneUIBannerSurfacePickerOption,
+  OneUIBannerSurfacePickerResolution
+} from "./banner-surface-picker.js";
 export {
   createOneuiThemeFromSpfxTheme,
   createOneuiThemeOverridesFromSpfxTheme,
@@ -27,18 +40,64 @@ export {
   oneuiDarkGradients,
   oneuiDarkGradientRoles,
   oneuiGradientNames,
+  oneuiLegacyGradientNames,
   oneuiGradientRoleNames,
   oneuiLightGradients,
   oneuiLightGradientRoles
 } from "./gradients.js";
 export type {
   OneUIGradient,
+  OneUILegacyGradientName,
   OneUIGradientName,
   OneUIGradients,
   OneUIGradientRole,
   OneUIGradientRoleName,
-  OneUIGradientRoles
+  OneUIGradientRoles,
+  OneUIResolvableGradientName
 } from "./gradients.js";
+export {
+  createOneUISurfacePropertyPaneOptions,
+  createOneUISurfaceRecipes,
+  defineOneUISurfacePolicy,
+  defineOneUISurfacePolicyMap,
+  createOneUISurfaceVariantRegistry,
+  getAllOneUISurfaceVariants,
+  getAllowedOneUISurfaceVariants,
+  getOneUIDefaultSurfaceVariantKey,
+  oneuiDarkSurfaceRecipes,
+  oneuiDarkSurfaceVariantRegistry,
+  oneuiDefaultSurfacePolicy,
+  oneuiLegacySurfaceVariantKeys,
+  oneuiLightSurfaceRecipes,
+  oneuiLightSurfaceVariantRegistry,
+  oneuiSurfaceKinds,
+  oneuiSurfaceRoleNames,
+  oneuiSurfaceVariantKeys,
+  resolveOneUISurfaceStyle,
+  resolveOneUISurfaceVariant,
+  resolveOneUISurfaceVariantKey
+} from "./surfaces.js";
+export type {
+  OneUILegacySurfaceVariantKey,
+  OneUIResolvableSurfaceVariantKey,
+  OneUISurfaceBackgroundStyle,
+  OneUISurfaceCategory,
+  OneUISurfaceKind,
+  OneUISurfacePolicy,
+  OneUISurfacePolicyInput,
+  OneUISurfacePolicyMap,
+  OneUISurfacePreview,
+  OneUISurfacePropertyPaneOption,
+  OneUISurfaceRecipe,
+  OneUISurfaceRecipes,
+  OneUISurfaceResolution,
+  OneUISurfaceRoleName,
+  OneUISurfaceTextTone,
+  OneUISurfaceVariantKey,
+  OneUISurfaceVariantRegistry,
+  OneUISurfaceVariantRegistryEntry,
+  ResolveOneUISurfaceVariantOptions
+} from "./surfaces.js";
 export {
   createOneuiTheme,
   oneuiDarkTheme,

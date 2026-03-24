@@ -24,14 +24,55 @@ The package also exports raw gradients separately from the semantic contract:
 
 - `rawGradientTokens`
 - `rawGradientTokenNames`
+- `rawSolidTokens`
+- `rawSolidTokenNames`
 
 Each raw gradient includes:
 
 - `id`
+- `label`
 - `type`
 - `direction`
+- `cssDirection`
 - `angle`
 - `stops`
+- `css`
+- `fallbackSolidColor`
+
+The branded gradients are now stored as structured definitions with semantic direction names such as `toTopRight`. The token builder generates ordered stop positions, CSS-ready directions, and the final gradient string from that input.
+
+Important:
+
+- `direction` is a per-variant property, not a global hardcoded rule
+- the current shipped company variants all use `toTopRight` because that is what the active brand spec provided
+- if one gradient changes later, update only that variant in `packages/tokens/src/gradients.ts`
+
+Example:
+
+```ts
+navyCyan: {
+  label: "Navy-Cyan",
+  direction: "toBottomLeft",
+  stops: ["#00AEEF", "#0095DA", "#0067B6", "#004298"]
+}
+```
+
+That will generate CSS like:
+
+```css
+linear-gradient(to bottom left, ...)
+```
+
+If UX updates the branded gradient stop list later, change it in:
+
+- `packages/tokens/src/gradients.ts`
+
+Each raw solid includes:
+
+- `id`
+- `label`
+- `type`
+- `value`
 - `css`
 - `fallbackSolidColor`
 
@@ -46,6 +87,15 @@ Each raw gradient includes:
 - `oneuiBreakpoints`: canonical breakpoint values for responsive helpers
 - `rawGradientTokens`: structured branded gradients for adapter layers
 - `rawGradientTokenNames`: exported gradient names for stable referencing
+- `rawSolidTokens`: structured branded solid primitives for shared surfaces
+- `rawSolidTokenNames`: exported solid primitive names for stable referencing
+
+If UX updates the three shared solid blue background options later, change them in:
+
+- `packages/tokens/src/solids.ts`
+  - `navy`
+  - `cyan`
+  - `lightBlue`
 
 ## Consumption Guidance
 

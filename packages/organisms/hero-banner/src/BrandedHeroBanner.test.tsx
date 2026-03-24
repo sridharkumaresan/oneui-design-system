@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { OneUICard, OneUIText } from "@functions-oneui/atoms";
-import { oneuiLightGradients } from "@functions-oneui/theme";
+import { oneuiLightSurfaceRecipes } from "@functions-oneui/theme";
 
 import { expectNoAxeViolations } from "@functions-oneui/testing";
 
@@ -17,14 +17,15 @@ describe("BrandedHeroBanner", () => {
     const banner = document.querySelector(
       "[data-oneui-branded-hero-banner]"
     ) as HTMLElement;
-    const primaryGradient = oneuiLightGradients.deepSpectrum;
+    const primarySurface = oneuiLightSurfaceRecipes.heroPrimary;
     const colorProbe = document.createElement("div");
-    colorProbe.style.backgroundColor = primaryGradient.fallbackSolidColor;
+    colorProbe.style.backgroundColor = primarySurface.background.backgroundColor;
 
     expect(screen.getByRole("region", { name: "Phase 1 banner" })).toBeTruthy();
     expect(banner.dataset.oneuiBrandedHeroBannerVariant).toBe("primary");
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
-    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("deepSpectrum");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroPrimary");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("cyanGreen");
     expect(banner.style.backgroundColor).toBe(colorProbe.style.backgroundColor);
     expect(banner.style.backgroundImage).toContain("linear-gradient");
   });
@@ -39,7 +40,8 @@ describe("BrandedHeroBanner", () => {
     ) as HTMLElement;
 
     expect(banner.dataset.oneuiBrandedHeroBannerVariant).toBe("secondary");
-    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("midnightBlue");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("navyCyan");
   });
 
   it("keeps the same slot-based composition model as the base banner", () => {

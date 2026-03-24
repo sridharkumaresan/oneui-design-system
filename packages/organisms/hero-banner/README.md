@@ -11,7 +11,7 @@ This package exposes two public components:
 
 `HeroBanner` is the generic publishable organism for high-visibility page messaging with:
 
-- solid or semantic gradient surface variants
+- semantic surface keys backed by the shared OneUI surface system
 - title and optional description
 - named composition slots for breadcrumb, widgets, search, aside content, and footer content
 - a layout that spans the host width without relying on embedded hero artwork
@@ -50,7 +50,7 @@ import { SmartBreadcrumb } from "@functions-oneui/organism-smart-breadcrumb";
       </OneUICard>
     </div>
   }
-  gradientName="deepSpectrum"
+  surfaceKey="heroPrimary"
   supportingContent={<SearchAutocomplete scopeOptions={[{ label: "All", value: "all" }]} />}
   title="Good morning, Sridhar"
   topStart={
@@ -81,11 +81,12 @@ The wrapper intentionally limits the surface API to:
 
 - `variant="primary" | "secondary"`
 - title, description, and the same named slots as `HeroBanner`
+- shared semantic surface mappings under the hood
 
 It does not expose:
 
-- raw `gradientName`
-- `surfaceVariant`
+- raw `gradientName` for new consumers
+- `surfaceVariant` for new consumers
 - arbitrary `backgroundColor`
 - banner background image inputs
 
@@ -115,7 +116,7 @@ Recommended property-pane inputs:
 
 - `title`
 - `description`
-- `variant`
+- `variant` or a semantic `bannerSurfaceKey` if the webpart is consuming the shared theme resolver directly
 - `showSearch`
 - `showBreadcrumb`
 - `showTopStartPanel`
@@ -127,12 +128,14 @@ Avoid reintroducing these controls in the consuming web part if the goal is bran
 - background image selection
 - raw gradient strings
 
+If the consuming team is not ready to adopt `HeroBanner`, they should still use the shared surface helpers from `@functions-oneui/theme` and persist only the semantic surface key.
+
 ## Recommended Standards
 
 - Keep the component `width: 100%` and place it inside a true full-width host region instead of forcing `100vw` from the component.
 - In SPFx, expose structured property-pane fields and let the web part map those fields into slot content.
 - For phase-1 adoption, prefer `BrandedHeroBanner` over `HeroBanner` so the approved gradient shell is enforced consistently.
-- Prefer the canonical gradients for branded hero moments and use solid surfaces when the page needs a simpler banner treatment.
+- Prefer semantic surface keys such as `heroPrimary`, `heroSecondary`, and `heroDeep` for branded hero moments.
 - Keep titles short and descriptions to one or two lines for responsive stability.
 - Prefer `contentTone="inverse"` for dark or saturated surfaces.
 - Do not add feature-specific banner props for search, widgets, or cards. Those belong in slot content.
