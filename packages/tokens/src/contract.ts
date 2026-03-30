@@ -154,6 +154,11 @@ export const semanticTokenContract = {
     focusRing: ""
   },
   components: {
+    button: {
+      typography: {
+        fontWeight: 0
+      }
+    },
     actionCard: {
       background: "",
       borderColor: "",
@@ -399,6 +404,7 @@ export const requiredSemanticTokenPaths = {
   radius: ["none", "sm", "md", "lg", "full"],
   shadows: ["sm", "md", "lg", "xl", "focusRing"],
   components: [
+    "button.typography.fontWeight",
     "actionCard.background",
     "actionCard.borderColor",
     "actionCard.borderWidth",

@@ -1,5 +1,6 @@
 import React from "react";
 
+import "@functions-oneui/fonts/styles.css";
 import { OneUIProvider } from "@functions-oneui/theme";
 
 /** @type {import('@storybook/react').Preview} */

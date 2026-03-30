@@ -124,6 +124,7 @@ export const semanticPathToThemeKeyMap = {
     focusRing: "shadowFocusRing"
   },
   components: {
+    "button.typography.fontWeight": "oneuiButtonFontWeight",
     "actionCard.background": "oneuiActionCardBackground",
     "actionCard.borderColor": "oneuiActionCardBorderColor",
     "actionCard.borderWidth": "oneuiActionCardBorderWidth",

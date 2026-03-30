@@ -20,7 +20,7 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     description,
     eyebrow,
     footer,
-    gradientName = "cyanGreen",
+    gradientName = "gradientCyanGreen",
     headingLevel = 2,
     height = "immersive",
     surfaceKey,

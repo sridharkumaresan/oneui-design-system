@@ -93,6 +93,8 @@ test("exports light and dark OneUI themes", () => {
   assert.equal(typeof oneuiDarkTheme, "object");
   assert.notEqual(oneuiLightTheme.colorNeutralBackground1, undefined);
   assert.notEqual(oneuiDarkTheme.colorNeutralBackground1, undefined);
+  assert.match(String(oneuiLightTheme.fontFamilyBase), /Barclays Effra/);
+  assert.equal(oneuiLightTheme.oneuiButtonFontWeight, 600);
 });
 
 test("exports centralized viewport and container query helpers", () => {
@@ -229,12 +231,13 @@ test("exports canonical gradients for light and dark themes", () => {
       }
 
       assert.equal(gradients.deepSpectrum.name, "deepSpectrum");
-      assert.equal(gradients.deepSpectrum.css, gradients.cyanGreen.css);
-      assert.equal(gradients.limeSky.css, gradients.cyanYellow.css);
-      assert.equal(gradients.softAqua.css, gradients.cyanLightBlue.css);
-      assert.equal(gradients.tealShift.css, gradients.cyanGreen.css);
-      assert.equal(gradients.midnightBlue.css, gradients.navyCyan.css);
-      assert.equal(gradients.pastelHorizon.css, gradients.cyanPink.css);
+      assert.equal(gradients.deepSpectrum.css, gradients.gradientCyanGreen.css);
+      assert.equal(gradients.cyanGreen.css, gradients.gradientCyanGreen.css);
+      assert.equal(gradients.limeSky.css, gradients.gradientCyanYellow.css);
+      assert.equal(gradients.softAqua.css, gradients.gradientCyanLightBlue.css);
+      assert.equal(gradients.tealShift.css, gradients.gradientCyanGreen.css);
+      assert.equal(gradients.midnightBlue.css, gradients.gradientNavyCyan.css);
+      assert.equal(gradients.pastelHorizon.css, gradients.gradientCyanPink.css);
     }
   });
 
@@ -263,8 +266,8 @@ test("exports semantic surface recipes and a legacy-safe registry", () => {
     "decorativeSurface"
   ]);
 
-  assert.equal(oneuiLightSurfaceRecipes.heroPrimary.rawGradientName, "cyanGreen");
-  assert.equal(oneuiDarkSurfaceRecipes.heroSecondary.rawGradientName, "navyCyan");
+  assert.equal(oneuiLightSurfaceRecipes.heroPrimary.rawGradientName, "gradientCyanGreen");
+  assert.equal(oneuiDarkSurfaceRecipes.heroSecondary.rawGradientName, "gradientNavyCyan");
   assert.equal(oneuiLightSurfaceRecipes.heroDeep.rawSolidName, "navy");
   assert.equal(oneuiLightSurfaceRecipes.heroBlue.rawSolidName, "cyan");
   assert.equal(oneuiLightSurfaceRecipes.heroLight.rawSolidName, "lightBlue");
@@ -397,8 +400,8 @@ test("useOneUIGradients follows OneUIProvider mode and defaults to light gradien
 
   assert.equal(darkModeGradients.deepSpectrum.css, oneuiDarkGradients.deepSpectrum.css);
   assert.equal(
-    darkModeGradients.cyanPink.fallbackSolidColor,
-    oneuiDarkGradients.cyanPink.fallbackSolidColor
+    darkModeGradients.gradientCyanPink.fallbackSolidColor,
+    oneuiDarkGradients.gradientCyanPink.fallbackSolidColor
   );
 });
 

@@ -2,6 +2,8 @@
 
 Semantic design tokens for OneUI. This package defines stable token names for themes and components so consumers depend on meaning (`text.primary`, `background.surface`) instead of raw color or size constants.
 
+This package is Fluent-first. It keeps Fluent token categories as the baseline mental model, then layers OneUI brand primitives and semantic aliases on top.
+
 ## Purpose
 
 - Provide a semantic token contract shared across the design system
@@ -10,6 +12,18 @@ Semantic design tokens for OneUI. This package defines stable token names for th
 - Act as the foundation layer for `@functions-oneui/theme`, atoms, and organisms
 
 ## Token Domains
+
+Fluent-aligned foundation categories are exported via `oneuiFluentTokenCategories`:
+
+- `colors`
+- `typography`
+- `fonts`
+- `spacing`
+- `radii`
+- `shadows`
+- `borders`
+- `motion`
+- `sizes`
 
 The semantic contract includes these required categories:
 
@@ -26,6 +40,12 @@ The package also exports raw gradients separately from the semantic contract:
 - `rawGradientTokenNames`
 - `rawSolidTokens`
 - `rawSolidTokenNames`
+- `oneuiFluentThemeOverrides`
+- `oneuiBrandColors`
+- `oneuiBrandFonts`
+- `oneuiFluentTypographyAliases`
+- `createOneuiCssVariables()`
+- `createOneuiCssVariablesStylesheet()`
 
 Each raw gradient includes:
 
@@ -50,7 +70,7 @@ Important:
 Example:
 
 ```ts
-navyCyan: {
+gradientNavyCyan: {
   label: "Navy-Cyan",
   direction: "toBottomLeft",
   stops: ["#00AEEF", "#0095DA", "#0067B6", "#004298"]
@@ -82,13 +102,19 @@ Each raw solid includes:
 - `lightThemeTokens`: semantic tokens for light mode
 - `darkThemeTokens`: semantic tokens for dark mode
 - `tokenCategories`: required top-level semantic categories
+- `oneuiFluentTokenCategories`: Fluent-first foundation categories
 - `requiredSemanticTokenPaths`: explicit required semantic keys per category
 - `semanticTokenContract`: explicit semantic token contract shape
 - `oneuiBreakpoints`: canonical breakpoint values for responsive helpers
+- `oneuiBrandColors`: central OneUI brand colors
+- `oneuiBrandFonts`: central OneUI brand font families
+- `oneuiFluentThemeOverrides`: Fluent-compatible baseline theme overrides for light and dark
+- `oneuiFluentTypographyAliases`: Fluent-friendly aliases such as `caption2`, `body1`, and `body1Strong`
 - `rawGradientTokens`: structured branded gradients for adapter layers
 - `rawGradientTokenNames`: exported gradient names for stable referencing
 - `rawSolidTokens`: structured branded solid primitives for shared surfaces
 - `rawSolidTokenNames`: exported solid primitive names for stable referencing
+- `createOneuiCssVariables()` / `createOneuiCssVariablesStylesheet()`: generated CSS variables from the same token source for future non-React consumers
 
 If UX updates the three shared solid blue background options later, change them in:
 
@@ -100,8 +126,9 @@ If UX updates the three shared solid blue background options later, change them 
 ## Consumption Guidance
 
 - Theme package usage: map semantic tokens into Fluent UI v9 theme slots and expose raw gradients through canonical gradient names
+- Font asset usage: import `@functions-oneui/fonts/styles.css` once so the exported brand font family resolves correctly at runtime
 - Component package usage: consume semantic names from theme output, not raw token internals
-- Cross-platform usage: future adapters for Angular, Vue, Swift, or CSS output should consume the same raw gradient definitions from this package
+- Cross-platform usage: Angular, Vue, Swift, or CSS adapters should derive from the same token source or generated CSS variables instead of inventing a second design system
 - Avoid importing private internals (raw palette or helper files); only use exports from the package root
 
 ## Validation

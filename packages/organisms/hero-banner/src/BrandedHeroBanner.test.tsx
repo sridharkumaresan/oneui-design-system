@@ -25,7 +25,7 @@ describe("BrandedHeroBanner", () => {
     expect(banner.dataset.oneuiBrandedHeroBannerVariant).toBe("primary");
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
     expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroPrimary");
-    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("cyanGreen");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientCyanGreen");
     expect(banner.style.backgroundColor).toBe(colorProbe.style.backgroundColor);
     expect(banner.style.backgroundImage).toContain("linear-gradient");
   });
@@ -41,7 +41,7 @@ describe("BrandedHeroBanner", () => {
 
     expect(banner.dataset.oneuiBrandedHeroBannerVariant).toBe("secondary");
     expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
-    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("navyCyan");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientNavyCyan");
   });
 
   it("keeps the same slot-based composition model as the base banner", () => {

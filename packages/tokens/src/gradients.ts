@@ -1,9 +1,11 @@
+import { oneuiBrandGradientStopPositions } from "./foundations.js";
+
 export const rawGradientTokenNames = [
-  "navyCyan",
-  "cyanGreen",
-  "cyanYellow",
-  "cyanLightBlue",
-  "cyanPink"
+  "gradientNavyCyan",
+  "gradientCyanGreen",
+  "gradientCyanYellow",
+  "gradientCyanLightBlue",
+  "gradientCyanPink"
 ] as const;
 
 export const rawGradientDirections = [
@@ -77,6 +79,10 @@ const cloneStops = (stops: readonly RawGradientStop[]): RawGradientStop[] => {
 };
 
 const toStopPosition = (index: number, totalStops: number): string => {
+  if (totalStops === oneuiBrandGradientStopPositions.length) {
+    return oneuiBrandGradientStopPositions[index];
+  }
+
   if (totalStops <= 1) {
     return "0%";
   }
@@ -147,86 +153,98 @@ const createRawGradientToken = (
 // spec provided, not because the token system is limited to one direction.
 // To change a single variant later, update only that variant's `direction`.
 const rawGradientDefinitions = {
-  navyCyan: {
+  gradientNavyCyan: {
     label: "Navy-Cyan",
     direction: "toTopRight",
     stops: [
-      "#00AEEF",
-      "#0095DA",
-      "#0067B6",
-      "#004298",
-      "#002581",
-      "#001070",
-      "#000466",
+      { color: "#00AEEF", position: "0%" },
+      { color: "#009AEB", position: "15%" },
+      { color: "#009DE1", position: "30%" },
+      { color: "#0088D0", position: "45%" },
+      { color: "#006BB9", position: "55%" },
+      { color: "#004698", position: "70%" },
+      { color: "#001877", position: "85%" },
       "#000063"
     ]
   },
-  cyanGreen: {
+  gradientCyanGreen: {
     label: "Cyan-Green",
     direction: "toTopRight",
     stops: [
-      "#75FAAC",
-      "#67F1B3",
-      "#42D9C8",
-      "#25C6D9",
-      "#10B8E5",
-      "#04B0EC",
+      { color: "#75FAAC", position: "0%" },
+      { color: "#67F1B3", position: "15%" },
+      { color: "#42D9C8", position: "30%" },
+      { color: "#25C6D9", position: "45%" },
+      { color: "#10B8E5", position: "55%" },
+      { color: "#04B0EC", position: "70%" },
       "#00AEEF"
     ]
   },
-  cyanYellow: {
+  gradientCyanYellow: {
     label: "Cyan-Yellow",
     direction: "toTopRight",
     stops: [
-      "#FFFF98",
-      "#CBEEA9",
-      "#95DDBB",
-      "#68CFCB",
-      "#42C3D8",
-      "#25B9E2",
-      "#10B3E9",
-      "#04AFED",
+      { color: "#FFF598", position: "0%" },
+      { color: "#CBEEA9", position: "15%" },
+      { color: "#95DDBB", position: "30%" },
+      { color: "#68CFCB", position: "45%" },
+      { color: "#42C3D8", position: "55%" },
+      { color: "#25B9E2", position: "70%" },
+      { color: "#10B3E9", position: "85%" },
+      { color: "#04AFED", position: "92.5%" },
       "#00AEEF"
     ]
   },
-  cyanLightBlue: {
+  gradientCyanLightBlue: {
     label: "Cyan-LightBlue",
     direction: "toTopRight",
     stops: [
-      "#AFFDFD",
-      "#95F1FA",
-      "#67DCF7",
-      "#42CBF4",
-      "#25BEF1",
-      "#10B5F0",
-      "#04AFEF",
+      { color: "#AFFDFD", position: "0%" },
+      { color: "#95F1FA", position: "15%" },
+      { color: "#67DCF7", position: "30%" },
+      { color: "#42CBF4", position: "45%" },
+      { color: "#25BEF1", position: "55%" },
+      { color: "#10B5F0", position: "70%" },
+      { color: "#04AFEF", position: "85%" },
       "#00AEEF"
     ]
   },
-  cyanPink: {
+  gradientCyanPink: {
     label: "Cyan-Pink",
     direction: "toTopRight",
     stops: [
-      "#F6CAC9",
-      "#CBC5CF",
-      "#95BFD7",
-      "#68B9DE",
-      "#42B5E4",
-      "#25B2E9",
-      "#10AFEC",
-      "#04AEEE",
+      { color: "#F6CAC9", position: "0%" },
+      { color: "#CBC5CF", position: "15%" },
+      { color: "#95BFD7", position: "30%" },
+      { color: "#68B9DE", position: "45%" },
+      { color: "#42B5E4", position: "55%" },
+      { color: "#25B2E9", position: "70%" },
+      { color: "#10AFEC", position: "85%" },
+      { color: "#04AEEE", position: "92.5%" },
       "#00AEEF"
     ]
   }
 } as const satisfies Record<RawGradientTokenName, RawGradientDefinition>;
 
 export const rawGradientTokens: Record<RawGradientTokenName, RawGradientToken> = {
-  navyCyan: createRawGradientToken("navyCyan", rawGradientDefinitions.navyCyan),
-  cyanGreen: createRawGradientToken("cyanGreen", rawGradientDefinitions.cyanGreen),
-  cyanYellow: createRawGradientToken("cyanYellow", rawGradientDefinitions.cyanYellow),
-  cyanLightBlue: createRawGradientToken(
-    "cyanLightBlue",
-    rawGradientDefinitions.cyanLightBlue
+  gradientNavyCyan: createRawGradientToken(
+    "gradientNavyCyan",
+    rawGradientDefinitions.gradientNavyCyan
   ),
-  cyanPink: createRawGradientToken("cyanPink", rawGradientDefinitions.cyanPink)
+  gradientCyanGreen: createRawGradientToken(
+    "gradientCyanGreen",
+    rawGradientDefinitions.gradientCyanGreen
+  ),
+  gradientCyanYellow: createRawGradientToken(
+    "gradientCyanYellow",
+    rawGradientDefinitions.gradientCyanYellow
+  ),
+  gradientCyanLightBlue: createRawGradientToken(
+    "gradientCyanLightBlue",
+    rawGradientDefinitions.gradientCyanLightBlue
+  ),
+  gradientCyanPink: createRawGradientToken(
+    "gradientCyanPink",
+    rawGradientDefinitions.gradientCyanPink
+  )
 };

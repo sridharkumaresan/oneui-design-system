@@ -22,27 +22,27 @@ const playgroundDirectionToCssMap = {
 };
 
 const gradientNameNotes = {
-  navyCyan: {
+  gradientNavyCyan: {
     title: "Hero secondary",
     usage: "Darker branded hero or compact branded panel surfaces.",
     approved: "Secondary hero moments, compact stock/weather overlays, dark branded promo panels."
   },
-  cyanYellow: {
+  gradientCyanYellow: {
     title: "Feature surface",
     usage: "Lighter feature and campaign surfaces with lower visual weight.",
     approved: "Section accents, promotional strips, low-density highlight bands."
   },
-  cyanLightBlue: {
+  gradientCyanLightBlue: {
     title: "Soft promotional surface",
     usage: "Soft branded surfaces for promotional or supportive content.",
     approved: "Promo cards, onboarding callouts, optional decorative panels."
   },
-  cyanGreen: {
+  gradientCyanGreen: {
     title: "Icon accent",
     usage: "Compact decorative accents around icon or metric containers.",
     approved: "Icon backplates, compact indicator containers, branded mini-panels."
   },
-  cyanPink: {
+  gradientCyanPink: {
     title: "Decorative pastel surface",
     usage: "Art-directed decorative surfaces with a softer tone.",
     approved: "Decorative side panels, supporting feature surfaces, non-critical visual flourish."
@@ -218,18 +218,18 @@ const GradientShowcase = () => {
           <OneUIHeroBanner
             contentTone="inverse"
             description="Primary branded hero treatment for prominent landing experiences."
-            gradientName="cyanGreen"
+            gradientName="gradientCyanGreen"
             height="comfortable"
             surfaceVariant="gradient"
-            title="cyanGreen"
+            title="gradientCyanGreen"
           />
           <OneUIHeroBanner
             contentTone="inverse"
             description="Darker alternative for secondary hero and compact branded panel moments."
-            gradientName="navyCyan"
+            gradientName="gradientNavyCyan"
             height="comfortable"
             surfaceVariant="gradient"
-            title="navyCyan"
+            title="gradientNavyCyan"
           />
         </div>
       </section>
@@ -250,7 +250,7 @@ const GradientShowcase = () => {
         >
           <article
             style={{
-              ...applyGradientSurface(gradients.navyCyan),
+              ...applyGradientSurface(gradients.gradientNavyCyan),
               borderRadius: theme?.borderRadiusXLarge ?? "1rem",
               color: theme?.colorNeutralForegroundOnBrand ?? theme?.colorNeutralForegroundInverted,
               display: "grid",
@@ -278,7 +278,7 @@ const GradientShowcase = () => {
           >
             <div
               style={{
-                ...applyGradientSurface(gradients.cyanGreen),
+                ...applyGradientSurface(gradients.gradientCyanGreen),
                 alignItems: "center",
                 borderRadius: theme?.borderRadiusCircular ?? "9999px",
                 color: theme?.colorNeutralForegroundOnBrand ?? theme?.colorNeutralForegroundInverted,
@@ -295,7 +295,7 @@ const GradientShowcase = () => {
             <div>
               <strong>Decorative icon backplate</strong>
               <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-                Use cyanGreen for compact decorative emphasis around icons or small branded indicators.
+                Use gradientCyanGreen for compact decorative emphasis around icons or small branded indicators.
               </p>
             </div>
           </article>
@@ -312,7 +312,7 @@ const GradientShowcase = () => {
           >
             <div
               style={{
-                ...applyGradientSurface(gradients.cyanYellow),
+                ...applyGradientSurface(gradients.gradientCyanYellow),
                 borderRadius: theme?.borderRadiusCircular ?? "9999px",
                 height: "0.375rem",
                 width: "6rem"
@@ -432,7 +432,7 @@ const GradientDirectionPlayground = ({ direction, gradientName }) => {
 
 export const DirectionPlayground = {
   args: {
-    gradientName: "cyanGreen",
+    gradientName: "gradientCyanGreen",
     direction: "toTopRight"
   },
   argTypes: {

@@ -53,12 +53,12 @@ export const rawSolidTokens: Record<RawSolidTokenName, RawSolidToken> = {
   brandMint: createRawSolidToken("brandMint", "Brand Mint", "#75FAAC"),
   brandAqua: createRawSolidToken("brandAqua", "Brand Aqua", "#AFFDFD"),
   brandPastel: createRawSolidToken("brandPastel", "Brand Pastel", "#F6CAC9"),
-  cyan: createRawSolidToken("cyan", "Cyan", "#0ED4F0"),
+  cyan: createRawSolidToken("cyan", "Cyan", "#00AEEF"),
   navy: createRawSolidToken("navy", "Navy", "#000063"),
   lightBlue: createRawSolidToken("lightBlue", "LightBlue", "#E7F6FD"),
   // Backward-compatible aliases while older consumers move to the simpler solid keys.
   surfaceBlueDark: createRawSolidToken("surfaceBlueDark", "Surface Blue Dark", "#000063"),
-  surfaceBlueLight: createRawSolidToken("surfaceBlueLight", "Surface Blue Light", "#0ED4F0"),
+  surfaceBlueLight: createRawSolidToken("surfaceBlueLight", "Surface Blue Light", "#00AEEF"),
   surfaceBlueLightest: createRawSolidToken(
     "surfaceBlueLightest",
     "Surface Blue Lightest",

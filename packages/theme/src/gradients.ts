@@ -7,6 +7,11 @@ import {
 
 export const oneuiGradientNames = rawGradientTokenNames;
 export const oneuiLegacyGradientNames = [
+  "navyCyan",
+  "cyanGreen",
+  "cyanYellow",
+  "cyanLightBlue",
+  "cyanPink",
   "deepSpectrum",
   "limeSky",
   "softAqua",
@@ -39,12 +44,17 @@ const oneuiLegacyGradientAliasMap: Record<
   OneUILegacyGradientName,
   OneUIGradientName
 > = {
-  deepSpectrum: "cyanGreen",
-  limeSky: "cyanYellow",
-  softAqua: "cyanLightBlue",
-  tealShift: "cyanGreen",
-  midnightBlue: "navyCyan",
-  pastelHorizon: "cyanPink"
+  navyCyan: "gradientNavyCyan",
+  cyanGreen: "gradientCyanGreen",
+  cyanYellow: "gradientCyanYellow",
+  cyanLightBlue: "gradientCyanLightBlue",
+  cyanPink: "gradientCyanPink",
+  deepSpectrum: "gradientCyanGreen",
+  limeSky: "gradientCyanYellow",
+  softAqua: "gradientCyanLightBlue",
+  tealShift: "gradientCyanGreen",
+  midnightBlue: "gradientNavyCyan",
+  pastelHorizon: "gradientCyanPink"
 };
 
 const cloneStops = (stops: readonly RawGradientStop[]): RawGradientStop[] => {

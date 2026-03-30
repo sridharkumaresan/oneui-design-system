@@ -2,7 +2,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createOneuiCssVariables,
+  createOneuiCssVariablesStylesheet,
   oneuiBreakpoints,
+  oneuiBrandColors,
+  oneuiFluentTypographyAliases,
+  oneuiFluentThemeOverrides,
+  oneuiFluentTokenCategories,
   rawGradientTokenNames,
   rawGradientTokens,
   rawSolidTokenNames,
@@ -45,6 +51,26 @@ test("exports centralized breakpoint tokens", () => {
   });
 });
 
+test("exports Fluent-aligned foundation categories and brand values", () => {
+  assert.deepEqual(oneuiFluentTokenCategories, [
+    "colors",
+    "typography",
+    "fonts",
+    "spacing",
+    "radii",
+    "shadows",
+    "borders",
+    "motion",
+    "sizes"
+  ]);
+
+  assert.equal(oneuiBrandColors.primary, "#00AEEF");
+  assert.equal(oneuiBrandColors.interactive, "#006DE3");
+  assert.equal(oneuiBrandColors.interactive2, "#272727");
+  assert.equal(oneuiFluentThemeOverrides.light.colorBrandBackground, "#006DE3");
+  assert.equal(oneuiFluentTypographyAliases.caption2.fontWeight, 500);
+});
+
 test("light and dark semantic token sets contain all required contract keys", () => {
   for (const [themeName, tokens] of Object.entries(semanticTokens)) {
     for (const [category, paths] of Object.entries(requiredSemanticTokenPaths)) {
@@ -65,11 +91,11 @@ test("light and dark semantic token sets contain all required contract keys", ()
 
 test("exports the five structured branded raw gradient tokens", () => {
   assert.deepEqual(rawGradientTokenNames, [
-    "navyCyan",
-    "cyanGreen",
-    "cyanYellow",
-    "cyanLightBlue",
-    "cyanPink"
+    "gradientNavyCyan",
+    "gradientCyanGreen",
+    "gradientCyanYellow",
+    "gradientCyanLightBlue",
+    "gradientCyanPink"
   ]);
 
   for (const gradientName of rawGradientTokenNames) {
@@ -126,4 +152,15 @@ test("exports the structured raw solid surface primitives", () => {
     assert.equal(solid.css, solid.value);
     assert.equal(solid.fallbackSolidColor, solid.value);
   }
+});
+
+test("exports CSS variable generation from the same token source of truth", () => {
+  const variables = createOneuiCssVariables({ mode: "light" });
+  const stylesheet = createOneuiCssVariablesStylesheet({ mode: "dark" });
+
+  assert.equal(variables["--oneui-fluent-colorBrandBackground"], "#006DE3");
+  assert.equal(variables["--oneui-gradient-gradientCyanGreen-fallback"], "#00AEEF");
+  assert.equal(variables["--oneui-solid-cyan"], "#00AEEF");
+  assert.match(stylesheet, /^:root \{/);
+  assert.match(stylesheet, /--oneui-fluent-colorNeutralBackground1:/);
 });

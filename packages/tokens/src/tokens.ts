@@ -1,4 +1,9 @@
 import { rawPalette } from "./internal/palette.js";
+import {
+  oneuiRadiusScale,
+  oneuiSpacingScale,
+  oneuiTypographyScale
+} from "./foundations.js";
 
 export const tokenCategories = [
   "color",
@@ -9,49 +14,6 @@ export const tokenCategories = [
   "components",
   "breakpoints"
 ];
-
-const typographyScale = {
-  fontFamily: {
-    base: '"Segoe UI", "Helvetica Neue", Arial, sans-serif',
-    monospace: '"Cascadia Mono", "SFMono-Regular", Menlo, monospace'
-  },
-  fontSize: {
-    caption: "0.75rem",
-    body: "0.875rem",
-    bodyLarge: "1rem",
-    title: "1.25rem",
-    headline: "1.75rem"
-  },
-  fontWeight: {
-    regular: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700
-  },
-  lineHeight: {
-    compact: 1.2,
-    normal: 1.4,
-    relaxed: 1.6
-  }
-};
-
-const spacingScale = {
-  xxs: "0.125rem",
-  xs: "0.25rem",
-  sm: "0.5rem",
-  md: "0.75rem",
-  lg: "1rem",
-  xl: "1.5rem",
-  xxl: "2rem"
-};
-
-const radiusScale = {
-  none: "0",
-  sm: "0.125rem",
-  md: "0.25rem",
-  lg: "0.5rem",
-  full: "9999px"
-};
 
 export const oneuiBreakpoints = {
   xs: "360px",
@@ -131,41 +93,41 @@ const actionCardComponentTokensLight = {
   },
   eyebrow: {
     typography: {
-      fontSize: typographyScale.fontSize.caption,
-      fontWeight: typographyScale.fontWeight.medium,
-      lineHeight: typographyScale.lineHeight.normal
+      fontSize: oneuiTypographyScale.fontSize.caption,
+      fontWeight: oneuiTypographyScale.fontWeight.medium,
+      lineHeight: oneuiTypographyScale.lineHeight.normal
     },
     color: rawPalette.neutral[500]
   },
   title: {
     typography: {
-      fontSize: typographyScale.fontSize.headline,
-      fontWeight: typographyScale.fontWeight.semibold,
+      fontSize: oneuiTypographyScale.fontSize.headline,
+      fontWeight: oneuiTypographyScale.fontWeight.semibold,
       lineHeight: 1.22
     },
     color: rawPalette.neutral[900]
   },
   meta: {
     typography: {
-      fontSize: typographyScale.fontSize.bodyLarge,
-      fontWeight: typographyScale.fontWeight.regular,
-      lineHeight: typographyScale.lineHeight.relaxed
+      fontSize: oneuiTypographyScale.fontSize.bodyLarge,
+      fontWeight: oneuiTypographyScale.fontWeight.regular,
+      lineHeight: oneuiTypographyScale.lineHeight.relaxed
     },
     color: rawPalette.neutral[500]
   },
   footer: {
     typography: {
-      fontSize: typographyScale.fontSize.body,
-      fontWeight: typographyScale.fontWeight.regular,
-      lineHeight: typographyScale.lineHeight.relaxed
+      fontSize: oneuiTypographyScale.fontSize.body,
+      fontWeight: oneuiTypographyScale.fontWeight.regular,
+      lineHeight: oneuiTypographyScale.lineHeight.relaxed
     },
     color: rawPalette.neutral[500]
   },
   link: {
     typography: {
-      fontSize: typographyScale.fontSize.bodyLarge,
-      fontWeight: typographyScale.fontWeight.semibold,
-      lineHeight: typographyScale.lineHeight.normal
+      fontSize: oneuiTypographyScale.fontSize.bodyLarge,
+      fontWeight: oneuiTypographyScale.fontWeight.semibold,
+      lineHeight: oneuiTypographyScale.lineHeight.normal
     },
     color: rawPalette.brand.interactive
   }
@@ -212,17 +174,17 @@ const actionSectionComponentTokensLight = {
   marginBlock: "24px",
   title: {
     typography: {
-      fontSize: typographyScale.fontSize.title,
-      fontWeight: typographyScale.fontWeight.semibold,
+      fontSize: oneuiTypographyScale.fontSize.title,
+      fontWeight: oneuiTypographyScale.fontWeight.semibold,
       lineHeight: 1.3
     },
     color: rawPalette.neutral[900]
   },
   link: {
     typography: {
-      fontSize: typographyScale.fontSize.bodyLarge,
-      fontWeight: typographyScale.fontWeight.semibold,
-      lineHeight: typographyScale.lineHeight.normal
+      fontSize: oneuiTypographyScale.fontSize.bodyLarge,
+      fontWeight: oneuiTypographyScale.fontWeight.semibold,
+      lineHeight: oneuiTypographyScale.lineHeight.normal
     },
     color: rawPalette.brand.interactive
   }
@@ -348,9 +310,23 @@ export const lightThemeTokens = {
       }
     }
   },
-  typography: typographyScale,
-  spacing: spacingScale,
-  radius: radiusScale,
+  typography: {
+    fontFamily: {
+      base: oneuiTypographyScale.fontFamily.base,
+      monospace: oneuiTypographyScale.fontFamily.monospace
+    },
+    fontSize: {
+      caption: oneuiTypographyScale.fontSize.caption,
+      body: oneuiTypographyScale.fontSize.body,
+      bodyLarge: oneuiTypographyScale.fontSize.bodyLarge,
+      title: oneuiTypographyScale.fontSize.title,
+      headline: oneuiTypographyScale.fontSize.headline
+    },
+    fontWeight: oneuiTypographyScale.fontWeight,
+    lineHeight: oneuiTypographyScale.lineHeight
+  },
+  spacing: oneuiSpacingScale,
+  radius: oneuiRadiusScale,
   shadows: {
     sm: "0 1px 2px 0 rgba(0, 0, 0, 0.12)",
     md: "0 4px 10px 0 rgba(0, 0, 0, 0.16)",
@@ -359,6 +335,11 @@ export const lightThemeTokens = {
     focusRing: `0 0 0 2px ${rawPalette.brand.interactive}`
   },
   components: {
+    button: {
+      typography: {
+        fontWeight: oneuiTypographyScale.fontWeight.semibold
+      }
+    },
     actionCard: actionCardComponentTokensLight,
     actionSection: actionSectionComponentTokensLight
   },
@@ -473,9 +454,23 @@ export const darkThemeTokens = {
       }
     }
   },
-  typography: typographyScale,
-  spacing: spacingScale,
-  radius: radiusScale,
+  typography: {
+    fontFamily: {
+      base: oneuiTypographyScale.fontFamily.base,
+      monospace: oneuiTypographyScale.fontFamily.monospace
+    },
+    fontSize: {
+      caption: oneuiTypographyScale.fontSize.caption,
+      body: oneuiTypographyScale.fontSize.body,
+      bodyLarge: oneuiTypographyScale.fontSize.bodyLarge,
+      title: oneuiTypographyScale.fontSize.title,
+      headline: oneuiTypographyScale.fontSize.headline
+    },
+    fontWeight: oneuiTypographyScale.fontWeight,
+    lineHeight: oneuiTypographyScale.lineHeight
+  },
+  spacing: oneuiSpacingScale,
+  radius: oneuiRadiusScale,
   shadows: {
     sm: "0 1px 2px 0 rgba(0, 0, 0, 0.30)",
     md: "0 4px 10px 0 rgba(0, 0, 0, 0.34)",
@@ -484,6 +479,11 @@ export const darkThemeTokens = {
     focusRing: `0 0 0 2px ${rawPalette.brand.primary}`
   },
   components: {
+    button: {
+      typography: {
+        fontWeight: oneuiTypographyScale.fontWeight.semibold
+      }
+    },
     actionCard: actionCardComponentTokensDark,
     actionSection: actionSectionComponentTokensDark
   },

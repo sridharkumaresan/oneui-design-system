@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "Barclays Effra";
+  src: url("./assets/effra-regular.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Barclays Effra";
+  src: url("./assets/effra-medium.woff") format("woff");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Barclays Effra";
+  src: url("./assets/effra-bold.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}

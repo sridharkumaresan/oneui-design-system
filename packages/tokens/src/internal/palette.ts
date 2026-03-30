@@ -15,6 +15,7 @@ const neutral = {
 const brand = {
   primary: "#00aeef",
   interactive: "#006de3",
+  interactive2: "#272727",
   interactiveAlt: "#005bbe",
   interactivePressed: "#004fa8"
 };

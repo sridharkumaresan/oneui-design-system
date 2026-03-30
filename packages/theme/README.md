@@ -2,9 +2,12 @@
 
 Fluent UI v9 compatible OneUI theme composition built from semantic tokens in `@functions-oneui/tokens`.
 
+The theme architecture is Fluent-first: start from Fluent UI React v9 theme tokens, apply OneUI brand foundations and semantic aliases, and only add OneUI-specific extension keys where Fluent does not already provide the right slot.
+
 ## Purpose
 
 - Map semantic token names to Fluent UI theme keys
+- Apply centrally maintained OneUI brand colors, fonts, spacing, motion, and type decisions onto Fluent-compatible theme slots
 - Provide ready-to-use light and dark theme objects
 - Expose canonical gradient families and semantic reusable surface recipes
 - Provide shared registry, policy, and resolver helpers for banners and branded surfaces
@@ -43,10 +46,14 @@ Fluent UI v9 compatible OneUI theme composition built from semantic tokens in `@
 - `createOneUIContainerQueryUp()` / `createOneUIContainerQueryDown()`
 - `semanticPathToThemeKeyMap`
 
+For token-source exports such as brand primitives, Fluent baseline overrides, typography aliases, and CSS variable generation, consume `@functions-oneui/tokens`.
+For brand font asset delivery, consume `@functions-oneui/fonts`.
+
 ## Basic Usage
 
 ```ts
 import { FluentProvider } from "@fluentui/react-components";
+import "@functions-oneui/fonts/styles.css";
 import { oneuiLightTheme } from "@functions-oneui/theme";
 
 <FluentProvider theme={oneuiLightTheme}>{/* app */}</FluentProvider>;
@@ -55,6 +62,7 @@ import { oneuiLightTheme } from "@functions-oneui/theme";
 ## Provider Usage
 
 ```ts
+import "@functions-oneui/fonts/styles.css";
 import { OneUIProvider } from "@functions-oneui/theme";
 
 <OneUIProvider mode="dark">{/* app */}</OneUIProvider>;
@@ -84,7 +92,7 @@ import { useOneUIGradients } from "@functions-oneui/theme";
 
 function HeroSurface(): JSX.Element {
   const gradients = useOneUIGradients();
-  const cyanGreen = gradients.cyanGreen;
+  const cyanGreen = gradients.gradientCyanGreen;
 
   return (
     <section
@@ -97,7 +105,7 @@ function HeroSurface(): JSX.Element {
 }
 ```
 
-Use the five canonical branded gradients for decorative hero surfaces, icon backplates, and section accents. Each token now carries a semantic direction such as `toTopRight` and generates the matching CSS direction internally. Do not introduce raw gradient strings directly in atoms or organisms as the default styling pattern. The old `deepSpectrum` name is kept as a legacy alias and resolves to `cyanGreen`.
+Use the five canonical branded gradients for decorative hero surfaces, icon backplates, and section accents. Each token now carries a semantic direction such as `toTopRight` and generates the matching CSS direction internally. Do not introduce raw gradient strings directly in atoms or organisms as the default styling pattern. The old `deepSpectrum` name is kept as a legacy alias and resolves to `gradientCyanGreen`.
 
 Clarity note:
 
@@ -233,6 +241,16 @@ Recommended rule:
 - let the SharePoint host theme influence compatible neutral and brand-adjacent Fluent values
 - keep canonical OneUI gradients and semantic surface recipes as OneUI-owned brand surfaces
 - do not let arbitrary host colors replace the approved hero gradient shell
+
+## Fluent Alignment
+
+Teams implementing UX specs can stay close to Fluent terminology:
+
+- typography aliases such as `caption2`, `body1`, and `body1Strong` are maintained in `@functions-oneui/tokens`
+- Fluent-compatible theme keys such as `colorNeutralForeground1`, `fontSizeBase400`, and `fontWeightSemibold` are composed into the final OneUI theme
+- component-specific tuning should only introduce extra `oneui*` theme keys where Fluent does not already provide the right semantic slot
+
+For example, the shared button font weight now flows through the theme key `oneuiButtonFontWeight`, so a UX request like “make all buttons bold” can be handled centrally in the token/theme layer and picked up by consuming components without rewriting each button style separately.
 
 ## Responsive Helpers
 

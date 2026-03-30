@@ -19,7 +19,7 @@ The surface system is intentionally split into three layers:
 
 1. `@functions-oneui/tokens`
    - owns raw gradient primitives and raw solid primitives as structured data
-   - examples: `rawGradientTokens.cyanGreen`, `rawSolidTokens.navy`
+   - examples: `rawGradientTokens.gradientCyanGreen`, `rawSolidTokens.navy`
 2. `@functions-oneui/theme`
    - maps those primitives into semantic reusable surface recipes
    - examples: `heroPrimary`, `heroSoft`, `iconPrimary`, `ctaPrimary`
@@ -36,8 +36,8 @@ Raw primitives remain design-oriented.
 
 Examples:
 
-- raw gradient `cyanGreen` powers semantic roles such as `heroPrimary` and `iconPrimary`
-- raw gradient `navyCyan` powers semantic roles such as `heroSecondary` and `panelSpotlight`
+- raw gradient `gradientCyanGreen` powers semantic roles such as `heroPrimary` and `iconPrimary`
+- raw gradient `gradientNavyCyan` powers semantic roles such as `heroSecondary` and `panelSpotlight`
 - raw solid `navy` powers semantic role `heroDeep`
 - raw solid `brandBlue` powers semantic roles such as `accentStrong` and `ctaPrimary`
 

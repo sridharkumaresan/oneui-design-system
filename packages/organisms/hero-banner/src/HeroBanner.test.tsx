@@ -55,7 +55,7 @@ describe("HeroBanner", () => {
 
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
     expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
-    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("navyCyan");
+    expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientNavyCyan");
     const colorProbe = document.createElement("div");
     colorProbe.style.backgroundColor = surface.background.backgroundColor;
 

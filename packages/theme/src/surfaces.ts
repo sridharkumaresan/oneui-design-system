@@ -39,6 +39,16 @@ export type OneUISurfaceVariantKey = OneUISurfaceRoleName;
 export const oneuiSurfaceVariantKeys = oneuiSurfaceRoleNames;
 
 export const oneuiLegacySurfaceVariantKeys = [
+  "gradientNavyCyan",
+  "gradientCyanGreen",
+  "gradientCyanYellow",
+  "gradientCyanLightBlue",
+  "gradientCyanPink",
+  "navyCyan",
+  "cyanGreen",
+  "cyanYellow",
+  "cyanLightBlue",
+  "cyanPink",
   "primary",
   "secondary",
   "deepSpectrum",
@@ -278,9 +288,9 @@ const createSurfaceRecipes = (
       category: "banner",
       group: "Hero",
       description: "Primary branded hero for high-visibility landing and destination pages.",
-      rawGradientName: "cyanGreen",
-      background: createGradientBackground(gradients, "cyanGreen"),
-      fallbackBackground: gradients.cyanGreen.fallbackSolidColor,
+      rawGradientName: "gradientCyanGreen",
+      background: createGradientBackground(gradients, "gradientCyanGreen"),
+      fallbackBackground: gradients.gradientCyanGreen.fallbackSolidColor,
       recommendedForeground: "inverse",
       textToneGuidance: "Use inverse text and controls for maximum contrast.",
       overlayGuidance: "Optional neutral or alpha overlays can be used behind dense widgets."
@@ -292,9 +302,9 @@ const createSurfaceRecipes = (
       category: "banner",
       group: "Hero",
       description: "Deeper secondary hero for darker portal shells and hub mastheads.",
-      rawGradientName: "navyCyan",
-      background: createGradientBackground(gradients, "navyCyan"),
-      fallbackBackground: gradients.navyCyan.fallbackSolidColor,
+      rawGradientName: "gradientNavyCyan",
+      background: createGradientBackground(gradients, "gradientNavyCyan"),
+      fallbackBackground: gradients.gradientNavyCyan.fallbackSolidColor,
       recommendedForeground: "inverse",
       textToneGuidance: "Pair with inverse content and low-noise overlays only."
     },
@@ -305,9 +315,9 @@ const createSurfaceRecipes = (
       category: "banner",
       group: "Hero",
       description: "Lighter banner treatment for supportive landing moments and quieter pages.",
-      rawGradientName: "cyanLightBlue",
-      background: createGradientBackground(gradients, "cyanLightBlue"),
-      fallbackBackground: gradients.cyanLightBlue.fallbackSolidColor,
+      rawGradientName: "gradientCyanLightBlue",
+      background: createGradientBackground(gradients, "gradientCyanLightBlue"),
+      fallbackBackground: gradients.gradientCyanLightBlue.fallbackSolidColor,
       recommendedForeground: "default",
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Prefer default foregrounds and avoid stacked dark overlays."
@@ -319,9 +329,9 @@ const createSurfaceRecipes = (
       category: "banner",
       group: "Hero",
       description: "Bright branded banner for search, discovery, and optimistic campaign moments.",
-      rawGradientName: "cyanYellow",
-      background: createGradientBackground(gradients, "cyanYellow"),
-      fallbackBackground: gradients.cyanYellow.fallbackSolidColor,
+      rawGradientName: "gradientCyanYellow",
+      background: createGradientBackground(gradients, "gradientCyanYellow"),
+      fallbackBackground: gradients.gradientCyanYellow.fallbackSolidColor,
       recommendedForeground: "default",
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Use default or branded text rather than inverse UI."
@@ -373,9 +383,9 @@ const createSurfaceRecipes = (
       category: "banner",
       group: "Hero",
       description: "Pastel hero for editorial, people-focused, or softer destination surfaces.",
-      rawGradientName: "cyanPink",
-      background: createGradientBackground(gradients, "cyanPink"),
-      fallbackBackground: gradients.cyanPink.fallbackSolidColor,
+      rawGradientName: "gradientCyanPink",
+      background: createGradientBackground(gradients, "gradientCyanPink"),
+      fallbackBackground: gradients.gradientCyanPink.fallbackSolidColor,
       recommendedForeground: "default",
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Keep copy dark and reduce decorative overlays."
@@ -387,9 +397,9 @@ const createSurfaceRecipes = (
       category: "icon",
       group: "Compact Surfaces",
       description: "Primary compact gradient for icon containers and small branded indicators.",
-      rawGradientName: "cyanGreen",
-      background: createGradientBackground(gradients, "cyanGreen"),
-      fallbackBackground: gradients.cyanGreen.fallbackSolidColor,
+      rawGradientName: "gradientCyanGreen",
+      background: createGradientBackground(gradients, "gradientCyanGreen"),
+      fallbackBackground: gradients.gradientCyanGreen.fallbackSolidColor,
       recommendedForeground: "inverse"
     },
     iconSecondary: {
@@ -399,9 +409,9 @@ const createSurfaceRecipes = (
       category: "icon",
       group: "Compact Surfaces",
       description: "Alternative compact gradient for lighter icon plates and metric callouts.",
-      rawGradientName: "cyanLightBlue",
-      background: createGradientBackground(gradients, "cyanLightBlue"),
-      fallbackBackground: gradients.cyanLightBlue.fallbackSolidColor,
+      rawGradientName: "gradientCyanLightBlue",
+      background: createGradientBackground(gradients, "gradientCyanLightBlue"),
+      fallbackBackground: gradients.gradientCyanLightBlue.fallbackSolidColor,
       recommendedForeground: "inverse"
     },
     accentStrong: {
@@ -450,9 +460,9 @@ const createSurfaceRecipes = (
       category: "card",
       group: "Reusable Components",
       description: "Featured card surface that reuses the lighter branded family without changing card structure.",
-      rawGradientName: "cyanYellow",
-      background: createGradientBackground(gradients, "cyanYellow"),
-      fallbackBackground: gradients.cyanYellow.fallbackSolidColor,
+      rawGradientName: "gradientCyanYellow",
+      background: createGradientBackground(gradients, "gradientCyanYellow"),
+      fallbackBackground: gradients.gradientCyanYellow.fallbackSolidColor,
       recommendedForeground: "default",
       borderColor: getThemeValue(theme, "colorNeutralStroke1")
     },
@@ -504,9 +514,9 @@ const createSurfaceRecipes = (
       category: "panel",
       group: "Reusable Components",
       description: "Compact gradient panel for spotlight modules, KPI overlays, and featured side content.",
-      rawGradientName: "navyCyan",
-      background: createGradientBackground(gradients, "navyCyan"),
-      fallbackBackground: gradients.navyCyan.fallbackSolidColor,
+      rawGradientName: "gradientNavyCyan",
+      background: createGradientBackground(gradients, "gradientNavyCyan"),
+      fallbackBackground: gradients.gradientNavyCyan.fallbackSolidColor,
       recommendedForeground: "inverse"
     },
     decorativeSurface: {
@@ -516,9 +526,9 @@ const createSurfaceRecipes = (
       category: "decorative",
       group: "Reusable Components",
       description: "Controlled decorative branded surface for visual support, not for default content backgrounds.",
-      rawGradientName: "cyanPink",
-      background: createGradientBackground(gradients, "cyanPink"),
-      fallbackBackground: gradients.cyanPink.fallbackSolidColor,
+      rawGradientName: "gradientCyanPink",
+      background: createGradientBackground(gradients, "gradientCyanPink"),
+      fallbackBackground: gradients.gradientCyanPink.fallbackSolidColor,
       recommendedForeground: "default",
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Reserve for decorative or low-density supporting surfaces."
@@ -533,6 +543,46 @@ const oneuiSurfaceLegacyAliasMap: Record<
     reason: string;
   }
 > = {
+  gradientNavyCyan: {
+    replacementKey: "heroSecondary",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  gradientCyanGreen: {
+    replacementKey: "heroPrimary",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  gradientCyanYellow: {
+    replacementKey: "heroFresh",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  gradientCyanLightBlue: {
+    replacementKey: "heroSoft",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  gradientCyanPink: {
+    replacementKey: "heroPastel",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  navyCyan: {
+    replacementKey: "heroSecondary",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  cyanGreen: {
+    replacementKey: "heroPrimary",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  cyanYellow: {
+    replacementKey: "heroFresh",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  cyanLightBlue: {
+    replacementKey: "heroSoft",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
+  cyanPink: {
+    replacementKey: "heroPastel",
+    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+  },
   primary: {
     replacementKey: "heroPrimary",
     reason: "Legacy phase-1 banner enum preserved for existing web-part instances."
