@@ -5,10 +5,16 @@ import { useOneUIInputClassName } from "./OneUIInput.styles.js";
 import type { OneUIInputProps } from "./OneUIInput.types.js";
 
 export const OneUIInput = React.forwardRef<HTMLInputElement, OneUIInputProps>((props, ref) => {
-  const { className, stretch = false, ...inputProps } = props;
-  const inputClassName = useOneUIInputClassName(stretch, className);
+  const { appearance, className, stretch = false, ...inputProps } = props;
+  const inputClassName = useOneUIInputClassName(
+    {
+      appearance,
+      stretch
+    },
+    className
+  );
 
-  return <Input {...inputProps} className={inputClassName} ref={ref} />;
+  return <Input {...inputProps} appearance={appearance} className={inputClassName} ref={ref} />;
 });
 
 OneUIInput.displayName = "OneUIInput";

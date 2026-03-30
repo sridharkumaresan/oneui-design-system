@@ -6,7 +6,7 @@ import type {
 } from "@functions-oneui/theme";
 
 export type HeroBannerContentTone = "default" | "inverse";
-export type HeroBannerHeight = "comfortable" | "immersive";
+export type HeroBannerHeight = "tiny" | "comfortable" | "immersive";
 export type HeroBannerSurfaceVariant = "solid" | "gradient";
 export type BrandedHeroBannerVariant = "primary" | "secondary";
 

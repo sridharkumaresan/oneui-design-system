@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -36,4 +37,14 @@ test("build output includes the stylesheet and woff assets", () => {
     existsSync(path.join(packageDir, "dist", "assets", "effra-bold.woff")),
     true
   );
+});
+
+test("stylesheet declares Barclays Effra for all shipped font weights", () => {
+  const stylesheet = readFileSync(path.join(packageDir, "dist", "styles.css"), "utf8");
+  const familyMatches = stylesheet.match(/font-family:\s*"Barclays Effra"/g) ?? [];
+
+  assert.equal(familyMatches.length, 3);
+  assert.match(stylesheet, /font-weight:\s*400/);
+  assert.match(stylesheet, /font-weight:\s*500/);
+  assert.match(stylesheet, /font-weight:\s*700/);
 });

@@ -337,7 +337,7 @@ export const lightThemeTokens = {
   components: {
     button: {
       typography: {
-        fontWeight: oneuiTypographyScale.fontWeight.semibold
+        fontWeight: oneuiTypographyScale.fontWeight.regular
       }
     },
     actionCard: actionCardComponentTokensLight,
@@ -481,7 +481,7 @@ export const darkThemeTokens = {
   components: {
     button: {
       typography: {
-        fontWeight: oneuiTypographyScale.fontWeight.semibold
+        fontWeight: oneuiTypographyScale.fontWeight.regular
       }
     },
     actionCard: actionCardComponentTokensDark,

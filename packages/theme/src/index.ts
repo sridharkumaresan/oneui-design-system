@@ -1,6 +1,7 @@
 export { useOneUIGradients } from "./gradient-context.js";
 export { OneUIProvider } from "./provider.js";
 export type { OneUIProviderProps } from "./provider.js";
+export { useOneUIThemeMode } from "./theme-mode-context.js";
 export { useOneUISurfaces } from "./surface-context.js";
 export {
   buildOneUIBannerSurfacePickerOptions,

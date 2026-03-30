@@ -9,18 +9,28 @@ const useStyles = makeStyles({
     borderRadius: tokens.borderRadiusLarge,
     minWidth: 0
   },
+  underline: {
+    borderRadius: tokens.borderRadiusNone
+  },
   stretch: {
     width: "100%"
   }
 });
 
-export const useOneUIInputClassName = (stretch: boolean, className?: string): string => {
+export const useOneUIInputClassName = (
+  options: {
+    appearance?: string;
+    stretch: boolean;
+  },
+  className?: string
+): string => {
   const styles = useStyles();
 
   return mergeClasses(
     oneUIInputClassNames.root,
     styles.root,
-    stretch ? styles.stretch : undefined,
+    options.appearance === "underline" ? styles.underline : undefined,
+    options.stretch ? styles.stretch : undefined,
     className
   );
 };

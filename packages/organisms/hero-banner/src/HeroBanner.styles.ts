@@ -30,6 +30,16 @@ const useStyles = makeStyles({
       paddingInline: tokens.spacingHorizontalL
     }
   },
+  innerTiny: {
+    gap: tokens.spacingVerticalM,
+    paddingBlock: tokens.spacingVerticalL,
+    paddingInline: tokens.spacingHorizontalXL,
+    [compactHeroBannerQuery]: {
+      gap: tokens.spacingVerticalS,
+      paddingBlock: tokens.spacingVerticalM,
+      paddingInline: tokens.spacingHorizontalM
+    }
+  },
   topRow: {
     alignItems: "start",
     display: "flex",
@@ -85,7 +95,10 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForegroundInverted
   },
   heightComfortable: {
-    minHeight: "20rem"
+    minHeight: "10rem"
+  },
+  heightTiny: {
+    minHeight: "6.5rem"
   },
   heightImmersive: {
     minHeight: "26rem"
@@ -98,6 +111,7 @@ const contentToneClassMap: Record<HeroBannerContentTone, keyof ReturnType<typeof
 };
 
 const heightClassMap: Record<HeroBannerHeight, keyof ReturnType<typeof useStyles>> = {
+  tiny: "heightTiny",
   comfortable: "heightComfortable",
   immersive: "heightImmersive"
 };
@@ -114,7 +128,11 @@ export const useHeroBannerClassNames = (options: {
     aside: styles.aside,
     contentColumn: styles.contentColumn,
     footer: styles.footer,
-    inner: mergeClasses(styles.inner, styles[heightClassMap[options.height]]),
+    inner: mergeClasses(
+      styles.inner,
+      options.height === "tiny" ? styles.innerTiny : undefined,
+      styles[heightClassMap[options.height]]
+    ),
     mainGrid: mergeClasses(styles.mainGrid, options.hasAside ? styles.mainGridWithAside : undefined),
     root: mergeClasses(styles.root, styles[contentToneClassMap[options.contentTone]], options.className),
     supportingContent: styles.supportingContent,

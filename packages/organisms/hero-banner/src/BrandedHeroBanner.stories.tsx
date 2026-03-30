@@ -145,7 +145,7 @@ const meta = {
     },
     height: {
       control: "inline-radio",
-      options: ["comfortable", "immersive"]
+      options: ["tiny", "comfortable", "immersive"]
     }
   },
   parameters: {

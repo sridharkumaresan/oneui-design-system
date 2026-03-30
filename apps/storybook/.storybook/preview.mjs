@@ -1,11 +1,41 @@
 import React from "react";
 
 import "@functions-oneui/fonts/styles.css";
+import "@functions-oneui/onboarding-styles/styles.css";
 import { OneUIProvider } from "@functions-oneui/theme";
+
+const storybookFontFamilies = {
+  brand: {
+    base: '"Barclays Effra", "Segoe UI", "Helvetica Neue", Arial, sans-serif',
+    brand: '"Barclays Effra", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
+  },
+  system: {
+    base: '"Segoe UI", "Helvetica Neue", Arial, sans-serif',
+    brand: '"Segoe UI", "Helvetica Neue", Arial, sans-serif'
+  },
+  humanist: {
+    base: '"Trebuchet MS", "Segoe UI", "Helvetica Neue", Arial, sans-serif',
+    brand: '"Trebuchet MS", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
+  }
+};
 
 /** @type {import('@storybook/react').Preview} */
 const preview = {
   globalTypes: {
+    fontFamily: {
+      name: "Font",
+      description: "Global OneUI font family override for Storybook demos",
+      defaultValue: "system",
+      toolbar: {
+        icon: "paragraph",
+        dynamicTitle: true,
+        items: [
+          { value: "system", title: "System UI" },
+          { value: "humanist", title: "Humanist" },
+          { value: "brand", title: "Barclays Effra" }
+        ]
+      }
+    },
     themeMode: {
       name: "Theme",
       description: "Global OneUI theme mode",
@@ -23,8 +53,23 @@ const preview = {
   decorators: [
     (Story, context) => {
       const mode = context.globals.themeMode === "dark" ? "dark" : "light";
+      const fontFamily =
+        storybookFontFamilies[context.globals.fontFamily] ?? storybookFontFamilies.system;
 
-      return React.createElement(OneUIProvider, { mode }, React.createElement(Story));
+      return React.createElement(
+        OneUIProvider,
+        {
+          mode,
+          themeOverrides: {
+            semanticTokens: {
+              typography: {
+                fontFamily
+              }
+            }
+          }
+        },
+        React.createElement(Story)
+      );
     }
   ],
   parameters: {

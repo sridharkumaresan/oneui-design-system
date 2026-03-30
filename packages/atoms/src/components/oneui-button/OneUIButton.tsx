@@ -48,7 +48,7 @@ const getButtonPaintVars = (
       "--oneui-button-border-hover": disabledBorder,
       "--oneui-button-border-pressed": disabledBorder,
       "--oneui-button-foreground": disabledForeground,
-      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "600"),
+      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "400"),
       "--oneui-button-shadow": "none",
       "--oneui-button-shadow-hover": "none",
       "--oneui-button-shadow-pressed": "none"
@@ -80,7 +80,7 @@ const getButtonPaintVars = (
         "colorNeutralForegroundOnBrand",
         "#ffffff"
       ),
-      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "600"),
+      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "400"),
       "--oneui-button-shadow": readThemeToken(theme, "shadow4", "none"),
       "--oneui-button-shadow-hover": readThemeToken(theme, "shadow8", "none"),
       "--oneui-button-shadow-pressed": readThemeToken(theme, "shadow4", "none")
@@ -124,7 +124,7 @@ const getButtonPaintVars = (
         "oneuiColorInteractionSecondaryForeground",
         "#1a1a1a"
       ),
-      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "600"),
+      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "400"),
       "--oneui-button-shadow": "none",
       "--oneui-button-shadow-hover": "none",
       "--oneui-button-shadow-pressed": "none"
@@ -168,7 +168,7 @@ const getButtonPaintVars = (
         "oneuiColorInteractionSubtleForeground",
         "#006de3"
       ),
-      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "600"),
+      "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "400"),
       "--oneui-button-shadow": "none",
       "--oneui-button-shadow-hover": "none",
       "--oneui-button-shadow-pressed": "none"
@@ -211,7 +211,7 @@ const getButtonPaintVars = (
       "oneuiColorInteractionTransparentForeground",
       "#006de3"
     ),
-    "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "600"),
+    "--oneui-button-font-weight": readThemeToken(theme, "oneuiButtonFontWeight", "400"),
     "--oneui-button-shadow": "none",
     "--oneui-button-shadow-hover": "none",
     "--oneui-button-shadow-pressed": "none"

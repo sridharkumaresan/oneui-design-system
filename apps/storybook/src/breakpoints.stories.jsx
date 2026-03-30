@@ -20,8 +20,7 @@ const breakpointCode = `import {
 
 const stackedCardQuery = createOneUIContainerQueryDown("md", "actionCard");
 const shellWideQuery = createOneUIMediaQueryUp("lg");
-
-console.log(oneuiBreakpoints.md); // "768px"`;
+const tabletBreakpoint = oneuiBreakpoints.md; // "768px"`;
 
 const breakpointSpecs = [
   {

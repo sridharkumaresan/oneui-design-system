@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     borderRadius: tokens.borderRadiusLarge,
     boxShadow: "var(--oneui-button-shadow, none)",
     color: "var(--oneui-button-foreground)",
-    fontWeight: "var(--oneui-button-font-weight, 600)",
+    fontWeight: "var(--oneui-button-font-weight, 400)",
     minWidth: "fit-content",
     transitionDuration: tokens.durationNormal,
     transitionProperty: "background-color, border-color, color, box-shadow",
