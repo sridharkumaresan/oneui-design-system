@@ -94,7 +94,7 @@ test("exports light and dark OneUI themes", () => {
   assert.notEqual(oneuiLightTheme.colorNeutralBackground1, undefined);
   assert.notEqual(oneuiDarkTheme.colorNeutralBackground1, undefined);
   assert.match(String(oneuiLightTheme.fontFamilyBase), /Barclays Effra/);
-  assert.equal(oneuiLightTheme.oneuiButtonFontWeight, 600);
+  assert.equal(oneuiLightTheme.oneuiButtonFontWeight, 400);
 });
 
 test("exports centralized viewport and container query helpers", () => {

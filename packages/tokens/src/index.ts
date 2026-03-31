@@ -49,7 +49,6 @@ export type {
 export {
   darkThemeTokens,
   lightThemeTokens,
-  oneuiActionCardContainerBreakpoints,
   oneuiBreakpoints,
   semanticTokens,
   tokenCategories

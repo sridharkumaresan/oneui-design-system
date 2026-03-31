@@ -1,11 +1,14 @@
 import { makeStyles, mergeClasses, shorthands } from "@fluentui/react-components";
 
-import { oneuiActionCardContainerBreakpoints } from "@functions-oneui/theme";
-
 import type { ActionCardDensity, ActionCardLayout } from "./ActionCard.types.js";
 
-const mediumUpQuery = `@container oneui-action-card (min-width: ${oneuiActionCardContainerBreakpoints.medium})`;
-const wideUpQuery = `@container oneui-action-card (min-width: ${oneuiActionCardContainerBreakpoints.wide})`;
+const actionCardContainerBreakpoints = {
+  medium: "680px",
+  wide: "960px"
+} as const;
+
+const mediumUpQuery = `@container oneui-action-card (min-width: ${actionCardContainerBreakpoints.medium})`;
+const wideUpQuery = `@container oneui-action-card (min-width: ${actionCardContainerBreakpoints.wide})`;
 
 const useStyles = makeStyles({
   root: {

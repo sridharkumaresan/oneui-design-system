@@ -1,8 +1,10 @@
 import { makeStyles, mergeClasses, shorthands } from "@fluentui/react-components";
 
-import { oneuiActionCardContainerBreakpoints } from "@functions-oneui/theme";
+const actionSectionContainerBreakpoints = {
+  medium: "680px"
+} as const;
 
-const mediumUpQuery = `@container oneui-action-section (min-width: ${oneuiActionCardContainerBreakpoints.medium})`;
+const mediumUpQuery = `@container oneui-action-section (min-width: ${actionSectionContainerBreakpoints.medium})`;
 
 const useStyles = makeStyles({
   root: {

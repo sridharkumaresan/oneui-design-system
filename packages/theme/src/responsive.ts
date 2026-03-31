@@ -1,5 +1,4 @@
 import {
-  oneuiActionCardContainerBreakpoints,
   oneuiBreakpoints,
   type OneUIBreakpointName
 } from "@functions-oneui/tokens";
@@ -35,5 +34,4 @@ export const createOneUIContainerQueryDown = (
 };
 
 export { oneuiBreakpoints };
-export { oneuiActionCardContainerBreakpoints };
 export type { OneUIBreakpointName };

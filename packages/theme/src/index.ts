@@ -27,7 +27,6 @@ export type {
   OneUISpfxThemeSemanticColors
 } from "./spfx.js";
 export {
-  oneuiActionCardContainerBreakpoints,
   createOneUIContainerQueryDown,
   createOneUIContainerQueryUp,
   createOneUIMediaQueryDown,

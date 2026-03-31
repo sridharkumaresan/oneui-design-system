@@ -5,6 +5,8 @@ import { OneUIBadge, OneUIButton, OneUILink, OneUIText } from "@functions-oneui/
 
 import { ActionCard } from "./ActionCard.js";
 
+import { makeStyles, Button } from "@fluentui/react-components";
+
 const frame = (maxWidth: string) =>
   ({
     marginInline: "auto",
@@ -48,7 +50,7 @@ const buildMeta = (owner: string, updatedAt: string) => (
 
 const defaultActions = (
   <>
-    <OneUIButton size="large">Approve</OneUIButton>
+    <Button appearance="primary">Approve</Button>
     <OneUIButton appearance="secondary" size="large">
       Reject
     </OneUIButton>

@@ -334,7 +334,7 @@ const InboxPage = () => {
                         actions={
                           <>
                             <span ref={isPrimaryDemoCard ? actionCardCtaTarget.ref : undefined}>
-                              <OneUIButton size="medium">
+                              <Button size="medium" appearance="primary">
                                 {task.primaryActionIcon ? (
                                   <span
                                     style={{
@@ -349,7 +349,7 @@ const InboxPage = () => {
                                 ) : (
                                   task.primaryActionLabel
                                 )}
-                              </OneUIButton>
+                              </Button>
                             </span>
                             {task.secondaryActionLabel ? (
                               <OneUILink href="/dismiss" underline="hover">

@@ -24,183 +24,6 @@ export const oneuiBreakpoints = {
   xxl: "1536px"
 };
 
-export const oneuiActionCardContainerBreakpoints = {
-  medium: "680px",
-  wide: "960px"
-} as const;
-
-const actionCardComponentTokensLight = {
-  background: rawPalette.neutral[0],
-  borderColor: rawPalette.neutral[200],
-  borderWidth: "1px",
-  radius: "16px",
-  shadow: "0 8px 24px -18px rgba(0, 0, 0, 0.28)",
-  paddingInline: {
-    desktop: "32px",
-    tablet: "24px",
-    mobile: "16px"
-  },
-  paddingBlock: {
-    desktop: "24px",
-    tablet: "20px",
-    mobile: "16px"
-  },
-  gap: {
-    contentToStatus: {
-      desktop: "32px",
-      tablet: "24px"
-    },
-    statusToDivider: {
-      desktop: "24px",
-      tablet: "20px"
-    },
-    dividerToActions: {
-      desktop: "24px",
-      tablet: "20px"
-    },
-    stacked: {
-      mobile: "16px"
-    },
-    actionItems: {
-      desktop: "12px",
-      tablet: "10px"
-    },
-    eyebrowToTitle: "12px",
-    titleToMeta: "12px",
-    metaItems: "8px",
-    footerDividerMargin: "20px"
-  },
-  actionsRail: {
-    minWidth: {
-      desktop: "280px",
-      tablet: "240px"
-    },
-    maxWidth: {
-      desktop: "320px"
-    }
-  },
-  divider: {
-    color: rawPalette.neutral[200],
-    width: "1px"
-  },
-  button: {
-    minHeight: "44px",
-    minWidth: "120px"
-  },
-  status: {
-    minHeight: "30px",
-    paddingInline: "13px"
-  },
-  eyebrow: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.caption,
-      fontWeight: oneuiTypographyScale.fontWeight.medium,
-      lineHeight: oneuiTypographyScale.lineHeight.normal
-    },
-    color: rawPalette.neutral[500]
-  },
-  title: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.headline,
-      fontWeight: oneuiTypographyScale.fontWeight.semibold,
-      lineHeight: 1.22
-    },
-    color: rawPalette.neutral[900]
-  },
-  meta: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.bodyLarge,
-      fontWeight: oneuiTypographyScale.fontWeight.regular,
-      lineHeight: oneuiTypographyScale.lineHeight.relaxed
-    },
-    color: rawPalette.neutral[500]
-  },
-  footer: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.body,
-      fontWeight: oneuiTypographyScale.fontWeight.regular,
-      lineHeight: oneuiTypographyScale.lineHeight.relaxed
-    },
-    color: rawPalette.neutral[500]
-  },
-  link: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.bodyLarge,
-      fontWeight: oneuiTypographyScale.fontWeight.semibold,
-      lineHeight: oneuiTypographyScale.lineHeight.normal
-    },
-    color: rawPalette.brand.interactive
-  }
-};
-
-const actionCardComponentTokensDark = {
-  ...actionCardComponentTokensLight,
-  background: rawPalette.neutral[900],
-  borderColor: rawPalette.neutral[700],
-  shadow: "0 10px 28px -18px rgba(0, 0, 0, 0.54)",
-  divider: {
-    color: rawPalette.neutral[700],
-    width: "1px"
-  },
-  eyebrow: {
-    ...actionCardComponentTokensLight.eyebrow,
-    color: rawPalette.neutral[300]
-  },
-  title: {
-    ...actionCardComponentTokensLight.title,
-    color: rawPalette.neutral[0]
-  },
-  meta: {
-    ...actionCardComponentTokensLight.meta,
-    color: rawPalette.neutral[300]
-  },
-  footer: {
-    ...actionCardComponentTokensLight.footer,
-    color: rawPalette.neutral[300]
-  },
-  link: {
-    ...actionCardComponentTokensLight.link,
-    color: rawPalette.brand.primary
-  }
-};
-
-const actionSectionComponentTokensLight = {
-  header: {
-    gap: "12px"
-  },
-  stack: {
-    gap: "20px"
-  },
-  marginBlock: "24px",
-  title: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.title,
-      fontWeight: oneuiTypographyScale.fontWeight.semibold,
-      lineHeight: 1.3
-    },
-    color: rawPalette.neutral[900]
-  },
-  link: {
-    typography: {
-      fontSize: oneuiTypographyScale.fontSize.bodyLarge,
-      fontWeight: oneuiTypographyScale.fontWeight.semibold,
-      lineHeight: oneuiTypographyScale.lineHeight.normal
-    },
-    color: rawPalette.brand.interactive
-  }
-};
-
-const actionSectionComponentTokensDark = {
-  ...actionSectionComponentTokensLight,
-  title: {
-    ...actionSectionComponentTokensLight.title,
-    color: rawPalette.neutral[0]
-  },
-  link: {
-    ...actionSectionComponentTokensLight.link,
-    color: rawPalette.brand.primary
-  }
-};
 
 export const lightThemeTokens = {
   color: {
@@ -339,9 +162,7 @@ export const lightThemeTokens = {
       typography: {
         fontWeight: oneuiTypographyScale.fontWeight.regular
       }
-    },
-    actionCard: actionCardComponentTokensLight,
-    actionSection: actionSectionComponentTokensLight
+    }
   },
   breakpoints: oneuiBreakpoints
 };
@@ -483,9 +304,7 @@ export const darkThemeTokens = {
       typography: {
         fontWeight: oneuiTypographyScale.fontWeight.regular
       }
-    },
-    actionCard: actionCardComponentTokensDark,
-    actionSection: actionSectionComponentTokensDark
+    }
   },
   breakpoints: oneuiBreakpoints
 };
