@@ -19,7 +19,10 @@ const getBadgeThemeVars = (
       border: theme.colorBrandStroke1,
       filledBackground: theme.oneuiColorBackgroundBrandStrong ?? theme.colorBrandBackground,
       filledForeground: theme.colorNeutralForegroundOnBrand,
-      softBackground: theme.oneuiColorBackgroundInfoSubtle ?? theme.colorBrandBackground2,
+      softBackground:
+        theme.oneuiColorBackgroundInfoSubtle ??
+        theme.colorNeutralBackground2 ??
+        theme.colorBrandBackground,
       softForeground: theme.colorBrandForeground1,
       outlinedForeground: theme.colorBrandForeground1
     },
@@ -43,7 +46,10 @@ const getBadgeThemeVars = (
       border: theme.oneuiColorBorderNeutral ?? theme.colorNeutralStroke1,
       filledBackground: theme.oneuiColorStatusNeutral ?? theme.colorNeutralForeground3,
       filledForeground: theme.oneuiColorTextOnNeutral ?? theme.colorNeutralForegroundInverted,
-      softBackground: theme.oneuiColorBackgroundNeutralSubtle ?? theme.colorNeutralBackground3,
+      softBackground:
+        theme.oneuiColorBackgroundNeutralSubtle ??
+        theme.colorNeutralBackground2 ??
+        theme.colorNeutralBackground1,
       softForeground: theme.colorNeutralForeground2,
       outlinedForeground: theme.colorNeutralForeground2
     },

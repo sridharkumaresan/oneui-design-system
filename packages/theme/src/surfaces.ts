@@ -16,14 +16,14 @@ import {
 } from "./theme.js";
 
 export const oneuiSurfaceRoleNames = [
-  "heroPrimary",
-  "heroSecondary",
-  "heroSoft",
-  "heroFresh",
-  "heroDeep",
-  "heroBlue",
-  "heroLight",
-  "heroPastel",
+  "gradientCyanGreen",
+  "gradientNavyCyan",
+  "gradientCyanLightBlue",
+  "gradientCyanYellow",
+  "gradientCyanPink",
+  "navy",
+  "cyan",
+  "lightBlue",
   "iconPrimary",
   "iconSecondary",
   "accentStrong",
@@ -39,16 +39,19 @@ export type OneUISurfaceVariantKey = OneUISurfaceRoleName;
 export const oneuiSurfaceVariantKeys = oneuiSurfaceRoleNames;
 
 export const oneuiLegacySurfaceVariantKeys = [
-  "gradientNavyCyan",
-  "gradientCyanGreen",
-  "gradientCyanYellow",
-  "gradientCyanLightBlue",
-  "gradientCyanPink",
   "navyCyan",
   "cyanGreen",
   "cyanYellow",
   "cyanLightBlue",
   "cyanPink",
+  "heroPrimary",
+  "heroSecondary",
+  "heroSoft",
+  "heroFresh",
+  "heroDeep",
+  "heroBlue",
+  "heroLight",
+  "heroPastel",
   "primary",
   "secondary",
   "deepSpectrum",
@@ -281,13 +284,13 @@ const createSurfaceRecipes = (
   gradients: OneUIGradients
 ): OneUISurfaceRecipes => {
   return {
-    heroPrimary: {
-      key: "heroPrimary",
-      label: "Hero Primary",
+    gradientCyanGreen: {
+      key: "gradientCyanGreen",
+      label: "Cyan-Green",
       type: "gradient",
       category: "banner",
-      group: "Hero",
-      description: "Primary branded hero for high-visibility landing and destination pages.",
+      group: "Brand gradients",
+      description: "Primary branded cyan-green gradient for banners, headers, and featured surfaces.",
       rawGradientName: "gradientCyanGreen",
       background: createGradientBackground(gradients, "gradientCyanGreen"),
       fallbackBackground: gradients.gradientCyanGreen.fallbackSolidColor,
@@ -295,26 +298,26 @@ const createSurfaceRecipes = (
       textToneGuidance: "Use inverse text and controls for maximum contrast.",
       overlayGuidance: "Optional neutral or alpha overlays can be used behind dense widgets."
     },
-    heroSecondary: {
-      key: "heroSecondary",
-      label: "Hero Secondary",
+    gradientNavyCyan: {
+      key: "gradientNavyCyan",
+      label: "Navy-Cyan",
       type: "gradient",
       category: "banner",
-      group: "Hero",
-      description: "Deeper secondary hero for darker portal shells and hub mastheads.",
+      group: "Brand gradients",
+      description: "Dark navy-to-cyan gradient for deeper branded headers and spotlight panels.",
       rawGradientName: "gradientNavyCyan",
       background: createGradientBackground(gradients, "gradientNavyCyan"),
       fallbackBackground: gradients.gradientNavyCyan.fallbackSolidColor,
       recommendedForeground: "inverse",
       textToneGuidance: "Pair with inverse content and low-noise overlays only."
     },
-    heroSoft: {
-      key: "heroSoft",
-      label: "Hero Soft",
+    gradientCyanLightBlue: {
+      key: "gradientCyanLightBlue",
+      label: "Cyan-LightBlue",
       type: "gradient",
       category: "banner",
-      group: "Hero",
-      description: "Lighter banner treatment for supportive landing moments and quieter pages.",
+      group: "Brand gradients",
+      description: "Light cyan-to-blue gradient for softer banners and supporting branded surfaces.",
       rawGradientName: "gradientCyanLightBlue",
       background: createGradientBackground(gradients, "gradientCyanLightBlue"),
       fallbackBackground: gradients.gradientCyanLightBlue.fallbackSolidColor,
@@ -322,13 +325,13 @@ const createSurfaceRecipes = (
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Prefer default foregrounds and avoid stacked dark overlays."
     },
-    heroFresh: {
-      key: "heroFresh",
-      label: "Hero Fresh",
+    gradientCyanYellow: {
+      key: "gradientCyanYellow",
+      label: "Cyan-Yellow",
       type: "gradient",
       category: "banner",
-      group: "Hero",
-      description: "Bright branded banner for search, discovery, and optimistic campaign moments.",
+      group: "Brand gradients",
+      description: "Bright cyan-to-yellow gradient for search, discovery, and optimistic feature areas.",
       rawGradientName: "gradientCyanYellow",
       background: createGradientBackground(gradients, "gradientCyanYellow"),
       fallbackBackground: gradients.gradientCyanYellow.fallbackSolidColor,
@@ -336,39 +339,39 @@ const createSurfaceRecipes = (
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Use default or branded text rather than inverse UI."
     },
-    heroDeep: {
-      key: "heroDeep",
-      label: "Hero Deep",
+    navy: {
+      key: "navy",
+      label: "Navy",
       type: "solid",
       category: "banner",
-      group: "Hero",
-      description: "Solid dark hero for teams migrating from color-only banners or needing reduced visual motion.",
+      group: "Brand solids",
+      description: "Solid navy branded surface for banners, headers, and low-motion alternatives.",
       rawSolidName: "navy",
       background: createSolidBackground("navy"),
       fallbackBackground: rawSolidTokens.navy.value,
       recommendedForeground: "inverse",
       textToneGuidance: "Use inverse text and preserve strong focus contrast."
     },
-    heroBlue: {
-      key: "heroBlue",
-      label: "Hero Blue",
+    cyan: {
+      key: "cyan",
+      label: "Cyan",
       type: "solid",
       category: "banner",
-      group: "Hero",
-      description: "Solid mid blue hero for simpler branded page headers and banner shells.",
+      group: "Brand solids",
+      description: "Solid cyan branded surface for straightforward page headers and banner shells.",
       rawSolidName: "cyan",
       background: createSolidBackground("cyan"),
       fallbackBackground: rawSolidTokens.cyan.value,
       recommendedForeground: "inverse",
       textToneGuidance: "Use inverse text or controls to preserve contrast on the core brand blue."
     },
-    heroLight: {
-      key: "heroLight",
-      label: "Hero Light",
+    lightBlue: {
+      key: "lightBlue",
+      label: "Light Blue",
       type: "solid",
       category: "banner",
-      group: "Hero",
-      description: "Lightest solid blue hero for gentle branded headers or low-weight page treatments.",
+      group: "Brand solids",
+      description: "Light blue branded surface for gentle page headers and lighter UI treatments.",
       rawSolidName: "lightBlue",
       background: createSolidBackground("lightBlue"),
       fallbackBackground: rawSolidTokens.lightBlue.value,
@@ -376,13 +379,13 @@ const createSurfaceRecipes = (
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Prefer default foreground tones and quiet supporting chrome."
     },
-    heroPastel: {
-      key: "heroPastel",
-      label: "Hero Pastel",
+    gradientCyanPink: {
+      key: "gradientCyanPink",
+      label: "Cyan-Pink",
       type: "gradient",
       category: "banner",
-      group: "Hero",
-      description: "Pastel hero for editorial, people-focused, or softer destination surfaces.",
+      group: "Brand gradients",
+      description: "Pastel cyan-to-pink gradient for softer editorial and people-focused moments.",
       rawGradientName: "gradientCyanPink",
       background: createGradientBackground(gradients, "gradientCyanPink"),
       fallbackBackground: gradients.gradientCyanPink.fallbackSolidColor,
@@ -543,60 +546,72 @@ const oneuiSurfaceLegacyAliasMap: Record<
     reason: string;
   }
 > = {
-  gradientNavyCyan: {
-    replacementKey: "heroSecondary",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
-  },
-  gradientCyanGreen: {
-    replacementKey: "heroPrimary",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
-  },
-  gradientCyanYellow: {
-    replacementKey: "heroFresh",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
-  },
-  gradientCyanLightBlue: {
-    replacementKey: "heroSoft",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
-  },
-  gradientCyanPink: {
-    replacementKey: "heroPastel",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
-  },
   navyCyan: {
-    replacementKey: "heroSecondary",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+    replacementKey: "gradientNavyCyan",
+    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
   },
   cyanGreen: {
-    replacementKey: "heroPrimary",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+    replacementKey: "gradientCyanGreen",
+    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
   },
   cyanYellow: {
-    replacementKey: "heroFresh",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+    replacementKey: "gradientCyanYellow",
+    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
   },
   cyanLightBlue: {
-    replacementKey: "heroSoft",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+    replacementKey: "gradientCyanLightBlue",
+    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
   },
   cyanPink: {
-    replacementKey: "heroPastel",
-    reason: "Primitive gradient tokens are deprecated as direct banner selections."
+    replacementKey: "gradientCyanPink",
+    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
+  },
+  heroPrimary: {
+    replacementKey: "gradientCyanGreen",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
+  },
+  heroSecondary: {
+    replacementKey: "gradientNavyCyan",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
+  },
+  heroSoft: {
+    replacementKey: "gradientCyanLightBlue",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
+  },
+  heroFresh: {
+    replacementKey: "gradientCyanYellow",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
+  },
+  heroDeep: {
+    replacementKey: "navy",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand solid keys."
+  },
+  heroBlue: {
+    replacementKey: "cyan",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand solid keys."
+  },
+  heroLight: {
+    replacementKey: "lightBlue",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand solid keys."
+  },
+  heroPastel: {
+    replacementKey: "gradientCyanPink",
+    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
   },
   primary: {
-    replacementKey: "heroPrimary",
+    replacementKey: "gradientCyanGreen",
     reason: "Legacy phase-1 banner enum preserved for existing web-part instances."
   },
   secondary: {
-    replacementKey: "heroSecondary",
+    replacementKey: "gradientNavyCyan",
     reason: "Legacy phase-1 banner enum preserved for existing web-part instances."
   },
   deepSpectrum: {
-    replacementKey: "heroPrimary",
+    replacementKey: "gradientCyanGreen",
     reason: "Raw gradient names are deprecated in favor of semantic surface keys."
   },
   midnightBlue: {
-    replacementKey: "heroSecondary",
+    replacementKey: "gradientNavyCyan",
     reason: "Raw gradient names are deprecated in favor of semantic surface keys."
   }
 };
@@ -604,7 +619,7 @@ const oneuiSurfaceLegacyAliasMap: Record<
 export const defineOneUISurfacePolicy = (
   policy: OneUISurfacePolicyInput = {}
 ): OneUISurfacePolicy => {
-  const defaultVariantKey = policy.defaultVariantKey ?? "heroPrimary";
+  const defaultVariantKey = policy.defaultVariantKey ?? "gradientCyanGreen";
   const allowedVariantKeys =
     policy.allowedVariantKeys && policy.allowedVariantKeys.length > 0
       ? cloneSurfaceVariantKeys(policy.allowedVariantKeys)
@@ -644,7 +659,7 @@ export const oneuiDefaultSurfacePolicy = defineOneUISurfacePolicy({
   label: "All OneUI surfaces",
   allowedVariantKeys: cloneSurfaceVariantKeys(oneuiSurfaceVariantKeys),
   allowedTypes: cloneSurfaceKinds(oneuiSurfaceKinds),
-  defaultVariantKey: "heroPrimary"
+  defaultVariantKey: "gradientCyanGreen"
 });
 
 const createSurfaceRegistry = (

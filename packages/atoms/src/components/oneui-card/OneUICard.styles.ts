@@ -4,8 +4,8 @@ import type { OneUICardAccent, OneUICardElevation, OneUICardPadding } from "./On
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: tokens.colorNeutralBackground2,
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    backgroundColor: tokens.colorNeutralBackground1,
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
     borderRadius: tokens.borderRadiusLarge,
     color: tokens.colorNeutralForeground1,
     display: "flex",
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     boxShadow: "none"
   },
   elevationRaised: {
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: tokens.colorNeutralBackground2,
     boxShadow: tokens.shadow8
   },
   paddingSm: {

@@ -20,13 +20,11 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     description,
     eyebrow,
     footer,
-    gradientName = "gradientCyanGreen",
     headingLevel = 2,
     height = "immersive",
-    surfaceKey,
+    surfaceKey = "gradientCyanGreen",
     style,
     supportingContent,
-    surfaceVariant = "solid",
     title,
     topEnd,
     topStart,
@@ -37,16 +35,7 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
   const descriptionId = description
     ? useOneUIId("oneui-hero-banner-description")
     : undefined;
-  const inferredSurfaceSelectionKey =
-    surfaceKey ??
-    (surfaceVariant === "gradient"
-      ? gradientName
-      : backgroundColor
-        ? undefined
-        : "accentStrong");
-  const resolvedSurfaceKey = resolveOneUISurfaceVariantKey(
-    inferredSurfaceSelectionKey
-  );
+  const resolvedSurfaceKey = resolveOneUISurfaceVariantKey(surfaceKey);
   const resolvedSurface = surfaces[resolvedSurfaceKey];
   const resolvedContentTone =
     contentTone ??
@@ -85,7 +74,7 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
       className: classNames.root,
       "data-oneui-hero-banner": "",
       "data-oneui-hero-banner-gradient-name": resolvedSurface.rawGradientName,
-      "data-oneui-hero-banner-selected-surface-key": inferredSurfaceSelectionKey,
+      "data-oneui-hero-banner-selected-surface-key": surfaceKey,
       "data-oneui-hero-banner-surface-key": resolvedSurface.key,
       "data-oneui-hero-banner-surface-variant": resolvedSurface.type,
       role: "region",

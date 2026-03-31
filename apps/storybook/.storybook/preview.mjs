@@ -2,7 +2,11 @@ import React from "react";
 
 import "@functions-oneui/fonts/styles.css";
 import "@functions-oneui/onboarding-styles/styles.css";
-import { OneUIProvider } from "@functions-oneui/theme";
+import {
+  OneUIProvider,
+  oneuiDarkTheme,
+  oneuiLightTheme
+} from "@functions-oneui/theme";
 
 const storybookFontFamilies = {
   brand: {
@@ -55,6 +59,7 @@ const preview = {
       const mode = context.globals.themeMode === "dark" ? "dark" : "light";
       const fontFamily =
         storybookFontFamilies[context.globals.fontFamily] ?? storybookFontFamilies.system;
+      const theme = mode === "dark" ? oneuiDarkTheme : oneuiLightTheme;
 
       return React.createElement(
         OneUIProvider,
@@ -68,7 +73,19 @@ const preview = {
             }
           }
         },
-        React.createElement(Story)
+        React.createElement(
+          "div",
+          {
+            style: {
+              backgroundColor: theme.colorNeutralBackground1,
+              color: theme.colorNeutralForeground1,
+              minHeight: "100vh",
+              padding: "1.5rem",
+              transition: "background-color 180ms ease, color 180ms ease"
+            }
+          },
+          React.createElement(Story)
+        )
       );
     }
   ],

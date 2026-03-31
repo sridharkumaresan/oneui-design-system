@@ -59,30 +59,30 @@ const testSurfacePolicies = defineOneUISurfacePolicyMap({
   connectionsHome: {
     label: "Connections home banner",
     allowedVariantKeys: [
-      "heroPrimary",
-      "heroSecondary",
-      "heroSoft",
-      "heroFresh",
-      "heroDeep",
-      "heroBlue",
-      "heroLight",
-      "heroPastel"
+      "gradientCyanGreen",
+      "gradientNavyCyan",
+      "gradientCyanLightBlue",
+      "gradientCyanYellow",
+      "gradientCyanPink",
+      "navy",
+      "cyan",
+      "lightBlue"
     ],
     allowedTypes: ["gradient", "solid"],
-    defaultVariantKey: "heroPrimary"
+    defaultVariantKey: "gradientCyanGreen"
   },
   hubSiteBanner: {
     label: "Hub site banner",
     allowedVariantKeys: [
-      "heroPrimary",
-      "heroSecondary",
-      "heroDeep",
-      "heroBlue",
-      "heroLight",
-      "heroPastel"
+      "gradientCyanGreen",
+      "gradientNavyCyan",
+      "navy",
+      "cyan",
+      "lightBlue",
+      "gradientCyanPink"
     ],
     allowedTypes: ["gradient", "solid"],
-    defaultVariantKey: "heroSecondary"
+    defaultVariantKey: "gradientNavyCyan"
   }
 });
 
@@ -248,14 +248,14 @@ test("createOneuiGradients defaults to light mode for invalid values", () => {
 
 test("exports semantic surface recipes and a legacy-safe registry", () => {
   assert.deepEqual(oneuiSurfaceRoleNames, [
-    "heroPrimary",
-    "heroSecondary",
-    "heroSoft",
-    "heroFresh",
-    "heroDeep",
-    "heroBlue",
-    "heroLight",
-    "heroPastel",
+    "gradientCyanGreen",
+    "gradientNavyCyan",
+    "gradientCyanLightBlue",
+    "gradientCyanYellow",
+    "gradientCyanPink",
+    "navy",
+    "cyan",
+    "lightBlue",
     "iconPrimary",
     "iconSecondary",
     "accentStrong",
@@ -266,17 +266,17 @@ test("exports semantic surface recipes and a legacy-safe registry", () => {
     "decorativeSurface"
   ]);
 
-  assert.equal(oneuiLightSurfaceRecipes.heroPrimary.rawGradientName, "gradientCyanGreen");
-  assert.equal(oneuiDarkSurfaceRecipes.heroSecondary.rawGradientName, "gradientNavyCyan");
-  assert.equal(oneuiLightSurfaceRecipes.heroDeep.rawSolidName, "navy");
-  assert.equal(oneuiLightSurfaceRecipes.heroBlue.rawSolidName, "cyan");
-  assert.equal(oneuiLightSurfaceRecipes.heroLight.rawSolidName, "lightBlue");
+  assert.equal(oneuiLightSurfaceRecipes.gradientCyanGreen.rawGradientName, "gradientCyanGreen");
+  assert.equal(oneuiDarkSurfaceRecipes.gradientNavyCyan.rawGradientName, "gradientNavyCyan");
+  assert.equal(oneuiLightSurfaceRecipes.navy.rawSolidName, "navy");
+  assert.equal(oneuiLightSurfaceRecipes.cyan.rawSolidName, "cyan");
+  assert.equal(oneuiLightSurfaceRecipes.lightBlue.rawSolidName, "lightBlue");
   assert.equal(oneuiLightSurfaceRecipes.ctaPrimary.type, "solid");
 
   const registry = createOneUISurfaceVariantRegistry({ mode: "dark" });
-  assert.equal(registry.heroPrimary.surfaceRole, "heroPrimary");
-  assert.equal(registry.primary.deprecated.replacementKey, "heroPrimary");
-  assert.equal(registry.midnightBlue.deprecated.replacementKey, "heroSecondary");
+  assert.equal(registry.gradientCyanGreen.surfaceRole, "gradientCyanGreen");
+  assert.equal(registry.primary.deprecated.replacementKey, "gradientCyanGreen");
+  assert.equal(registry.midnightBlue.deprecated.replacementKey, "gradientNavyCyan");
 });
 
 test("resolves semantic surface keys, consumer-defined policies, and property-pane options", () => {
@@ -284,21 +284,21 @@ test("resolves semantic surface keys, consumer-defined policies, and property-pa
     resolveOneUISurfaceVariantKey(undefined, testSurfacePolicies.connectionsHome),
     testSurfacePolicies.connectionsHome.defaultVariantKey
   );
-  assert.equal(resolveOneUISurfaceVariantKey("deepSpectrum"), "heroPrimary");
+  assert.equal(resolveOneUISurfaceVariantKey("deepSpectrum"), "gradientCyanGreen");
   assert.equal(
     getOneUIDefaultSurfaceVariantKey(oneuiDefaultSurfacePolicy),
-    "heroPrimary"
+    "gradientCyanGreen"
   );
 
   const resolution = resolveOneUISurfaceVariant("midnightBlue", {
     policy: testSurfacePolicies.connectionsHome
   });
-  assert.equal(resolution.resolvedKey, "heroSecondary");
+  assert.equal(resolution.resolvedKey, "gradientNavyCyan");
   assert.equal(resolution.isDeprecatedSelection, true);
-  assert.equal(resolution.policy.defaultVariantKey, "heroPrimary");
+  assert.equal(resolution.policy.defaultVariantKey, "gradientCyanGreen");
 
-  const style = resolveOneUISurfaceStyle("heroDeep");
-  assert.equal(style.backgroundColor, oneuiLightSurfaceRecipes.heroDeep.background.backgroundColor);
+  const style = resolveOneUISurfaceStyle("navy");
+  assert.equal(style.backgroundColor, oneuiLightSurfaceRecipes.navy.background.backgroundColor);
   assert.equal(typeof style.color, "string");
 
   const options = createOneUISurfacePropertyPaneOptions(
@@ -307,7 +307,7 @@ test("resolves semantic surface keys, consumer-defined policies, and property-pa
     selectedKey: "deepSpectrum"
     }
   );
-  assert.ok(options.some((option) => option.key === "heroPrimary"));
+  assert.ok(options.some((option) => option.key === "gradientCyanGreen"));
   assert.ok(
     options.some(
       (option) => option.key === "deepSpectrum" && option.hiddenFromSelections
@@ -321,13 +321,13 @@ test("builds banner surface picker options with availability filtering and defau
     availability: "gradientOnly",
   });
 
-  assert.equal(gradientOnlyPicker.defaultKey, "heroPrimary");
-  assert.equal(gradientOnlyPicker.effectiveKey, "heroPrimary");
+  assert.equal(gradientOnlyPicker.defaultKey, "gradientCyanGreen");
+  assert.equal(gradientOnlyPicker.effectiveKey, "gradientCyanGreen");
   assert.ok(gradientOnlyPicker.options.length > 0);
   assert.ok(gradientOnlyPicker.options.every((option) => option.type === "gradient"));
   assert.ok(
     gradientOnlyPicker.options.some(
-      (option) => option.key === "heroPrimary" && option.isDefault
+      (option) => option.key === "gradientCyanGreen" && option.isDefault
     )
   );
 
@@ -341,7 +341,7 @@ test("builds banner surface picker options with availability filtering and defau
     solidOnlyPicker.options
       .filter((option) => !option.hiddenFromSelections)
       .map((option) => option.key),
-    ["heroDeep", "heroBlue", "heroLight"]
+    ["navy", "cyan", "lightBlue"]
   );
   assert.ok(solidOnlyPicker.options.some((option) => option.isDefault));
   assert.equal(solidOnlyPicker.defaultKey, solidOnlyPicker.options[0].key);
@@ -371,8 +371,8 @@ test("preserves a hidden current selection and resolves banner style through the
     selectedKey: "deepSpectrum"
   });
 
-  assert.equal(style.backgroundImage, oneuiLightSurfaceRecipes.heroPrimary.background.backgroundImage);
-  assert.equal(style.backgroundColor, oneuiLightSurfaceRecipes.heroPrimary.background.backgroundColor);
+  assert.equal(style.backgroundImage, oneuiLightSurfaceRecipes.gradientCyanGreen.background.backgroundImage);
+  assert.equal(style.backgroundColor, oneuiLightSurfaceRecipes.gradientCyanGreen.background.backgroundColor);
 });
 
 test("useOneUIGradients follows OneUIProvider mode and defaults to light gradients", () => {
@@ -414,12 +414,12 @@ test("useOneUISurfaces follows OneUIProvider mode and defaults to light recipes"
 
   renderToStaticMarkup(React.createElement(OutsideProbe));
   assert.equal(
-    outsideProviderSurfaces.heroPrimary.rawGradientName,
-    oneuiLightSurfaceRecipes.heroPrimary.rawGradientName
+    outsideProviderSurfaces.gradientCyanGreen.rawGradientName,
+    oneuiLightSurfaceRecipes.gradientCyanGreen.rawGradientName
   );
   assert.equal(
-    outsideProviderSurfaces.heroBlue.rawSolidName,
-    oneuiLightSurfaceRecipes.heroBlue.rawSolidName
+    outsideProviderSurfaces.cyan.rawSolidName,
+    oneuiLightSurfaceRecipes.cyan.rawSolidName
   );
 
   let darkModeSurfaces;
@@ -433,12 +433,12 @@ test("useOneUISurfaces follows OneUIProvider mode and defaults to light recipes"
   );
 
   assert.equal(
-    darkModeSurfaces.heroSecondary.rawGradientName,
-    oneuiDarkSurfaceRecipes.heroSecondary.rawGradientName
+    darkModeSurfaces.gradientNavyCyan.rawGradientName,
+    oneuiDarkSurfaceRecipes.gradientNavyCyan.rawGradientName
   );
   assert.equal(
-    darkModeSurfaces.heroDeep.background.backgroundColor,
-    oneuiDarkSurfaceRecipes.heroDeep.background.backgroundColor
+    darkModeSurfaces.navy.background.backgroundColor,
+    oneuiDarkSurfaceRecipes.navy.background.backgroundColor
   );
 });
 

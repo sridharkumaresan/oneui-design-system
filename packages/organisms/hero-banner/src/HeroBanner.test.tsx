@@ -47,14 +47,14 @@ describe("HeroBanner", () => {
 
   it("applies the configured semantic surface key", () => {
     renderWithOneUIProvider(
-      <HeroBanner surfaceKey="heroSecondary" title="Gradient" />
+      <HeroBanner surfaceKey="gradientNavyCyan" title="Gradient" />
     );
 
     const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
-    const surface = oneuiLightSurfaceRecipes.heroSecondary;
+    const surface = oneuiLightSurfaceRecipes.gradientNavyCyan;
 
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
-    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("gradientNavyCyan");
     expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientNavyCyan");
     const colorProbe = document.createElement("div");
     colorProbe.style.backgroundColor = surface.background.backgroundColor;
@@ -63,23 +63,20 @@ describe("HeroBanner", () => {
     expect(banner.style.backgroundImage).toContain("linear-gradient");
   });
 
-  it("keeps resolving legacy gradient selections through the shared surface system", () => {
-    renderWithOneUIProvider(
-      <HeroBanner gradientName="midnightBlue" surfaceVariant="gradient" title="Legacy gradient" />
-    );
+  it("keeps resolving legacy surface selections through the shared surface system", () => {
+    renderWithOneUIProvider(<HeroBanner surfaceKey="midnightBlue" title="Legacy gradient" />);
 
     const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
 
     expect(banner.dataset.oneuiHeroBannerSelectedSurfaceKey).toBe("midnightBlue");
-    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("gradientNavyCyan");
   });
 
   it("has no obvious axe violations", async () => {
     const { container } = renderWithOneUIProvider(
       <HeroBanner
         description="Welcome to Connections, how can we help you today?"
-        gradientName="deepSpectrum"
-        surfaceVariant="gradient"
+        surfaceKey="deepSpectrum"
         title="Good morning, Sridhar"
       />
     );

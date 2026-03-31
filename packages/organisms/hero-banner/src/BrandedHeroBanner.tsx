@@ -1,31 +1,20 @@
 import React from "react";
 
 import { HeroBanner } from "./HeroBanner.js";
-import type {
-  BrandedHeroBannerProps,
-  BrandedHeroBannerVariant
-} from "./HeroBanner.types.js";
-
-const brandedHeroVariantToSurfaceKey: Record<
-  BrandedHeroBannerVariant,
-  "heroPrimary" | "heroSecondary"
-> = {
-  primary: "heroPrimary",
-  secondary: "heroSecondary"
-};
+import type { BrandedHeroBannerProps } from "./HeroBanner.types.js";
 
 export const BrandedHeroBanner = (
   props: BrandedHeroBannerProps
 ): React.JSX.Element => {
-  const { variant = "primary", ...restProps } = props;
+  const { surfaceKey = "gradientCyanGreen", ...restProps } = props;
 
   return (
     <HeroBanner
       {...restProps}
       contentTone="inverse"
       data-oneui-branded-hero-banner=""
-      data-oneui-branded-hero-banner-variant={variant}
-      surfaceKey={brandedHeroVariantToSurfaceKey[variant]}
+      data-oneui-branded-hero-banner-surface-key={surfaceKey}
+      surfaceKey={surfaceKey}
     />
   );
 };
