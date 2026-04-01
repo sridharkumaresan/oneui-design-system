@@ -26,15 +26,15 @@ test("exports the brand font family metadata", () => {
 test("build output includes the stylesheet and woff assets", () => {
   assert.equal(existsSync(path.join(packageDir, "dist", "styles.css")), true);
   assert.equal(
-    existsSync(path.join(packageDir, "dist", "assets", "effra-regular.woff")),
+    existsSync(path.join(packageDir, "dist", "assets", "BarclaysEffra_W_Rg.woff")),
     true
   );
   assert.equal(
-    existsSync(path.join(packageDir, "dist", "assets", "effra-medium.woff")),
+    existsSync(path.join(packageDir, "dist", "assets", "BarclaysEffra_W_Md.woff")),
     true
   );
   assert.equal(
-    existsSync(path.join(packageDir, "dist", "assets", "effra-bold.woff")),
+    existsSync(path.join(packageDir, "dist", "assets", "BarclaysEffra_W_Bd.woff")),
     true
   );
 });

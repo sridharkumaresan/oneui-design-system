@@ -8,18 +8,18 @@ export const oneuiBrandFontFaces = [
     family: "Barclays Effra",
     style: "normal",
     weight: 400,
-    fileName: "effra-regular.woff"
+    fileName: "BarclaysEffra_W_Rg.woff"
   },
   {
     family: "Barclays Effra",
     style: "normal",
     weight: 500,
-    fileName: "effra-medium.woff"
+    fileName: "BarclaysEffra_W_Md.woff"
   },
   {
     family: "Barclays Effra",
     style: "normal",
     weight: 700,
-    fileName: "effra-bold.woff"
+    fileName: "BarclaysEffra_W_Bd.woff"
   }
 ] as const;
