@@ -25,6 +25,7 @@ import {
   oneuiDarkSurfaceRecipes,
   oneuiDarkTheme,
   oneuiDefaultSurfacePolicy,
+  oneuiFluidTypographySlots,
   oneuiGradientNames,
   oneuiLightSurfaceRecipes,
   oneuiLightGradients,
@@ -159,6 +160,60 @@ test("createOneuiTheme supports safe semantic and fluent overrides", () => {
   assert.equal(themed.colorNeutralBackground1, oneuiDarkTheme.colorNeutralBackground1);
 });
 
+test("createOneuiTheme keeps fluid typography disabled by default", () => {
+  const staticTheme = createOneuiTheme({ mode: "light" });
+
+  assert.match(String(staticTheme.fontSizeBase200), /rem/);
+  assert.doesNotMatch(String(staticTheme.fontSizeBase200), /clamp\(/);
+});
+
+test("createOneuiTheme supports fluid typography settings across all fluent size slots", () => {
+  const fluidTheme = createOneuiTheme({
+    mode: "light",
+    fluidTypography: {
+      enabled: true,
+      maxViewport: 1440,
+      minViewport: 320,
+      scale: "comfortable"
+    }
+  });
+
+  for (const slot of oneuiFluidTypographySlots) {
+    assert.match(String(fluidTheme[slot]), /clamp\(/);
+  }
+});
+
+test("createOneuiTheme fluid typography also applies to font-size overrides", () => {
+  const fluidTheme = createOneuiTheme({
+    mode: "light",
+    fluidTypography: {
+      enabled: true
+    },
+    fluentTheme: {
+      fontSizeBase400: "2rem"
+    }
+  });
+
+  assert.match(String(fluidTheme.fontSizeBase400), /clamp\(/);
+});
+
+test("createOneuiTheme supports the shorthand typography fluid flag", () => {
+  const fluidTheme = createOneuiTheme({
+    mode: "light",
+    typography: {
+      fluid: true
+    }
+  });
+
+  assert.match(String(fluidTheme.fontSizeBase500), /clamp\(/);
+});
+
+test("createOneuiTheme keeps backward compatibility for typographyMode", () => {
+  const fluidTheme = createOneuiTheme({ mode: "light", typographyMode: "fluid" });
+
+  assert.match(String(fluidTheme.fontSizeHero700), /clamp\(/);
+});
+
 test("createOneuiTheme defaults to light mode for invalid mode values", () => {
   const themed = createOneuiTheme({ mode: "unknown" });
   assert.equal(themed.colorNeutralBackground1, oneuiLightTheme.colorNeutralBackground1);
@@ -214,32 +269,32 @@ test("createOneuiThemeFromSpfxTheme resolves mode from the host theme inversion 
 test("exports canonical gradients for light and dark themes", () => {
   assert.deepEqual(oneuiGradientNames, rawGradientTokenNames);
 
-    for (const gradients of [oneuiLightGradients, oneuiDarkGradients]) {
-      for (const gradientName of oneuiGradientNames) {
-        const resolvedGradient = gradients[gradientName];
-        const rawGradient = rawGradientTokens[gradientName];
+  for (const gradients of [oneuiLightGradients, oneuiDarkGradients]) {
+    for (const gradientName of oneuiGradientNames) {
+      const resolvedGradient = gradients[gradientName];
+      const rawGradient = rawGradientTokens[gradientName];
 
-        assert.equal(resolvedGradient.name, gradientName);
-        assert.equal(resolvedGradient.label, rawGradient.label);
-        assert.equal(resolvedGradient.type, rawGradient.type);
-        assert.equal(resolvedGradient.direction, rawGradient.direction);
-        assert.equal(resolvedGradient.cssDirection, rawGradient.cssDirection);
-        assert.equal(resolvedGradient.angle, rawGradient.angle);
-        assert.equal(resolvedGradient.css, rawGradient.css);
-        assert.equal(resolvedGradient.fallbackSolidColor, rawGradient.fallbackSolidColor);
-        assert.deepEqual(resolvedGradient.stops, rawGradient.stops);
-      }
-
-      assert.equal(gradients.deepSpectrum.name, "deepSpectrum");
-      assert.equal(gradients.deepSpectrum.css, gradients.gradientCyanGreen.css);
-      assert.equal(gradients.cyanGreen.css, gradients.gradientCyanGreen.css);
-      assert.equal(gradients.limeSky.css, gradients.gradientCyanYellow.css);
-      assert.equal(gradients.softAqua.css, gradients.gradientCyanLightBlue.css);
-      assert.equal(gradients.tealShift.css, gradients.gradientCyanGreen.css);
-      assert.equal(gradients.midnightBlue.css, gradients.gradientNavyCyan.css);
-      assert.equal(gradients.pastelHorizon.css, gradients.gradientCyanPink.css);
+      assert.equal(resolvedGradient.name, gradientName);
+      assert.equal(resolvedGradient.label, rawGradient.label);
+      assert.equal(resolvedGradient.type, rawGradient.type);
+      assert.equal(resolvedGradient.direction, rawGradient.direction);
+      assert.equal(resolvedGradient.cssDirection, rawGradient.cssDirection);
+      assert.equal(resolvedGradient.angle, rawGradient.angle);
+      assert.equal(resolvedGradient.css, rawGradient.css);
+      assert.equal(resolvedGradient.fallbackSolidColor, rawGradient.fallbackSolidColor);
+      assert.deepEqual(resolvedGradient.stops, rawGradient.stops);
     }
-  });
+
+    assert.equal(gradients.deepSpectrum.name, "deepSpectrum");
+    assert.equal(gradients.deepSpectrum.css, gradients.gradientCyanGreen.css);
+    assert.equal(gradients.cyanGreen.css, gradients.gradientCyanGreen.css);
+    assert.equal(gradients.limeSky.css, gradients.gradientCyanYellow.css);
+    assert.equal(gradients.softAqua.css, gradients.gradientCyanLightBlue.css);
+    assert.equal(gradients.tealShift.css, gradients.gradientCyanGreen.css);
+    assert.equal(gradients.midnightBlue.css, gradients.gradientNavyCyan.css);
+    assert.equal(gradients.pastelHorizon.css, gradients.gradientCyanPink.css);
+  }
+});
 
 test("createOneuiGradients defaults to light mode for invalid values", () => {
   assert.deepEqual(createOneuiGradients("dark"), oneuiDarkGradients);
@@ -285,10 +340,7 @@ test("resolves semantic surface keys, consumer-defined policies, and property-pa
     testSurfacePolicies.connectionsHome.defaultVariantKey
   );
   assert.equal(resolveOneUISurfaceVariantKey("deepSpectrum"), "gradientCyanGreen");
-  assert.equal(
-    getOneUIDefaultSurfaceVariantKey(oneuiDefaultSurfacePolicy),
-    "gradientCyanGreen"
-  );
+  assert.equal(getOneUIDefaultSurfaceVariantKey(oneuiDefaultSurfacePolicy), "gradientCyanGreen");
 
   const resolution = resolveOneUISurfaceVariant("midnightBlue", {
     policy: testSurfacePolicies.connectionsHome
@@ -301,24 +353,17 @@ test("resolves semantic surface keys, consumer-defined policies, and property-pa
   assert.equal(style.backgroundColor, oneuiLightSurfaceRecipes.navy.background.backgroundColor);
   assert.equal(typeof style.color, "string");
 
-  const options = createOneUISurfacePropertyPaneOptions(
-    testSurfacePolicies.connectionsHome,
-    {
+  const options = createOneUISurfacePropertyPaneOptions(testSurfacePolicies.connectionsHome, {
     selectedKey: "deepSpectrum"
-    }
-  );
+  });
   assert.ok(options.some((option) => option.key === "gradientCyanGreen"));
-  assert.ok(
-    options.some(
-      (option) => option.key === "deepSpectrum" && option.hiddenFromSelections
-    )
-  );
+  assert.ok(options.some((option) => option.key === "deepSpectrum" && option.hiddenFromSelections));
 });
 
 test("builds banner surface picker options with availability filtering and defaults", () => {
   const gradientOnlyPicker = buildOneUIBannerSurfacePickerOptions({
     policy: testSurfacePolicies.connectionsHome,
-    availability: "gradientOnly",
+    availability: "gradientOnly"
   });
 
   assert.equal(gradientOnlyPicker.defaultKey, "gradientCyanGreen");
@@ -333,7 +378,7 @@ test("builds banner surface picker options with availability filtering and defau
 
   const solidOnlyPicker = buildOneUIBannerSurfacePickerOptions({
     policy: testSurfacePolicies.connectionsHome,
-    availability: "solidOnly",
+    availability: "solidOnly"
   });
 
   assert.ok(solidOnlyPicker.options.every((option) => option.type === "solid"));
@@ -354,15 +399,16 @@ test("preserves a hidden current selection and resolves banner style through the
     selectedKey: "deepSpectrum"
   });
 
-  assert.equal(getOneUIBannerSurfaceEffectiveKey({
-    policy: testSurfacePolicies.connectionsHome,
-    availability: "solidOnly",
-    selectedKey: "deepSpectrum"
-  }), "deepSpectrum");
+  assert.equal(
+    getOneUIBannerSurfaceEffectiveKey({
+      policy: testSurfacePolicies.connectionsHome,
+      availability: "solidOnly",
+      selectedKey: "deepSpectrum"
+    }),
+    "deepSpectrum"
+  );
   assert.ok(
-    picker.options.some(
-      (option) => option.key === "deepSpectrum" && option.hiddenFromSelections
-    )
+    picker.options.some((option) => option.key === "deepSpectrum" && option.hiddenFromSelections)
   );
 
   const style = getOneUIBannerSurfaceStyle({
@@ -371,8 +417,14 @@ test("preserves a hidden current selection and resolves banner style through the
     selectedKey: "deepSpectrum"
   });
 
-  assert.equal(style.backgroundImage, oneuiLightSurfaceRecipes.gradientCyanGreen.background.backgroundImage);
-  assert.equal(style.backgroundColor, oneuiLightSurfaceRecipes.gradientCyanGreen.background.backgroundColor);
+  assert.equal(
+    style.backgroundImage,
+    oneuiLightSurfaceRecipes.gradientCyanGreen.background.backgroundImage
+  );
+  assert.equal(
+    style.backgroundColor,
+    oneuiLightSurfaceRecipes.gradientCyanGreen.background.backgroundColor
+  );
 });
 
 test("useOneUIGradients follows OneUIProvider mode and defaults to light gradients", () => {
@@ -383,10 +435,7 @@ test("useOneUIGradients follows OneUIProvider mode and defaults to light gradien
   };
 
   renderToStaticMarkup(React.createElement(OutsideProbe));
-  assert.equal(
-    outsideProviderGradients.deepSpectrum.css,
-    oneuiLightGradients.deepSpectrum.css
-  );
+  assert.equal(outsideProviderGradients.deepSpectrum.css, oneuiLightGradients.deepSpectrum.css);
 
   let darkModeGradients;
   const DarkProbe = () => {

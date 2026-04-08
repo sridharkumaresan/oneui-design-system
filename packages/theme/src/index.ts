@@ -1,4 +1,12 @@
 export { useOneUIGradients } from "./gradient-context.js";
+export {
+  oneuiFluidTypographySlots,
+  oneuiFluidTypographyViewportVar
+} from "./internal/fluid-typography.js";
+export type {
+  OneUIFluidTypographyScale,
+  OneUIFluidTypographySettings
+} from "./internal/fluid-typography.js";
 export { OneUIProvider } from "./provider.js";
 export type { OneUIProviderProps } from "./provider.js";
 export { useOneUIThemeMode } from "./theme-mode-context.js";
@@ -109,5 +117,6 @@ export type {
   CreateOneuiThemeOptions,
   OneUIFluentTheme,
   OneUIThemeMode,
+  OneUITypographyMode,
   SemanticTokenSet
 } from "./theme.js";

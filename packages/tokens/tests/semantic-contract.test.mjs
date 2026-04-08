@@ -7,6 +7,7 @@ import {
   oneuiBreakpoints,
   oneuiBrandColors,
   oneuiFluentTypographyAliases,
+  oneuiFluentTypographySlotAliases,
   oneuiFluentThemeOverrides,
   oneuiFluentTokenCategories,
   rawGradientTokenNames,
@@ -69,6 +70,12 @@ test("exports Fluent-aligned foundation categories and brand values", () => {
   assert.equal(oneuiBrandColors.interactive2, "#272727");
   assert.equal(oneuiFluentThemeOverrides.light.colorBrandBackground, "#006DE3");
   assert.equal(oneuiFluentTypographyAliases.caption2.fontWeight, 500);
+  assert.equal(oneuiFluentTypographyAliases.title1.fontSize, "2rem");
+  assert.equal(oneuiFluentTypographyAliases.title2.fontSize, "1.75rem");
+  assert.equal(oneuiFluentTypographySlotAliases.caption2.fontSize, "fontSizeBase100");
+  assert.equal(oneuiFluentTypographySlotAliases.body1.fontSize, "fontSizeBase300");
+  assert.equal(oneuiFluentTypographySlotAliases.title2.fontSize, "fontSizeBase600");
+  assert.equal(oneuiFluentTypographySlotAliases.title1.fontSize, "fontSizeHero700");
 });
 
 test("light and dark semantic token sets contain all required contract keys", () => {

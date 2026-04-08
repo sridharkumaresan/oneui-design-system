@@ -5,10 +5,19 @@ import {
   semanticTokens
 } from "@functions-oneui/tokens";
 
+import {
+  applyFluidTypographyToTheme,
+  normalizeFluidTypographySettings
+} from "./internal/fluid-typography.js";
 import { semanticPathToThemeKeyMap } from "./internal/mapping.js";
 import { deepMerge, getByPath } from "./internal/object-utils.js";
+import type {
+  OneUIFluidTypographyScale,
+  OneUIFluidTypographySettings
+} from "./internal/fluid-typography.js";
 
 type OneUIThemeMode = keyof typeof semanticTokens;
+type OneUITypographyMode = "static" | "fluid";
 type SemanticTokenSet = (typeof semanticTokens)["light"];
 type SemanticCategory = keyof SemanticTokenSet;
 type UnknownRecord = Record<string, unknown>;
@@ -19,13 +28,36 @@ type DeepPartial<T> = {
 };
 
 export type CreateOneuiThemeOptions = {
+  fluidTypography?: OneUIFluidTypographySettings;
   mode?: string;
   semanticTokens?: DeepPartial<SemanticTokenSet>;
   fluentTheme?: Partial<OneUIFluentTheme>;
+  typography?: {
+    fluid?: boolean;
+  };
+  typographyMode?: OneUITypographyMode;
 };
 
 const normalizeMode = (mode: string | undefined): OneUIThemeMode => {
   return mode === "dark" ? "dark" : "light";
+};
+
+const normalizeTypographyMode = (
+  typographyMode: OneUITypographyMode | undefined
+): OneUITypographyMode => {
+  return typographyMode === "fluid" ? "fluid" : "static";
+};
+
+const resolveFluidTypographyEnabled = (overrides: CreateOneuiThemeOptions): boolean => {
+  if (typeof overrides.fluidTypography?.enabled === "boolean") {
+    return overrides.fluidTypography.enabled;
+  }
+
+  if (typeof overrides.typography?.fluid === "boolean") {
+    return overrides.typography.fluid;
+  }
+
+  return normalizeTypographyMode(overrides.typographyMode) === "fluid";
 };
 
 const getBaseFluentTheme = (mode: OneUIThemeMode): OneUIFluentTheme => {
@@ -153,6 +185,10 @@ export const oneuiDarkTheme: OneUIFluentTheme = deepMerge(
 
 export const createOneuiTheme = (overrides: CreateOneuiThemeOptions = {}): OneUIFluentTheme => {
   const mode = normalizeMode(overrides.mode);
+  const fluidTypography = normalizeFluidTypographySettings({
+    ...(overrides.fluidTypography ?? {}),
+    enabled: resolveFluidTypographyEnabled(overrides)
+  });
   const semanticOverrides = (overrides.semanticTokens ?? {}) as UnknownRecord;
   const fluentThemeOverrides = (overrides.fluentTheme ?? {}) as UnknownRecord;
 
@@ -167,10 +203,20 @@ export const createOneuiTheme = (overrides: CreateOneuiThemeOptions = {}): OneUI
     oneuiFluentThemeOverrides[mode] as UnknownRecord
   );
   const resolvedTheme = deepMerge(baseFluentTheme as UnknownRecord, mappedTheme as UnknownRecord);
+  const themeWithOverrides = deepMerge(
+    resolvedTheme as UnknownRecord,
+    fluentThemeOverrides
+  ) as OneUIFluentTheme;
 
-  return deepMerge(resolvedTheme as UnknownRecord, fluentThemeOverrides) as OneUIFluentTheme;
+  return applyFluidTypographyToTheme(themeWithOverrides, fluidTypography);
 };
 
 export const oneuiThemeModes = ["light", "dark"] as const;
-export type { OneUIThemeMode, SemanticTokenSet };
+export type {
+  OneUIFluidTypographyScale,
+  OneUIFluidTypographySettings,
+  OneUIThemeMode,
+  OneUITypographyMode,
+  SemanticTokenSet
+};
 export { semanticPathToThemeKeyMap };

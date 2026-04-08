@@ -108,6 +108,18 @@ export const oneuiFluentTypographyAliases = {
     fontWeight: oneuiTypographyScale.fontWeight.semibold,
     lineHeight: oneuiTypographyScale.lineHeight.relaxed
   },
+  title1: {
+    fontFamily: oneuiTypographyScale.fontFamily.brand,
+    fontSize: "2rem",
+    fontWeight: oneuiTypographyScale.fontWeight.bold,
+    lineHeight: 1.1
+  },
+  title2: {
+    fontFamily: oneuiTypographyScale.fontFamily.brand,
+    fontSize: oneuiTypographyScale.fontSize.headline,
+    fontWeight: oneuiTypographyScale.fontWeight.bold,
+    lineHeight: 1.22
+  },
   title3: {
     fontFamily: oneuiTypographyScale.fontFamily.brand,
     fontSize: oneuiTypographyScale.fontSize.title,
@@ -119,5 +131,50 @@ export const oneuiFluentTypographyAliases = {
     fontSize: oneuiTypographyScale.fontSize.headline,
     fontWeight: oneuiTypographyScale.fontWeight.semibold,
     lineHeight: 1.22
+  }
+} as const;
+
+export const oneuiFluentTypographySlotAliases = {
+  body1: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeBase300",
+    fontWeight: "fontWeightRegular",
+    lineHeight: "lineHeightBase400"
+  },
+  body1Strong: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeBase300",
+    fontWeight: "fontWeightSemibold",
+    lineHeight: "lineHeightBase400"
+  },
+  caption2: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeBase100",
+    fontWeight: "fontWeightMedium",
+    lineHeight: "lineHeightBase200"
+  },
+  hero: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeHero800",
+    fontWeight: "fontWeightBold",
+    lineHeight: "lineHeightHero800"
+  },
+  title1: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeHero700",
+    fontWeight: "fontWeightBold",
+    lineHeight: "lineHeightHero700"
+  },
+  title2: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeBase600",
+    fontWeight: "fontWeightBold",
+    lineHeight: "lineHeightBase600"
+  },
+  title3: {
+    fontFamily: "fontFamilyBase",
+    fontSize: "fontSizeBase500",
+    fontWeight: "fontWeightSemibold",
+    lineHeight: "lineHeightBase500"
   }
 } as const;

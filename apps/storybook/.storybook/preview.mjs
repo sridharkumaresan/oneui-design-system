@@ -1,12 +1,9 @@
 import React from "react";
 
+import { DocsContainer } from "@storybook/blocks";
 import "@functions-oneui/fonts/styles.css";
 import "@functions-oneui/onboarding-styles/styles.css";
-import {
-  OneUIProvider,
-  oneuiDarkTheme,
-  oneuiLightTheme
-} from "@functions-oneui/theme";
+import { OneUIProvider, oneuiDarkTheme, oneuiLightTheme } from "@functions-oneui/theme";
 
 const storybookFontFamilies = {
   brand: {
@@ -21,6 +18,29 @@ const storybookFontFamilies = {
     base: '"Trebuchet MS", "Segoe UI", "Helvetica Neue", Arial, sans-serif',
     brand: '"Trebuchet MS", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
   }
+};
+
+const FullWidthDocsContainer = (props) => {
+  return React.createElement(
+    React.Fragment,
+    null,
+    React.createElement("style", {
+      dangerouslySetInnerHTML: {
+        __html: `
+          .sbdocs-wrapper {
+            max-width: none !important;
+            padding-inline: 32px !important;
+          }
+
+          .sbdocs-content {
+            max-width: none !important;
+            width: 100% !important;
+          }
+        `
+      }
+    }),
+    React.createElement(DocsContainer, props)
+  );
 };
 
 /** @type {import('@storybook/react').Preview} */
@@ -97,6 +117,7 @@ const preview = {
       }
     },
     docs: {
+      container: FullWidthDocsContainer,
       codePanel: true,
       canvas: {
         sourceState: "shown"

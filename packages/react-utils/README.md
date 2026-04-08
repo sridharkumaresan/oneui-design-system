@@ -2,6 +2,83 @@
 
 React-focused utilities shared by OneUI packages.
 
+## Progressive Loading
+
+Shared contracts and helpers for coordinating multiple async sections are exposed from:
+
+```ts
+import {
+  calculateProgressSummary,
+  shouldMarkSectionDelayed,
+  useLoadingCoordinator,
+  useProgressiveLoading
+} from "@functions-oneui/react-utils/progressive-loading";
+```
+
+### What belongs here
+
+- generic loading contracts such as `LoadingStatus`, `LoadingSectionState`, and `LoadingProgressSummary`
+- pure summary/delayed helpers
+- generic React hooks for externally managed or loader-managed async coordination
+
+### What does not belong here
+
+- task-specific or search-specific types
+- SPFx HTTP clients
+- Graph or SharePoint SDK assumptions
+- page layout or rendering decisions
+
+### Architecture note
+
+- Organisms render UI only and should receive status via props.
+- `react-utils/progressive-loading` owns the generic contracts and orchestration helpers.
+- Consumers own loader functions, retry behavior, data mapping, and final section body rendering.
+- SPFx-specific fetching stays outside the reusable packages so the same primitives remain usable in ordinary React apps, internal portals, and future webparts.
+
+### Externally managed state example
+
+```ts
+import {
+  applyLoadingSectionUpdate,
+  calculateProgressSummary,
+  createLoadingCoordinatorState
+} from "@functions-oneui/react-utils/progressive-loading";
+
+const initialState = createLoadingCoordinatorState([
+  { id: "news", title: "News" },
+  { id: "people", title: "People" }
+]);
+
+const nextState = applyLoadingSectionUpdate(initialState, {
+  id: "news",
+  status: "success",
+  count: 12
+});
+
+const progress = calculateProgressSummary(nextState.sections);
+```
+
+### Hook-managed state example
+
+```tsx
+import { useProgressiveLoading } from "@functions-oneui/react-utils/progressive-loading";
+
+const loading = useProgressiveLoading({
+  delayedThresholdMs: 1500,
+  sections: [
+    {
+      id: "news",
+      title: "News",
+      loader: async ({ signal }) => {
+        const response = await fetch("/api/news", { signal });
+        return response.json();
+      },
+      getCount: (data) => data.items.length
+    }
+  ]
+});
+```
+
 ## Logging
 
 Structured logging is exposed from the subpath import:
@@ -186,3 +263,13 @@ The logging subpath exports:
 - `useComponentLogger`
 - `createTestLogger`
 - core logging types
+
+The progressive-loading subpath exports:
+
+- `LoadingStatus`
+- `LoadingSectionState`
+- `LoadingProgressSummary`
+- `calculateProgressSummary`
+- `shouldMarkSectionDelayed`
+- `useLoadingCoordinator`
+- `useProgressiveLoading`

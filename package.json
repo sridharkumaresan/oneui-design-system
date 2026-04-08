@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev:storybook": "pnpm --filter @functions-oneui/storybook run dev",
+    "dev:playground": "pnpm --filter @functions-oneui/playground run dev",
     "build": "turbo run build",
     "lint": "turbo run lint && node ./scripts/audit-scripts.mjs",
     "typecheck": "turbo run typecheck",

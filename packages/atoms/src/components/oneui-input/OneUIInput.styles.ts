@@ -6,7 +6,7 @@ export const oneUIInputClassNames = {
 
 const useStyles = makeStyles({
   root: {
-    borderRadius: tokens.borderRadiusLarge,
+    borderRadius: tokens.borderRadiusMedium,
     minWidth: 0
   },
   underline: {

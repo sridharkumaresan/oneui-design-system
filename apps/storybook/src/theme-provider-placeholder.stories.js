@@ -8,7 +8,7 @@ const meta = {
     docs: {
       description: {
         story:
-          "Placeholder story to verify global theme toolbar + OneUIProvider wiring in Storybook."
+          "Placeholder story to verify global theme toolbar + OneUIProvider wiring in Storybook. See the Fluid Typography story for the typographyMode example."
       }
     }
   }

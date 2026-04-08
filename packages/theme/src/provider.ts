@@ -9,7 +9,12 @@ import { OneUISurfaceContext } from "./surface-context.js";
 import { createOneUISurfaceRecipes } from "./surfaces.js";
 import { createOneuiTheme } from "./theme.js";
 import { OneUIThemeModeContext } from "./theme-mode-context.js";
-import type { CreateOneuiThemeOptions, OneUIThemeMode } from "./theme.js";
+import type {
+  CreateOneuiThemeOptions,
+  OneUIFluidTypographySettings,
+  OneUIThemeMode,
+  OneUITypographyMode
+} from "./theme.js";
 
 const fluentModule = fluentReactComponents as {
   FluentProvider?: React.ComponentType<FluentProviderProps>;
@@ -27,18 +32,29 @@ type FluentProviderBaseProps = Omit<ComponentProps<typeof FluentProvider>, "them
 
 export type OneUIProviderProps = FluentProviderBaseProps & {
   mode?: OneUIThemeMode;
+  fluidTypography?: OneUIFluidTypographySettings;
+  typographyMode?: OneUITypographyMode;
   themeOverrides?: Omit<CreateOneuiThemeOptions, "mode">;
   children?: ReactNode;
 };
 
 export const OneUIProvider = (props: OneUIProviderProps): React.JSX.Element => {
-  const { mode = "light", themeOverrides, children, ...providerProps } = props;
+  const {
+    mode = "light",
+    fluidTypography,
+    typographyMode,
+    themeOverrides,
+    children,
+    ...providerProps
+  } = props;
   const theme = React.useMemo(() => {
     return createOneuiTheme({
       ...(themeOverrides ?? {}),
-      mode
+      fluidTypography,
+      mode,
+      typographyMode
     });
-  }, [mode, themeOverrides]);
+  }, [fluidTypography, mode, themeOverrides, typographyMode]);
   const gradients = React.useMemo(() => {
     return createOneuiGradients(mode);
   }, [mode]);
