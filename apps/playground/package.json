@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter @functions-oneui/organism-hero-banner run build && vite",
+    "dev": "pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && vite",
     "build": "pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && tsc -p tsconfig.json --noEmit && vite build",
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
     "typecheck": "pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && tsc -p tsconfig.json --noEmit",
