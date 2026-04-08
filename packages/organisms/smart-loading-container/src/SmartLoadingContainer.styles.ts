@@ -22,6 +22,7 @@ const useStyles = makeStyles({
     }
   },
   contentGrid: {
+    alignItems: "start",
     display: "grid",
     gap: tokens.spacingHorizontalL
   },
@@ -72,11 +73,11 @@ const useStyles = makeStyles({
     display: "grid",
     gap: tokens.spacingHorizontalM,
     gridTemplateColumns: "minmax(0, 1fr) auto",
-    minHeight: "4.5rem",
-    paddingBottom: tokens.spacingVerticalS,
+    minHeight: "4rem",
+    paddingBottom: tokens.spacingVerticalXS,
     paddingLeft: tokens.spacingHorizontalL,
     paddingRight: tokens.spacingHorizontalL,
-    paddingTop: tokens.spacingVerticalS,
+    paddingTop: tokens.spacingVerticalXS,
     "@media (max-width: 640px)": {
       alignItems: "start",
       gridTemplateColumns: "minmax(0, 1fr)",
@@ -115,13 +116,13 @@ const useStyles = makeStyles({
   sectionAvatar: {
     alignItems: "center",
     backgroundColor: tokens.colorNeutralBackground2,
-    borderRadius: tokens.borderRadiusLarge,
+    borderRadius: tokens.borderRadiusMedium,
     color: tokens.colorBrandForeground1,
     display: "inline-flex",
     flexShrink: 0,
-    height: "2.5rem",
+    height: "2rem",
     justifyContent: "center",
-    width: "2.5rem"
+    width: "2rem"
   },
   sectionAvatarAccentBrand: {
     backgroundColor: tokens.colorNeutralBackground1,
@@ -412,16 +413,16 @@ const useStyles = makeStyles({
     borderRadius: tokens.borderRadiusMedium,
     display: "grid",
     gap: tokens.spacingVerticalS,
-    minHeight: "8rem",
-    paddingBottom: tokens.spacingVerticalM,
+    minHeight: "5rem",
+    paddingBottom: tokens.spacingVerticalS,
     paddingLeft: tokens.spacingHorizontalM,
     paddingRight: tokens.spacingHorizontalM,
-    paddingTop: tokens.spacingVerticalM
+    paddingTop: tokens.spacingVerticalS
   },
   stateRegionFeedback: {
-    alignContent: "center",
-    justifyItems: "center",
-    textAlign: "center"
+    alignContent: "start",
+    justifyItems: "stretch",
+    textAlign: "left"
   },
   stateRegionLoading: {
     backgroundColor: tokens.colorNeutralBackground2
@@ -449,32 +450,28 @@ const useStyles = makeStyles({
     display: "grid",
     gap: tokens.spacingVerticalS
   },
-  stateLabelRow: {
-    alignItems: "center",
-    display: "flex",
-    flexWrap: "wrap",
-    gap: tokens.spacingHorizontalXS
-  },
-  stateIconHalo: {
-    alignItems: "center",
-    backgroundColor: tokens.colorNeutralBackground1,
-    borderRadius: tokens.borderRadiusCircular,
-    display: "inline-flex",
-    height: "3.25rem",
-    justifyContent: "center",
-    width: "3.25rem"
-  },
   stateMessage: {
     display: "grid",
     gap: tokens.spacingVerticalXS,
-    justifyItems: "center",
-    maxWidth: "26rem",
-    textAlign: "center"
+    justifyItems: "stretch",
+    maxWidth: "none",
+    textAlign: "left",
+    width: "100%"
   },
   stateActionsRow: {
     display: "flex",
     flexWrap: "wrap",
     gap: tokens.spacingHorizontalS
+  },
+  statusInlineBody: {
+    maxWidth: "none",
+    width: "100%"
+  },
+  statusInlineMessageBody: {
+    overflow: "visible",
+    textOverflow: "clip",
+    whiteSpace: "normal",
+    wordBreak: "break-word"
   },
   loadingSkeleton: {
     display: "grid",
@@ -566,14 +563,12 @@ export const useSmartLoadingContainerClassNames = (
     sectionTitle: styles.sectionTitle,
     sectionStatusArea: styles.sectionMetaRail,
     stateActionsRow: styles.stateActionsRow,
-    stateIconHalo: styles.stateIconHalo,
     statusSummary: styles.statusSummary,
     statusBadge: styles.statusBadge,
     spinnerIcon: styles.spinnerIcon,
     statusSummaryMinimal: styles.statusSummaryMinimal,
     stateBanner: styles.stateBanner,
     stateBody: styles.stateBody,
-    stateLabelRow: styles.stateLabelRow,
     stateMessage: styles.stateMessage,
     stateRegion: styles.stateRegion,
     stateRegionFeedback: styles.stateRegionFeedback,
@@ -581,6 +576,8 @@ export const useSmartLoadingContainerClassNames = (
     stateRegionEmpty: styles.stateRegionEmpty,
     stateRegionError: styles.stateRegionError,
     stateRegionLoading: styles.stateRegionLoading,
+    statusInlineBody: styles.statusInlineBody,
+    statusInlineMessageBody: styles.statusInlineMessageBody,
     loadingLinePrimary: styles.loadingLinePrimary,
     loadingLineSecondary: styles.loadingLineSecondary,
     loadingLineTertiary: styles.loadingLineTertiary,

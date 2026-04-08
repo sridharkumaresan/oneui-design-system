@@ -1,6 +1,12 @@
 import React from "react";
 
-import { OneUIBadge, OneUIButton, OneUIHeading, OneUIStack, OneUIText } from "@functions-oneui/atoms";
+import {
+  OneUIBadge,
+  OneUIButton,
+  OneUIHeading,
+  OneUIStack,
+  OneUIText
+} from "@functions-oneui/atoms";
 import { useOneUIId } from "@functions-oneui/react-utils";
 import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loading";
 import { mergeClasses } from "@fluentui/react-components";
@@ -34,7 +40,14 @@ const statusAppearanceMap: Record<LoadingStatus, "soft" | "outlined"> = {
 };
 
 const SpinnerIcon = ({ className }: { className?: string }): React.JSX.Element => (
-  <svg aria-hidden="true" className={className} fill="none" height="12" viewBox="0 0 12 12" width="12">
+  <svg
+    aria-hidden="true"
+    className={className}
+    fill="none"
+    height="12"
+    viewBox="0 0 12 12"
+    width="12"
+  >
     <path
       d="M6 1.25a4.75 4.75 0 1 0 4.56 6.06"
       stroke="currentColor"
@@ -66,7 +79,12 @@ const EmptyIcon = (): React.JSX.Element => (
 
 const SuccessIcon = (): React.JSX.Element => (
   <svg aria-hidden="true" fill="none" height="12" viewBox="0 0 12 12" width="12">
-    <path d="m2.5 6.1 2.1 2.15 4.9-4.8" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
+    <path
+      d="m2.5 6.1 2.1 2.15 4.9-4.8"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="1.5"
+    />
   </svg>
 );
 
@@ -82,7 +100,10 @@ const AvatarFallbackIcon = (): React.JSX.Element => (
   </svg>
 );
 
-const getStatusIcon = (effectiveStatus: LoadingStatus, spinnerClassName?: string): React.JSX.Element => {
+const getStatusIcon = (
+  effectiveStatus: LoadingStatus,
+  spinnerClassName?: string
+): React.JSX.Element => {
   if (effectiveStatus === "loading" || effectiveStatus === "refreshing") {
     return <SpinnerIcon className={spinnerClassName} />;
   }
@@ -260,9 +281,7 @@ const getStatusSummaryText = ({
   return "Ready";
 };
 
-const getStatusBadgeText = (
-  effectiveStatus: LoadingStatus
-): React.ReactNode | null => {
+const getStatusBadgeText = (effectiveStatus: LoadingStatus): React.ReactNode | null => {
   if (effectiveStatus === "success") {
     return null;
   }
@@ -306,56 +325,43 @@ const renderStateBody = ({
   classNames: ReturnType<typeof useSmartLoadingContainerClassNames>;
   effectiveStatus: Extract<LoadingStatus, "loading" | "delayed" | "error" | "empty" | "idle">;
 }): React.ReactNode => {
-  if (effectiveStatus === "loading") {
+  const renderSimpleStateMessage = (message: React.ReactNode): React.ReactNode => {
+    const inlineIconClassName = getStatusInlineIconClassName(classNames, effectiveStatus);
+    const inlineMessageClassName = mergeClasses(
+      getStatusInlineMessageClassName(classNames, effectiveStatus),
+      classNames.statusInlineMessageBody
+    );
+
     return (
       <div className={classNames.stateMessage}>
-        <div className={classNames.stateLabelRow}>
-          <span className={classNames.stateIconHalo}>
-            <OneUIBadge appearance="soft" icon={<SpinnerIcon className={classNames.spinnerIcon} />} size="sm" tone="info">
-              Loading
-            </OneUIBadge>
+        <span className={mergeClasses(classNames.statusInline, classNames.statusInlineBody)}>
+          <span className={inlineIconClassName}>
+            {effectiveStatus === "loading" ? (
+              <SpinnerIcon className={classNames.spinnerIcon} />
+            ) : (
+              getStatusIcon(effectiveStatus)
+            )}
           </span>
-        </div>
-        <OneUIText>{loadingLabel ?? "Loading section content..."}</OneUIText>
-        <OneUIText size="caption" tone="secondary">
-          We are still collecting content from this source.
-        </OneUIText>
+          <span className={inlineMessageClassName}>{message}</span>
+        </span>
       </div>
     );
+  };
+
+  if (effectiveStatus === "loading") {
+    return renderSimpleStateMessage(loadingLabel ?? "Loading section content...");
   }
 
   if (effectiveStatus === "delayed") {
-    return (
-      <div className={classNames.stateMessage}>
-        <div className={classNames.stateLabelRow}>
-          <span className={classNames.stateIconHalo}>
-            <OneUIBadge appearance="soft" icon={<WarningIcon />} size="sm" tone="warning">
-              Delayed
-            </OneUIBadge>
-          </span>
-        </div>
-        <OneUIText>{delayedMessage ?? "This section is taking longer than usual to respond."}</OneUIText>
-        <OneUIText size="caption" tone="secondary">
-          You can keep browsing while this source continues to load.
-        </OneUIText>
-      </div>
+    return renderSimpleStateMessage(
+      delayedMessage ?? "This section is taking longer than usual to respond."
     );
   }
 
   if (effectiveStatus === "error") {
     return (
       <OneUIStack className={classNames.stateMessage} gap="sm">
-        <div className={classNames.stateLabelRow}>
-          <span className={classNames.stateIconHalo}>
-            <OneUIBadge appearance="soft" icon={<WarningIcon />} size="sm" tone="danger">
-              Error
-            </OneUIBadge>
-          </span>
-        </div>
-        <OneUIText>{errorMessage ?? "We could not load content for this section."}</OneUIText>
-        <OneUIText size="caption" tone="secondary">
-          The source may be temporarily unavailable.
-        </OneUIText>
+        {renderSimpleStateMessage(errorMessage ?? "We could not load content for this section.")}
         {onRetry ? (
           <div className={classNames.stateActionsRow}>
             <OneUIButton onClick={onRetry}>{retryLabel ?? "Retry"}</OneUIButton>
@@ -366,38 +372,12 @@ const renderStateBody = ({
   }
 
   if (effectiveStatus === "empty") {
-    return (
-      <div className={classNames.stateMessage}>
-        <div className={classNames.stateLabelRow}>
-          <span className={classNames.stateIconHalo}>
-            <OneUIBadge appearance="outlined" icon={<EmptyIcon />} size="sm" tone="neutral">
-              Empty
-            </OneUIBadge>
-          </span>
-        </div>
-        <OneUIText>{emptyMessage ?? "No content is available for this section right now."}</OneUIText>
-        <OneUIText size="caption" tone="secondary">
-          Try a broader query or check again later.
-        </OneUIText>
-      </div>
+    return renderSimpleStateMessage(
+      emptyMessage ?? "No content is available for this section right now."
     );
   }
 
-  return (
-    <div className={classNames.stateMessage}>
-      <div className={classNames.stateLabelRow}>
-        <span className={classNames.stateIconHalo}>
-          <OneUIBadge appearance="outlined" icon={<EmptyIcon />} size="sm" tone="neutral">
-            Idle
-          </OneUIBadge>
-        </span>
-      </div>
-      <OneUIText>This section is ready to load.</OneUIText>
-      <OneUIText size="caption" tone="secondary">
-        Content will appear here once the source is requested.
-      </OneUIText>
-    </div>
-  );
+  return renderSimpleStateMessage("This section is ready to load.");
 };
 
 const shouldAutoCollapse = ({
@@ -490,7 +470,10 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
   const displayCount =
     typeof count === "number"
       ? count
-      : effectiveStatus === "loading" || effectiveStatus === "refreshing" || effectiveStatus === "delayed" || effectiveStatus === "empty"
+      : effectiveStatus === "loading" ||
+          effectiveStatus === "refreshing" ||
+          effectiveStatus === "delayed" ||
+          effectiveStatus === "empty"
         ? 0
         : undefined;
   const accentClassNames = getSectionAccentClassNames(classNames, accentTone);
@@ -639,7 +622,10 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
     Component,
     {
       ...restProps,
-      "aria-busy": effectiveStatus === "loading" || effectiveStatus === "delayed" || effectiveStatus === "refreshing",
+      "aria-busy":
+        effectiveStatus === "loading" ||
+        effectiveStatus === "delayed" ||
+        effectiveStatus === "refreshing",
       "aria-labelledby": titleId,
       className: mergeClasses(classNames.section, accentClassNames.section),
       "data-oneui-smart-loading-section": ""
@@ -680,7 +666,10 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
       </div>
 
       <div
-        className={mergeClasses(classNames.bodyViewport, collapsed ? classNames.bodyViewportCollapsed : undefined)}
+        className={mergeClasses(
+          classNames.bodyViewport,
+          collapsed ? classNames.bodyViewportCollapsed : undefined
+        )}
         data-oneui-smart-loading-section-body=""
         id={bodyId}
       >
