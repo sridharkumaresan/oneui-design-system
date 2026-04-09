@@ -94,34 +94,34 @@ const fluidTypographyScaleMap: Record<
   Record<(typeof oneuiFluidTypographySlots)[number], FluidScaleSpec>
 > = {
   compact: {
-    fontSizeBase100: { minScale: 0.98, maxScale: 1.03 },
-    fontSizeBase200: { minScale: 0.98, maxScale: 1.04 },
-    fontSizeBase300: { minScale: 0.97, maxScale: 1.05 },
-    fontSizeBase400: { minScale: 0.97, maxScale: 1.06 },
-    fontSizeBase500: { minScale: 0.96, maxScale: 1.08 },
-    fontSizeBase600: { minScale: 0.95, maxScale: 1.1 },
-    fontSizeHero700: { minScale: 0.94, maxScale: 1.12 },
-    fontSizeHero800: { minScale: 0.93, maxScale: 1.14 }
+    fontSizeBase100: { minScale: 0.98, maxScale: 1 },
+    fontSizeBase200: { minScale: 0.98, maxScale: 1 },
+    fontSizeBase300: { minScale: 0.97, maxScale: 1 },
+    fontSizeBase400: { minScale: 0.96, maxScale: 1 },
+    fontSizeBase500: { minScale: 0.95, maxScale: 1 },
+    fontSizeBase600: { minScale: 0.94, maxScale: 1 },
+    fontSizeHero700: { minScale: 0.92, maxScale: 1 },
+    fontSizeHero800: { minScale: 0.9, maxScale: 1 }
   },
   comfortable: {
-    fontSizeBase100: { minScale: 0.96, maxScale: 1.05 },
-    fontSizeBase200: { minScale: 0.96, maxScale: 1.06 },
-    fontSizeBase300: { minScale: 0.95, maxScale: 1.08 },
-    fontSizeBase400: { minScale: 0.95, maxScale: 1.1 },
-    fontSizeBase500: { minScale: 0.94, maxScale: 1.12 },
-    fontSizeBase600: { minScale: 0.93, maxScale: 1.14 },
-    fontSizeHero700: { minScale: 0.92, maxScale: 1.17 },
-    fontSizeHero800: { minScale: 0.9, maxScale: 1.2 }
+    fontSizeBase100: { minScale: 0.97, maxScale: 1 },
+    fontSizeBase200: { minScale: 0.97, maxScale: 1 },
+    fontSizeBase300: { minScale: 0.96, maxScale: 1 },
+    fontSizeBase400: { minScale: 0.95, maxScale: 1 },
+    fontSizeBase500: { minScale: 0.94, maxScale: 1 },
+    fontSizeBase600: { minScale: 0.92, maxScale: 1 },
+    fontSizeHero700: { minScale: 0.9, maxScale: 1 },
+    fontSizeHero800: { minScale: 0.88, maxScale: 1 }
   },
   expressive: {
-    fontSizeBase100: { minScale: 0.95, maxScale: 1.06 },
-    fontSizeBase200: { minScale: 0.95, maxScale: 1.08 },
-    fontSizeBase300: { minScale: 0.94, maxScale: 1.1 },
-    fontSizeBase400: { minScale: 0.93, maxScale: 1.13 },
-    fontSizeBase500: { minScale: 0.92, maxScale: 1.16 },
-    fontSizeBase600: { minScale: 0.9, maxScale: 1.2 },
-    fontSizeHero700: { minScale: 0.88, maxScale: 1.24 },
-    fontSizeHero800: { minScale: 0.86, maxScale: 1.28 }
+    fontSizeBase100: { minScale: 0.96, maxScale: 1 },
+    fontSizeBase200: { minScale: 0.96, maxScale: 1 },
+    fontSizeBase300: { minScale: 0.95, maxScale: 1 },
+    fontSizeBase400: { minScale: 0.94, maxScale: 1 },
+    fontSizeBase500: { minScale: 0.93, maxScale: 1 },
+    fontSizeBase600: { minScale: 0.91, maxScale: 1 },
+    fontSizeHero700: { minScale: 0.89, maxScale: 1 },
+    fontSizeHero800: { minScale: 0.87, maxScale: 1 }
   }
 };
 

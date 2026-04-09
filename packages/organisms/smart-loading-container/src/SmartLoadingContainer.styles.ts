@@ -12,6 +12,13 @@ const useStyles = makeStyles({
     display: "grid",
     gap: tokens.spacingVerticalS
   },
+  containerTitle: {
+    color: tokens.colorNeutralForeground2,
+    fontSize: tokens.fontSizeBase600,
+    fontWeight: tokens.fontWeightSemibold,
+    letterSpacing: "-0.01em",
+    lineHeight: tokens.lineHeightBase600
+  },
   headerRow: {
     alignItems: "start",
     display: "grid",
@@ -36,6 +43,8 @@ const useStyles = makeStyles({
     gridTemplateColumns: "minmax(0, 1fr)"
   },
   section: {
+    alignContent: "start",
+    alignSelf: "start",
     backgroundColor: tokens.colorNeutralBackground1,
     border: `1px solid ${tokens.colorNeutralStroke2}`,
     borderRadius: tokens.borderRadiusLarge,
@@ -45,8 +54,12 @@ const useStyles = makeStyles({
     boxSizing: "border-box",
     display: "grid",
     gap: 0,
+    gridTemplateRows: "auto auto",
     overflow: "hidden",
     boxShadow: tokens.shadow4
+  },
+  sectionFlat: {
+    boxShadow: "none"
   },
   sectionAccentBrand: {
     borderTopColor: tokens.colorBrandStroke1
@@ -78,7 +91,7 @@ const useStyles = makeStyles({
     paddingLeft: tokens.spacingHorizontalL,
     paddingRight: tokens.spacingHorizontalL,
     paddingTop: tokens.spacingVerticalXS,
-    "@media (max-width: 640px)": {
+    "@media (max-width: 960px)": {
       alignItems: "start",
       gridTemplateColumns: "minmax(0, 1fr)",
       minHeight: "unset",
@@ -154,10 +167,15 @@ const useStyles = makeStyles({
     minWidth: 0
   },
   sectionTitle: {
+    color: tokens.colorNeutralForeground2,
+    fontSize: tokens.fontSizeBase500,
+    fontWeight: tokens.fontWeightSemibold,
+    letterSpacing: "-0.01em",
+    lineHeight: tokens.lineHeightBase500,
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    "@media (max-width: 768px)": {
+    "@media (max-width: 960px)": {
       overflow: "visible",
       textOverflow: "clip",
       whiteSpace: "normal",
@@ -171,7 +189,7 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalS,
     justifyContent: "flex-end",
     minWidth: 0,
-    "@media (max-width: 640px)": {
+    "@media (max-width: 960px)": {
       flexWrap: "wrap",
       gap: tokens.spacingHorizontalS,
       justifyContent: "flex-start"
@@ -184,7 +202,7 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalS,
     justifyContent: "flex-end",
     minWidth: 0,
-    "@media (max-width: 640px)": {
+    "@media (max-width: 960px)": {
       justifyContent: "flex-start"
     }
   },
@@ -197,10 +215,31 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalXS,
     maxWidth: "18rem",
     minWidth: 0,
-    "@media (max-width: 768px)": {
+    "@media (max-width: 960px)": {
       maxWidth: "none",
       width: "100%"
     }
+  },
+  statusInlineInfo: {
+    backgroundColor: `color-mix(in srgb, ${tokens.colorBrandBackground2} 24%, ${tokens.colorNeutralBackground1} 76%)`,
+    borderBottomColor: tokens.colorBrandStroke2,
+    borderLeftColor: tokens.colorBrandStroke2,
+    borderRightColor: tokens.colorBrandStroke2,
+    borderTopColor: tokens.colorBrandStroke2
+  },
+  statusInlineWarning: {
+    backgroundColor: `color-mix(in srgb, ${tokens.colorPaletteGoldBackground2} 34%, ${tokens.colorNeutralBackground1} 66%)`,
+    borderBottomColor: tokens.colorPaletteDarkOrangeBorder2,
+    borderLeftColor: tokens.colorPaletteDarkOrangeBorder2,
+    borderRightColor: tokens.colorPaletteDarkOrangeBorder2,
+    borderTopColor: tokens.colorPaletteDarkOrangeBorder2
+  },
+  statusInlineDanger: {
+    backgroundColor: `color-mix(in srgb, ${tokens.colorPaletteRedBackground1} 26%, ${tokens.colorNeutralBackground1} 74%)`,
+    borderBottomColor: tokens.colorPaletteRedBorder2,
+    borderLeftColor: tokens.colorPaletteRedBorder2,
+    borderRightColor: tokens.colorPaletteRedBorder2,
+    borderTopColor: tokens.colorPaletteRedBorder2
   },
   statusInlineIcon: {
     alignItems: "center",
@@ -232,7 +271,7 @@ const useStyles = makeStyles({
     paddingTop: "0.3125rem",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    "@media (max-width: 768px)": {
+    "@media (max-width: 960px)": {
       overflow: "visible",
       textOverflow: "clip",
       whiteSpace: "normal",
@@ -289,7 +328,7 @@ const useStyles = makeStyles({
     textAlign: "right",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    "@media (max-width: 640px)": {
+    "@media (max-width: 960px)": {
       maxWidth: "none",
       overflow: "visible",
       textAlign: "left",
@@ -307,7 +346,7 @@ const useStyles = makeStyles({
     textAlign: "right",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    "@media (max-width: 640px)": {
+    "@media (max-width: 960px)": {
       maxWidth: "none",
       overflow: "visible",
       textAlign: "left",
@@ -321,7 +360,7 @@ const useStyles = makeStyles({
     flexWrap: "wrap",
     gap: tokens.spacingHorizontalS,
     justifyContent: "flex-end",
-    "@media (max-width: 768px)": {
+    "@media (max-width: 960px)": {
       justifyContent: "flex-start"
     }
   },
@@ -345,7 +384,7 @@ const useStyles = makeStyles({
     ":hover": {
       backgroundColor: tokens.colorNeutralBackground2
     },
-    "@media (max-width: 640px)": {
+    "@media (max-width: 960px)": {
       marginLeft: "auto"
     }
   },
@@ -395,6 +434,7 @@ const useStyles = makeStyles({
   body: {
     display: "grid",
     gap: tokens.spacingVerticalS,
+    minWidth: 0,
     paddingBottom: tokens.spacingVerticalL,
     paddingLeft: tokens.spacingHorizontalL,
     paddingRight: tokens.spacingHorizontalL,
@@ -408,35 +448,16 @@ const useStyles = makeStyles({
     display: "none"
   },
   stateRegion: {
-    backgroundColor: tokens.colorNeutralBackground2,
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
-    borderRadius: tokens.borderRadiusMedium,
     display: "grid",
-    gap: tokens.spacingVerticalS,
-    minHeight: "5rem",
-    paddingBottom: tokens.spacingVerticalS,
-    paddingLeft: tokens.spacingHorizontalM,
-    paddingRight: tokens.spacingHorizontalM,
-    paddingTop: tokens.spacingVerticalS
+    gap: tokens.spacingVerticalM,
+    minWidth: 0,
+    minHeight: "10rem",
+    width: "100%"
   },
   stateRegionFeedback: {
-    alignContent: "start",
-    justifyItems: "stretch",
-    textAlign: "left"
-  },
-  stateRegionLoading: {
-    backgroundColor: tokens.colorNeutralBackground2
-  },
-  stateRegionDelayed: {
-    backgroundColor: tokens.colorPaletteGoldBackground2,
-    border: `1px solid ${tokens.colorPaletteDarkOrangeBorder2}`
-  },
-  stateRegionError: {
-    backgroundColor: tokens.colorPaletteRedBackground1,
-    border: `1px solid ${tokens.colorPaletteRedBorder2}`
-  },
-  stateRegionEmpty: {
-    backgroundColor: tokens.colorNeutralBackground2
+    alignContent: "center",
+    justifyItems: "center",
+    textAlign: "center"
   },
   stateBanner: {
     backgroundColor: tokens.colorNeutralBackground2,
@@ -450,28 +471,63 @@ const useStyles = makeStyles({
     display: "grid",
     gap: tokens.spacingVerticalS
   },
+  customStateSlot: {
+    display: "grid",
+    justifyItems: "center",
+    maxWidth: "100%",
+    minWidth: 0,
+    width: "100%"
+  },
   stateMessage: {
     display: "grid",
-    gap: tokens.spacingVerticalXS,
-    justifyItems: "stretch",
-    maxWidth: "none",
-    textAlign: "left",
+    gap: tokens.spacingVerticalM,
+    justifyItems: "center",
+    maxWidth: "28rem",
+    textAlign: "center",
     width: "100%"
+  },
+  stateFeedback: {
+    display: "grid",
+    gap: tokens.spacingVerticalS,
+    justifyItems: "center",
+    width: "100%"
+  },
+  stateFeedbackIcon: {
+    alignItems: "center",
+    backgroundColor: tokens.colorNeutralBackground1,
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: tokens.borderRadiusCircular,
+    color: tokens.colorNeutralForeground3,
+    display: "inline-flex",
+    height: "3rem",
+    justifyContent: "center",
+    width: "3rem"
+  },
+  stateFeedbackIconBare: {
+    alignItems: "center",
+    display: "inline-flex",
+    justifyContent: "center"
+  },
+  stateFeedbackIconInfo: {
+    color: tokens.colorBrandForeground1
+  },
+  stateFeedbackIconWarning: {
+    color: tokens.colorPaletteDarkOrangeForeground1
+  },
+  stateFeedbackIconDanger: {
+    color: tokens.colorPaletteRedForeground1
+  },
+  stateFeedbackIconNeutral: {
+    color: tokens.colorNeutralForeground3
+  },
+  stateFeedbackMessage: {
+    maxWidth: "24rem"
   },
   stateActionsRow: {
     display: "flex",
     flexWrap: "wrap",
+    justifyContent: "center",
     gap: tokens.spacingHorizontalS
-  },
-  statusInlineBody: {
-    maxWidth: "none",
-    width: "100%"
-  },
-  statusInlineMessageBody: {
-    overflow: "visible",
-    textOverflow: "clip",
-    whiteSpace: "normal",
-    wordBreak: "break-word"
   },
   loadingSkeleton: {
     display: "grid",
@@ -520,6 +576,7 @@ export const useSmartLoadingContainerClassNames = (
     container: mergeClasses(styles.container, className),
     countBadge: styles.countBadge,
     contentGrid: mergeClasses(styles.contentGrid, styles[layoutMap[layout]]),
+    containerTitle: styles.containerTitle,
     header: styles.header,
     headerMeta: styles.headerMeta,
     headerRow: styles.headerRow,
@@ -545,6 +602,8 @@ export const useSmartLoadingContainerClassNames = (
     sectionHeaderAccentSuccess: styles.sectionHeaderAccentSuccess,
     sectionHeaderAccentWarning: styles.sectionHeaderAccentWarning,
     statusInline: styles.statusInline,
+    statusInlineDanger: styles.statusInlineDanger,
+    statusInlineInfo: styles.statusInlineInfo,
     statusInlineIcon: styles.statusInlineIcon,
     statusInlineIconDanger: styles.statusInlineIconDanger,
     statusInlineIconInfo: styles.statusInlineIconInfo,
@@ -555,8 +614,10 @@ export const useSmartLoadingContainerClassNames = (
     statusInlineMessageInfo: styles.statusInlineMessageInfo,
     statusInlineMessageSubtle: styles.statusInlineMessageSubtle,
     statusInlineMessageWarning: styles.statusInlineMessageWarning,
+    statusInlineWarning: styles.statusInlineWarning,
     section: styles.section,
     sectionActions: styles.sectionActions,
+    sectionFlat: styles.sectionFlat,
     sectionHeader: styles.sectionHeader,
     sectionHeaderMain: styles.sectionHeaderMain,
     sectionHeading: styles.sectionHeading,
@@ -569,15 +630,18 @@ export const useSmartLoadingContainerClassNames = (
     statusSummaryMinimal: styles.statusSummaryMinimal,
     stateBanner: styles.stateBanner,
     stateBody: styles.stateBody,
+    customStateSlot: styles.customStateSlot,
+    stateFeedback: styles.stateFeedback,
+    stateFeedbackIcon: styles.stateFeedbackIcon,
+    stateFeedbackIconBare: styles.stateFeedbackIconBare,
+    stateFeedbackIconDanger: styles.stateFeedbackIconDanger,
+    stateFeedbackIconInfo: styles.stateFeedbackIconInfo,
+    stateFeedbackIconNeutral: styles.stateFeedbackIconNeutral,
+    stateFeedbackIconWarning: styles.stateFeedbackIconWarning,
+    stateFeedbackMessage: styles.stateFeedbackMessage,
     stateMessage: styles.stateMessage,
     stateRegion: styles.stateRegion,
     stateRegionFeedback: styles.stateRegionFeedback,
-    stateRegionDelayed: styles.stateRegionDelayed,
-    stateRegionEmpty: styles.stateRegionEmpty,
-    stateRegionError: styles.stateRegionError,
-    stateRegionLoading: styles.stateRegionLoading,
-    statusInlineBody: styles.statusInlineBody,
-    statusInlineMessageBody: styles.statusInlineMessageBody,
     loadingLinePrimary: styles.loadingLinePrimary,
     loadingLineSecondary: styles.loadingLineSecondary,
     loadingLineTertiary: styles.loadingLineTertiary,

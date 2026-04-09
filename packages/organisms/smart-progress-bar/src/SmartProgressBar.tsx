@@ -1,6 +1,7 @@
 import React from "react";
 
 import { OneUIBadge, OneUIHeading, OneUIStack, OneUIText } from "@functions-oneui/atoms";
+import { mergeClasses } from "@fluentui/react-components";
 import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loading";
 
 import { useSmartProgressBarClassNames } from "./SmartProgressBar.styles.js";
@@ -55,7 +56,10 @@ const getStatusBreakdownText = ({
   loading = 0,
   refreshing = 0,
   success = 0
-}: Pick<SmartProgressBarProps, "delayed" | "empty" | "error" | "loading" | "refreshing" | "success">): string => {
+}: Pick<
+  SmartProgressBarProps,
+  "delayed" | "empty" | "error" | "loading" | "refreshing" | "success"
+>): string => {
   const parts: string[] = [];
 
   if (loading > 0) {
@@ -174,6 +178,7 @@ export const SmartProgressBar = (props: SmartProgressBarProps): React.JSX.Elemen
     error = 0,
     items = [],
     loading = 0,
+    mode = "slim",
     percent,
     progressBarAriaLabel,
     refreshing = 0,
@@ -187,6 +192,9 @@ export const SmartProgressBar = (props: SmartProgressBarProps): React.JSX.Elemen
     ...restProps
   } = props;
   const classNames = useSmartProgressBarClassNames(className);
+  const [expanded, setExpanded] = React.useState(mode === "full");
+  const detailsId = React.useId();
+  const isSlim = mode === "slim";
   const resolvedPercent = percent ?? (total > 0 ? Math.round((completed / total) * 100) : 0);
   const resolvedSummaryText =
     summaryText ??
@@ -207,24 +215,79 @@ export const SmartProgressBar = (props: SmartProgressBarProps): React.JSX.Elemen
     success
   });
   const resolvedAriaValueText = `${resolvedPercent}% complete. ${resolvedSummaryText}`;
+  const showExpandedDetails = !isSlim || expanded;
+  const headerDescription = isSlim ? resolvedSummaryText : description;
+  const detailDescription = isSlim ? description : undefined;
+
+  const handleToggle = React.useCallback(() => {
+    if (!isSlim) {
+      return;
+    }
+
+    setExpanded((current) => !current);
+  }, [isSlim]);
 
   return (
     <section
       {...restProps}
       aria-label={ariaLabel ?? (typeof title === "string" ? title : "Progress status")}
       aria-busy={loading > 0 || delayed > 0 || refreshing > 0}
-      className={classNames.root}
+      className={mergeClasses(classNames.root, isSlim ? classNames.rootSlim : undefined)}
       data-oneui-smart-progress-bar=""
     >
-      <div className={classNames.header}>
-        <OneUIStack gap="xs">
-          <OneUIHeading level={2}>{title}</OneUIHeading>
-          {description ? <OneUIText tone="secondary">{description}</OneUIText> : null}
-        </OneUIStack>
-        <OneUIText className={classNames.meterValue} tone="secondary">
-          {completed}/{total}
-        </OneUIText>
-      </div>
+      {isSlim ? (
+        <button
+          aria-controls={detailsId}
+          aria-expanded={expanded}
+          className={classNames.headerSlimButton}
+          onClick={handleToggle}
+          type="button"
+        >
+          <div className={classNames.headerTitleGroup}>
+            <OneUIHeading className={mergeClasses(classNames.title, classNames.titleSlim)} level={2}>
+              {title}
+            </OneUIHeading>
+            {headerDescription ? (
+              <OneUIText
+                className={mergeClasses(classNames.description, classNames.descriptionSlim)}
+                tone="secondary"
+              >
+                {headerDescription}
+              </OneUIText>
+            ) : null}
+          </div>
+          <div className={classNames.headerRight}>
+            <span className={classNames.metricBadge}>
+              <span className={classNames.metricBadgeValue}>{completed}</span>
+              <span className={classNames.metricBadgeTotal}>/{total}</span>
+            </span>
+            <span
+              aria-hidden="true"
+              className={mergeClasses(
+                classNames.chevronButtonGlyph,
+                expanded ? classNames.chevronButtonGlyphExpanded : undefined
+              )}
+            />
+          </div>
+        </button>
+      ) : (
+        <div className={classNames.header}>
+          <OneUIStack gap="xs">
+            <OneUIHeading className={classNames.title} level={2}>
+              {title}
+            </OneUIHeading>
+            {headerDescription ? (
+              <OneUIText className={classNames.description} tone="secondary">
+                {headerDescription}
+              </OneUIText>
+            ) : null}
+          </OneUIStack>
+          <span className={classNames.metricBadge}>
+            <span className={classNames.metricBadgeValue}>{completed}</span>
+            <span className={classNames.metricBadgeTotal}>/{total}</span>
+          </span>
+        </div>
+      )}
 
       {showProgressBar ? (
         <div
@@ -233,42 +296,60 @@ export const SmartProgressBar = (props: SmartProgressBarProps): React.JSX.Elemen
           aria-valuemin={0}
           aria-valuenow={resolvedPercent}
           aria-valuetext={resolvedAriaValueText}
-          className={classNames.meterTrack}
+          className={mergeClasses(classNames.meterTrack, isSlim ? classNames.meterTrackSlim : undefined)}
           role="progressbar"
         >
           <div className={classNames.meterFill} style={{ width: `${resolvedPercent}%` }} />
         </div>
       ) : null}
 
-      {showSummary ? (
-        <div className={classNames.summary}>
-          <OneUIText tone="secondary">{resolvedSummaryText}</OneUIText>
-          {resolvedStatusBreakdown ? (
-            <OneUIText className={classNames.summaryBreakdown} tone="secondary">
-              {resolvedStatusBreakdown}
-            </OneUIText>
-          ) : null}
-        </div>
-      ) : null}
+      <div
+        className={mergeClasses(
+          classNames.detailsViewport,
+          showExpandedDetails ? classNames.detailsViewportExpanded : undefined
+        )}
+        id={detailsId}
+      >
+        <div className={classNames.detailsViewportInner}>
+          <div className={classNames.detailsBody}>
+            {detailDescription ? (
+              <OneUIText className={classNames.description} tone="secondary">
+                {detailDescription}
+              </OneUIText>
+            ) : null}
 
-      {showChips && items.length > 0 ? (
-        <ul aria-label={chipsAriaLabel} className={classNames.itemList}>
-          {items.map((item) => (
-            <li className={classNames.item} key={item.id}>
-              <OneUIBadge
-                aria-label={getItemAriaLabel(item)}
-                appearance={statusAppearanceMap[item.status]}
-                icon={<StatusGlyph status={item.status} />}
-                shape="pill"
-                size="sm"
-                tone={statusToneMap[item.status]}
-              >
-                <span className={classNames.itemLabel}>{item.label}</span>
-              </OneUIBadge>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+            {showSummary ? (
+              <div className={classNames.summary}>
+                <OneUIText tone="secondary">{resolvedSummaryText}</OneUIText>
+                {resolvedStatusBreakdown ? (
+                  <OneUIText className={classNames.summaryBreakdown} tone="secondary">
+                    {resolvedStatusBreakdown}
+                  </OneUIText>
+                ) : null}
+              </div>
+            ) : null}
+
+            {showChips && items.length > 0 ? (
+              <ul aria-label={chipsAriaLabel} className={classNames.itemList}>
+                {items.map((item) => (
+                  <li className={classNames.item} key={item.id}>
+                    <OneUIBadge
+                      aria-label={getItemAriaLabel(item)}
+                      appearance={statusAppearanceMap[item.status]}
+                      icon={<StatusGlyph status={item.status} />}
+                      shape="pill"
+                      size="sm"
+                      tone={statusToneMap[item.status]}
+                    >
+                      <span className={classNames.itemLabel}>{item.label}</span>
+                    </OneUIBadge>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

@@ -11,6 +11,7 @@ import { useOneUIId } from "@functions-oneui/react-utils";
 import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loading";
 import { mergeClasses } from "@fluentui/react-components";
 
+import { SmartLoadingSurfaceAppearanceContext } from "./SmartLoadingContainer.context.js";
 import { useSmartLoadingContainerClassNames } from "./SmartLoadingContainer.styles.js";
 import type { SmartLoadingSectionProps } from "./SmartLoadingContainer.types.js";
 
@@ -186,6 +187,25 @@ const getStatusInlineIconClassName = (
   return mergeClasses(classNames.statusInlineIcon, classNames.statusInlineIconNeutral);
 };
 
+const getStatusInlineClassName = (
+  classNames: ReturnType<typeof useSmartLoadingContainerClassNames>,
+  effectiveStatus: LoadingStatus
+): string => {
+  if (effectiveStatus === "loading" || effectiveStatus === "refreshing") {
+    return mergeClasses(classNames.statusInline, classNames.statusInlineInfo);
+  }
+
+  if (effectiveStatus === "delayed") {
+    return mergeClasses(classNames.statusInline, classNames.statusInlineWarning);
+  }
+
+  if (effectiveStatus === "error") {
+    return mergeClasses(classNames.statusInline, classNames.statusInlineDanger);
+  }
+
+  return classNames.statusInline;
+};
+
 const getStatusInlineMessageClassName = (
   classNames: ReturnType<typeof useSmartLoadingContainerClassNames>,
   effectiveStatus: LoadingStatus
@@ -311,57 +331,84 @@ const getStatusBadgeText = (effectiveStatus: LoadingStatus): React.ReactNode | n
 
 const renderStateBody = ({
   classNames,
+  delayedContent,
   delayedMessage,
+  emptyContent,
   effectiveStatus,
+  errorContent,
   emptyMessage,
   errorMessage,
+  idleContent,
+  loadingContent,
   loadingLabel,
   onRetry,
   retryLabel
 }: Pick<
   SmartLoadingSectionProps,
-  "delayedMessage" | "emptyMessage" | "errorMessage" | "loadingLabel" | "onRetry" | "retryLabel"
+  | "delayedContent"
+  | "delayedMessage"
+  | "emptyContent"
+  | "emptyMessage"
+  | "errorContent"
+  | "errorMessage"
+  | "idleContent"
+  | "loadingContent"
+  | "loadingLabel"
+  | "onRetry"
+  | "retryLabel"
 > & {
   classNames: ReturnType<typeof useSmartLoadingContainerClassNames>;
   effectiveStatus: Extract<LoadingStatus, "loading" | "delayed" | "error" | "empty" | "idle">;
 }): React.ReactNode => {
-  const renderSimpleStateMessage = (message: React.ReactNode): React.ReactNode => {
-    const inlineIconClassName = getStatusInlineIconClassName(classNames, effectiveStatus);
-    const inlineMessageClassName = mergeClasses(
-      getStatusInlineMessageClassName(classNames, effectiveStatus),
-      classNames.statusInlineMessageBody
-    );
+  const renderDefaultStateMessage = (message: React.ReactNode): React.ReactNode => {
+    const stateIconClassName =
+      effectiveStatus === "loading"
+        ? mergeClasses(classNames.stateFeedbackIconBare, classNames.stateFeedbackIconInfo)
+        : effectiveStatus === "delayed"
+          ? mergeClasses(classNames.stateFeedbackIconBare, classNames.stateFeedbackIconWarning)
+          : effectiveStatus === "error"
+            ? mergeClasses(classNames.stateFeedbackIcon, classNames.stateFeedbackIconDanger)
+            : mergeClasses(classNames.stateFeedbackIconBare, classNames.stateFeedbackIconNeutral);
 
     return (
       <div className={classNames.stateMessage}>
-        <span className={mergeClasses(classNames.statusInline, classNames.statusInlineBody)}>
-          <span className={inlineIconClassName}>
+        <div className={classNames.stateFeedback}>
+          <span className={stateIconClassName}>
             {effectiveStatus === "loading" ? (
               <SpinnerIcon className={classNames.spinnerIcon} />
             ) : (
               getStatusIcon(effectiveStatus)
             )}
           </span>
-          <span className={inlineMessageClassName}>{message}</span>
-        </span>
+          <OneUIText className={classNames.stateFeedbackMessage}>{message}</OneUIText>
+        </div>
       </div>
     );
   };
 
   if (effectiveStatus === "loading") {
-    return renderSimpleStateMessage(loadingLabel ?? "Loading section content...");
+    return (
+      loadingContent ?? renderDefaultStateMessage(loadingLabel ?? "Loading section content...")
+    );
   }
 
   if (effectiveStatus === "delayed") {
-    return renderSimpleStateMessage(
-      delayedMessage ?? "This section is taking longer than usual to respond."
+    return (
+      delayedContent ??
+      renderDefaultStateMessage(
+        delayedMessage ?? "This section is taking longer than usual to respond."
+      )
     );
   }
 
   if (effectiveStatus === "error") {
+    if (errorContent) {
+      return errorContent;
+    }
+
     return (
       <OneUIStack className={classNames.stateMessage} gap="sm">
-        {renderSimpleStateMessage(errorMessage ?? "We could not load content for this section.")}
+        {renderDefaultStateMessage(errorMessage ?? "Unable to load this section.")}
         {onRetry ? (
           <div className={classNames.stateActionsRow}>
             <OneUIButton onClick={onRetry}>{retryLabel ?? "Retry"}</OneUIButton>
@@ -372,12 +419,13 @@ const renderStateBody = ({
   }
 
   if (effectiveStatus === "empty") {
-    return renderSimpleStateMessage(
-      emptyMessage ?? "No content is available for this section right now."
+    return (
+      emptyContent ??
+      renderDefaultStateMessage(emptyMessage ?? "No matching records were found for this section.")
     );
   }
 
-  return renderSimpleStateMessage("This section is ready to load.");
+  return idleContent ?? renderDefaultStateMessage("This section is ready to load.");
 };
 
 const shouldAutoCollapse = ({
@@ -420,17 +468,23 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
     collapseOnEmpty = false,
     count,
     defaultCollapsed = false,
+    delayedContent,
     delayedMessage,
     delayedThresholdMs,
     description,
+    emptyContent,
     emptyMessage,
+    errorContent,
     errorMessage,
     expandOnSuccess = false,
     headingLevel = 3,
+    idleContent,
+    loadingContent,
     loadingLabel,
     onCollapsedChange,
     onRetry,
     retryLabel,
+    surfaceAppearance,
     status,
     statusDisplayMode = "inline",
     title,
@@ -442,6 +496,9 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
   const titleId = useOneUIId("oneui-smart-loading-section-title");
   const classNames = useSmartLoadingContainerClassNames("single", className);
   const Component = as as React.ElementType;
+  const inheritedSurfaceAppearance = React.useContext(SmartLoadingSurfaceAppearanceContext);
+  const resolvedSurfaceAppearance = surfaceAppearance ?? inheritedSurfaceAppearance;
+  const previousEffectiveStatusRef = React.useRef<LoadingStatus | undefined>(undefined);
   const effectiveStatus = getEffectiveStatus({
     delayedTriggered,
     status
@@ -452,10 +509,15 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
     ? children
     : renderStateBody({
         classNames,
+        delayedContent,
         delayedMessage,
         effectiveStatus,
+        emptyContent,
         emptyMessage,
+        errorContent,
         errorMessage,
+        idleContent,
+        loadingContent,
         loadingLabel,
         onRetry,
         retryLabel
@@ -477,6 +539,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
         ? 0
         : undefined;
   const accentClassNames = getSectionAccentClassNames(classNames, accentTone);
+  const statusInlineClassName = getStatusInlineClassName(classNames, effectiveStatus);
   const statusInlineIconClassName = getStatusInlineIconClassName(classNames, effectiveStatus);
   const statusInlineMessageClassName = getStatusInlineMessageClassName(classNames, effectiveStatus);
 
@@ -497,8 +560,12 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
 
   React.useEffect(() => {
     if (!collapsible) {
+      previousEffectiveStatusRef.current = effectiveStatus;
       return;
     }
+
+    const previousEffectiveStatus = previousEffectiveStatusRef.current;
+    const statusChanged = previousEffectiveStatus !== effectiveStatus;
 
     const nextShouldCollapse = shouldAutoCollapse({
       autoCollapseOnDelayed,
@@ -507,13 +574,15 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
       effectiveStatus
     });
 
-    if (nextShouldCollapse && !internalCollapsed) {
+    if (statusChanged && nextShouldCollapse && !internalCollapsed) {
       setInternalCollapsed(true);
       onCollapsedChange?.(true);
+      previousEffectiveStatusRef.current = effectiveStatus;
       return;
     }
 
     if (
+      statusChanged &&
       expandOnSuccess &&
       (effectiveStatus === "success" || effectiveStatus === "refreshing") &&
       internalCollapsed
@@ -521,6 +590,8 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
       setInternalCollapsed(false);
       onCollapsedChange?.(false);
     }
+
+    previousEffectiveStatusRef.current = effectiveStatus;
   }, [
     autoCollapseOnDelayed,
     autoCollapseOnError,
@@ -549,7 +620,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
     effectiveStatus === "error" ||
     effectiveStatus === "empty" ||
     effectiveStatus === "idle" ? (
-      <span className={classNames.statusInline}>
+      <span className={statusInlineClassName}>
         <span className={statusInlineIconClassName}>
           {effectiveStatus === "loading" || effectiveStatus === "refreshing" ? (
             <SpinnerIcon className={classNames.spinnerIcon} />
@@ -606,16 +677,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
       effectiveStatus === "empty" ||
       effectiveStatus === "idle"
       ? classNames.stateRegionFeedback
-      : undefined,
-    effectiveStatus === "loading"
-      ? classNames.stateRegionLoading
-      : effectiveStatus === "delayed"
-        ? classNames.stateRegionDelayed
-        : effectiveStatus === "error"
-          ? classNames.stateRegionError
-          : effectiveStatus === "empty"
-            ? classNames.stateRegionEmpty
-            : undefined
+      : undefined
   );
 
   return React.createElement(
@@ -627,7 +689,12 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
         effectiveStatus === "delayed" ||
         effectiveStatus === "refreshing",
       "aria-labelledby": titleId,
-      className: mergeClasses(classNames.section, accentClassNames.section),
+      className: mergeClasses(
+        classNames.section,
+        accentClassNames.section,
+        resolvedSurfaceAppearance === "flat" ? classNames.sectionFlat : undefined
+      ),
+      "data-oneui-surface-appearance": resolvedSurfaceAppearance,
       "data-oneui-smart-loading-section": ""
     },
     <>
@@ -688,14 +755,19 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
               </>
             ) : (
               <div className={stateRegionClassName}>
-                {effectiveStatus === "loading" ? (
-                  <div aria-hidden="true" className={classNames.loadingSkeleton}>
-                    <div className={classNames.loadingLinePrimary} />
-                    <div className={classNames.loadingLineSecondary} />
-                    <div className={classNames.loadingLineTertiary} />
-                  </div>
-                ) : null}
-                <div className={classNames.stateBody}>{stateBody}</div>
+                <div
+                  className={
+                    effectiveStatus === "loading" ||
+                    effectiveStatus === "delayed" ||
+                    effectiveStatus === "error" ||
+                    effectiveStatus === "empty" ||
+                    effectiveStatus === "idle"
+                      ? classNames.customStateSlot
+                      : classNames.stateBody
+                  }
+                >
+                  {stateBody}
+                </div>
               </div>
             )}
           </div>

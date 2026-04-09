@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@fluentui/react-components": "9.73.0",
+    "@functions-oneui/organism-illustrated-state": "workspace:*",
     "@functions-oneui/testing": "workspace:*",
     "@testing-library/react": "16.3.2",
     "@types/react": "19.2.14",

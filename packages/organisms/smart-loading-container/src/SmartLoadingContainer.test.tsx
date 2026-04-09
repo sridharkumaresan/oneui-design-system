@@ -24,7 +24,9 @@ describe("SmartLoadingContainer", () => {
 
     expect(screen.getByText("Three news results are available.")).toBeTruthy();
     expect(screen.getByText("Existing people results remain visible.")).toBeTruthy();
-    expect(screen.getByText("Refreshing section content while keeping current results visible.")).toBeTruthy();
+    expect(
+      screen.getByText("Refreshing section content while keeping current results visible.")
+    ).toBeTruthy();
   });
 
   it("supports retry actions and delayed messaging", () => {
@@ -109,6 +111,54 @@ describe("SmartLoadingContainer", () => {
     expect(screen.getByText("Taking longer than expected")).toBeTruthy();
   });
 
+  it("allows empty sections to be re-expanded after auto-collapse", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer title="Enterprise search">
+        <SmartLoadingSection
+          collapseOnEmpty
+          collapsible
+          emptyMessage="No matching records."
+          status="empty"
+          title="People"
+        />
+      </SmartLoadingContainer>
+    );
+
+    const headerButton = screen.getByRole("button", { name: "Expand People" });
+    expect(headerButton.getAttribute("aria-expanded")).toBe("false");
+
+    fireEvent.click(headerButton);
+
+    expect(headerButton.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByText("No matching records.")).toBeTruthy();
+  });
+
+  it("renders custom state content when provided", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer title="Enterprise search">
+        <SmartLoadingSection
+          emptyContent={<OneUIText>Custom empty body</OneUIText>}
+          status="empty"
+          title="People"
+        />
+      </SmartLoadingContainer>
+    );
+
+    expect(screen.getByText("Custom empty body")).toBeTruthy();
+  });
+
+  it("allows container-level flat section surfaces", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer surfaceAppearance="flat" title="Enterprise search">
+        <SmartLoadingSection status="empty" title="People" />
+      </SmartLoadingContainer>
+    );
+
+    expect(screen.getByRole("region", { name: "People" }).getAttribute("data-oneui-surface-appearance")).toBe(
+      "flat"
+    );
+  });
+
   it("hides children when the section is not settled successfully", () => {
     renderWithOneUIProvider(
       <SmartLoadingContainer title="Enterprise search">
@@ -126,7 +176,13 @@ describe("SmartLoadingContainer", () => {
   it("supports collapsible sections", () => {
     renderWithOneUIProvider(
       <SmartLoadingContainer title="Enterprise search">
-        <SmartLoadingSection collapsible defaultCollapsed loadingLabel="Fetching..." status="loading" title="People" />
+        <SmartLoadingSection
+          collapsible
+          defaultCollapsed
+          loadingLabel="Fetching..."
+          status="loading"
+          title="People"
+        />
       </SmartLoadingContainer>
     );
 

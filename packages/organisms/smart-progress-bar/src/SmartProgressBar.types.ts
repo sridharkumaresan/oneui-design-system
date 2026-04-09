@@ -9,6 +9,8 @@ export type SmartProgressBarItem = {
   status: LoadingStatus;
 };
 
+export type SmartProgressBarMode = "full" | "slim";
+
 export type SmartProgressBarProps = HTMLAttributes<HTMLElement> & {
   ariaLabel?: string;
   chipsAriaLabel?: string;
@@ -19,6 +21,7 @@ export type SmartProgressBarProps = HTMLAttributes<HTMLElement> & {
   error?: number;
   items?: SmartProgressBarItem[];
   loading?: number;
+  mode?: SmartProgressBarMode;
   percent?: number;
   progressBarAriaLabel?: string;
   refreshing?: number;

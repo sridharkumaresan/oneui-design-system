@@ -2,6 +2,7 @@ import React from "react";
 
 import { OneUIHeading, OneUIStack, OneUIText } from "@functions-oneui/atoms";
 
+import { SmartLoadingSurfaceAppearanceContext } from "./SmartLoadingContainer.context.js";
 import { useSmartLoadingContainerClassNames } from "./SmartLoadingContainer.styles.js";
 import type { SmartLoadingContainerProps } from "./SmartLoadingContainer.types.js";
 
@@ -15,6 +16,7 @@ export const SmartLoadingContainer = (props: SmartLoadingContainerProps): React.
     headingLevel = 2,
     layout = "split",
     progressSlot,
+    surfaceAppearance = "raised",
     title,
     ...restProps
   } = props;
@@ -26,13 +28,16 @@ export const SmartLoadingContainer = (props: SmartLoadingContainerProps): React.
     {
       ...restProps,
       className: classNames.container,
+      "data-oneui-surface-appearance": surfaceAppearance,
       "data-oneui-smart-loading-container": ""
     },
-    <>
+    <SmartLoadingSurfaceAppearanceContext.Provider value={surfaceAppearance}>
       <header className={classNames.header}>
         <div className={classNames.headerRow}>
           <OneUIStack gap="xs">
-            <OneUIHeading level={headingLevel}>{title}</OneUIHeading>
+            <OneUIHeading className={classNames.containerTitle} level={headingLevel}>
+              {title}
+            </OneUIHeading>
             {description ? <OneUIText tone="secondary">{description}</OneUIText> : null}
           </OneUIStack>
           {actions ? <div className={classNames.sectionActions}>{actions}</div> : null}
@@ -40,6 +45,6 @@ export const SmartLoadingContainer = (props: SmartLoadingContainerProps): React.
         {progressSlot}
       </header>
       <div className={classNames.contentGrid}>{children}</div>
-    </>
+    </SmartLoadingSurfaceAppearanceContext.Provider>
   );
 };

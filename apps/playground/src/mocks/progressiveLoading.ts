@@ -1,7 +1,14 @@
 import type { LoadingSectionConfig } from "@functions-oneui/react-utils/progressive-loading";
 
 export type DemoCardItem = {
+  badgeTone?: "brand" | "danger" | "info" | "success" | "warning";
+  badgeText?: string;
+  eyebrow?: string;
+  footerNote?: string;
+  helperLinkLabel?: string;
   meta?: string;
+  primaryActionLabel?: string;
+  secondaryActionLabel?: string;
   summary: string;
   title: string;
 };

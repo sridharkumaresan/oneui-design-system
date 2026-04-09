@@ -16,17 +16,19 @@ const meta = {
   args: {
     completed: 4,
     delayed: 1,
-    description: "Results appear progressively as each source responds. You can start browsing loaded content below.",
+    description:
+      "Results appear progressively as each source responds. You can start browsing loaded content below.",
     empty: 1,
     error: 1,
     items: [
-      { id: "news", label: "News", status: "success", count: 12 },
-      { id: "people", label: "People", status: "refreshing", count: 8 },
+      { count: 12, id: "news", label: "News", status: "success" },
+      { count: 8, id: "people", label: "People", status: "refreshing" },
       { id: "resources", label: "Resources", status: "error" },
       { id: "files", label: "Files", status: "empty" },
       { id: "sites", label: "Sites", status: "delayed" }
     ],
     loading: 0,
+    mode: "slim",
     percent: 57,
     refreshing: 1,
     success: 2,
@@ -49,6 +51,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const FullMode: Story = {
+  args: {
+    mode: "full"
+  }
+};
+
 export const SearchHeader: Story = {
   render: (args) => {
     return (
@@ -69,7 +77,7 @@ export const LoadingHeavy: Story = {
     items: [
       { id: "approvals", label: "Approvals", status: "loading" },
       { id: "tasks", label: "Tasks", status: "loading" },
-      { id: "alerts", label: "Alerts", status: "success", count: 5 }
+      { count: 5, id: "alerts", label: "Alerts", status: "success" }
     ],
     loading: 2,
     percent: 33,
@@ -103,8 +111,8 @@ export const MixedStates: Story = {
     empty: 1,
     error: 1,
     items: [
-      { id: "sites", label: "Sites", status: "success", count: 18 },
-      { id: "people", label: "People", status: "success", count: 6 },
+      { count: 18, id: "sites", label: "Sites", status: "success" },
+      { count: 6, id: "people", label: "People", status: "success" },
       { id: "resources", label: "Resources", status: "error" },
       { id: "files", label: "Files", status: "empty" },
       { id: "servicenow", label: "ServiceNow", status: "delayed" }
@@ -163,8 +171,8 @@ export const HookManagedExample: Story = {
         empty={0}
         error={0}
         items={[
-          { id: "hr", label: "HR", status: "success", count: 2 },
-          { id: "it", label: "IT", status: completed < 3 ? "delayed" : "success", count: 4 }
+          { count: 2, id: "hr", label: "HR", status: "success" },
+          { count: 4, id: "it", label: "IT", status: completed < 3 ? "delayed" : "success" }
         ]}
         loading={0}
         percent={Math.round((completed / 3) * 100)}

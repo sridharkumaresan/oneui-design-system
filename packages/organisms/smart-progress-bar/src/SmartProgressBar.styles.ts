@@ -16,17 +16,142 @@ const useStyles = makeStyles({
     paddingTop: tokens.spacingVerticalM,
     width: "100%"
   },
+  rootSlim: {
+    background: `linear-gradient(180deg, ${tokens.colorNeutralBackground1} 0%, ${tokens.colorNeutralBackground2} 100%)`,
+    borderBottomColor: tokens.colorNeutralStroke2,
+    borderLeftColor: tokens.colorNeutralStroke2,
+    borderRightColor: tokens.colorNeutralStroke2,
+    borderTopColor: tokens.colorNeutralStroke2,
+    gap: tokens.spacingVerticalXS,
+    paddingBottom: tokens.spacingVerticalS,
+    paddingTop: tokens.spacingVerticalS
+  },
   header: {
     alignItems: "start",
     display: "grid",
     gap: tokens.spacingVerticalXS,
     gridTemplateColumns: "1fr auto"
   },
+  headerSlimButton: {
+    alignItems: "center",
+    appearance: "none",
+    backgroundColor: "transparent",
+    border: "none",
+    color: "inherit",
+    cursor: "pointer",
+    display: "grid",
+    gap: tokens.spacingHorizontalM,
+    gridTemplateColumns: "minmax(0, 1fr) auto",
+    margin: 0,
+    padding: 0,
+    textAlign: "left",
+    width: "100%"
+  },
+  headerTitleGroup: {
+    display: "grid",
+    gap: "2px",
+    minWidth: 0
+  },
+  title: {
+    color: tokens.colorNeutralForeground2,
+    fontSize: tokens.fontSizeBase500,
+    fontWeight: tokens.fontWeightSemibold,
+    letterSpacing: "-0.01em",
+    lineHeight: tokens.lineHeightBase500
+  },
+  titleSlim: {
+    fontSize: tokens.fontSizeBase400,
+    fontWeight: tokens.fontWeightSemibold,
+    lineHeight: tokens.lineHeightBase400
+  },
+  description: {
+    fontSize: tokens.fontSizeBase200,
+    lineHeight: tokens.lineHeightBase200
+  },
+  descriptionSlim: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
+  },
+  headerRight: {
+    alignItems: "center",
+    display: "inline-flex",
+    gap: tokens.spacingHorizontalS
+  },
+  metricBadge: {
+    alignItems: "center",
+    background: `linear-gradient(135deg, ${tokens.colorBrandBackground} 0%, ${tokens.colorPaletteLightTealBackground2} 100%)`,
+    borderBottom: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
+    borderLeft: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
+    borderRadius: tokens.borderRadiusCircular,
+    borderRight: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
+    borderTop: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
+    boxShadow: `0 8px 18px color-mix(in srgb, ${tokens.colorBrandBackground} 18%, transparent)`,
+    color: tokens.colorNeutralForegroundOnBrand,
+    display: "inline-flex",
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
+    gap: tokens.spacingHorizontalXS,
+    lineHeight: tokens.lineHeightBase200,
+    minHeight: "2rem",
+    paddingBottom: "0.25rem",
+    paddingLeft: tokens.spacingHorizontalM,
+    paddingRight: tokens.spacingHorizontalM,
+    paddingTop: "0.25rem"
+  },
+  metricBadgeValue: {
+    fontSize: tokens.fontSizeBase300
+  },
+  metricBadgeTotal: {
+    color: "color-mix(in srgb, white 82%, transparent)",
+    fontWeight: tokens.fontWeightMedium
+  },
+  chevronButtonGlyph: {
+    borderBottom: `1.5px solid ${tokens.colorNeutralForeground3}`,
+    borderRight: `1.5px solid ${tokens.colorNeutralForeground3}`,
+    display: "inline-block",
+    height: "0.45rem",
+    transform: "rotate(45deg)",
+    transitionDuration: tokens.durationNormal,
+    transitionProperty: "transform",
+    transitionTimingFunction: tokens.curveEasyEase,
+    width: "0.45rem"
+  },
+  chevronButtonGlyphExpanded: {
+    transform: "rotate(-135deg)"
+  },
+  detailsViewport: {
+    display: "grid",
+    gridTemplateRows: "0fr",
+    opacity: 0,
+    overflow: "hidden",
+    transitionDuration: tokens.durationNormal,
+    transitionProperty: "grid-template-rows, opacity",
+    transitionTimingFunction: tokens.curveEasyEase,
+    "@media (prefers-reduced-motion: reduce)": {
+      transitionDuration: "0ms"
+    }
+  },
+  detailsViewportExpanded: {
+    gridTemplateRows: "1fr",
+    opacity: 1
+  },
+  detailsViewportInner: {
+    minHeight: 0,
+    overflow: "hidden"
+  },
+  detailsBody: {
+    display: "grid",
+    gap: tokens.spacingVerticalS,
+    paddingTop: tokens.spacingVerticalXS
+  },
   summary: {
     alignItems: "baseline",
     color: tokens.colorNeutralForeground2,
     display: "grid",
     gap: tokens.spacingVerticalXXS,
+    fontSize: tokens.fontSizeBase200,
+    lineHeight: tokens.lineHeightBase200,
     textWrap: "balance"
   },
   summaryBreakdown: {
@@ -40,6 +165,9 @@ const useStyles = makeStyles({
     overflow: "hidden",
     width: "100%"
   },
+  meterTrackSlim: {
+    height: "0.25rem"
+  },
   meterFill: {
     backgroundColor: tokens.colorBrandBackground,
     borderRadius: tokens.borderRadiusCircular,
@@ -47,10 +175,6 @@ const useStyles = makeStyles({
     transitionDuration: tokens.durationSlower,
     transitionProperty: "width",
     transitionTimingFunction: tokens.curveEasyEase
-  },
-  meterValue: {
-    minWidth: "3.5rem",
-    textAlign: "right"
   },
   itemList: {
     display: "flex",
@@ -208,14 +332,29 @@ export const useSmartProgressBarClassNames = (className?: string) => {
   const styles = useStyles();
 
   return {
+    chevronButtonGlyph: styles.chevronButtonGlyph,
+    chevronButtonGlyphExpanded: styles.chevronButtonGlyphExpanded,
+    description: styles.description,
+    descriptionSlim: styles.descriptionSlim,
+    detailsBody: styles.detailsBody,
+    detailsViewport: styles.detailsViewport,
+    detailsViewportExpanded: styles.detailsViewportExpanded,
+    detailsViewportInner: styles.detailsViewportInner,
     header: styles.header,
+    headerRight: styles.headerRight,
+    headerSlimButton: styles.headerSlimButton,
+    headerTitleGroup: styles.headerTitleGroup,
     item: styles.item,
     itemLabel: styles.itemLabel,
     itemList: styles.itemList,
     meterFill: styles.meterFill,
     meterTrack: styles.meterTrack,
-    meterValue: styles.meterValue,
+    meterTrackSlim: styles.meterTrackSlim,
+    metricBadge: styles.metricBadge,
+    metricBadgeTotal: styles.metricBadgeTotal,
+    metricBadgeValue: styles.metricBadgeValue,
     root: mergeClasses(styles.root, className),
+    rootSlim: styles.rootSlim,
     statusGlyphDelayed: styles.statusGlyphDelayed,
     statusGlyphEmpty: styles.statusGlyphEmpty,
     statusGlyphEmptyMark: styles.statusGlyphEmptyMark,
@@ -226,6 +365,8 @@ export const useSmartProgressBarClassNames = (className?: string) => {
     statusGlyphSuccess: styles.statusGlyphSuccess,
     statusGlyphSuccessMark: styles.statusGlyphSuccessMark,
     summary: styles.summary,
-    summaryBreakdown: styles.summaryBreakdown
+    summaryBreakdown: styles.summaryBreakdown,
+    title: styles.title,
+    titleSlim: styles.titleSlim
   };
 };

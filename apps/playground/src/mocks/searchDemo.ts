@@ -18,7 +18,7 @@ export type SearchDemoItem =
       meta: string;
       summary: string;
       tag?: string;
-      thumbnailLabel?: string;
+      thumbnailTone?: "campus" | "event" | "insight" | "nature" | "wellness";
       title: string;
     }
   | {
@@ -79,7 +79,7 @@ export const searchDemoSections: SearchDemoSectionFixture[] = [
         summary:
           "New generative AI capabilities rolled out across retail banking to improve response times and personalise customer interactions at scale.",
         tag: "Technology",
-        thumbnailLabel: "AI",
+        thumbnailTone: "insight",
         title: "Barclays launches AI-powered customer service platform"
       },
       {
@@ -89,7 +89,7 @@ export const searchDemoSections: SearchDemoSectionFixture[] = [
         summary:
           "Barclays surpassed its green financing targets by 15%, with continued investment in sustainable funding activity.",
         tag: "Corporate News",
-        thumbnailLabel: "SR",
+        thumbnailTone: "nature",
         title: "Sustainability report 2025 highlights"
       },
       {
@@ -99,7 +99,7 @@ export const searchDemoSections: SearchDemoSectionFixture[] = [
         summary:
           "Full schedule of wellness activities including mindfulness workshops, fitness challenges, and health awareness sessions.",
         tag: "People & Culture",
-        thumbnailLabel: "WW",
+        thumbnailTone: "wellness",
         title: "Employee wellness month March 2026 activities"
       }
     ],
@@ -189,7 +189,7 @@ export const searchDemoSections: SearchDemoSectionFixture[] = [
         meta: "Organisation   Barclays Connections   Structure",
         summary:
           "If you have any questions about how to get around your new building, the support guide and orientation pack are available here.",
-        thumbnailLabel: "S",
+        thumbnailTone: "campus",
         title: "Building orientation & induction"
       },
       {
@@ -198,7 +198,7 @@ export const searchDemoSections: SearchDemoSectionFixture[] = [
         meta: "Organisation   Barclays Connections   Who we are",
         summary:
           "Event details and location guidance for the innovation showcase taking place later this month.",
-        thumbnailLabel: "E",
+        thumbnailTone: "event",
         title: "Driving innovation to a 24-hour deadline"
       }
     ],

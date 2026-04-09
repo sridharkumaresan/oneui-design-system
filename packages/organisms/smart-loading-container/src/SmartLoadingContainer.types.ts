@@ -3,7 +3,14 @@ import type { HTMLAttributes, JSX, ReactNode } from "react";
 import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loading";
 
 export type SmartLoadingLayout = "single" | "split";
-export type SmartLoadingSectionAccentTone = "neutral" | "brand" | "success" | "warning" | "danger" | "info";
+export type SmartLoadingSurfaceAppearance = "flat" | "raised";
+export type SmartLoadingSectionAccentTone =
+  | "neutral"
+  | "brand"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info";
 
 export type SmartLoadingContainerProps = HTMLAttributes<HTMLElement> & {
   actions?: ReactNode;
@@ -13,6 +20,7 @@ export type SmartLoadingContainerProps = HTMLAttributes<HTMLElement> & {
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   layout?: SmartLoadingLayout;
   progressSlot?: ReactNode;
+  surfaceAppearance?: SmartLoadingSurfaceAppearance;
   title: ReactNode;
 };
 
@@ -30,17 +38,23 @@ export type SmartLoadingSectionProps = HTMLAttributes<HTMLElement> & {
   count?: number;
   defaultCollapsed?: boolean;
   delayedThresholdMs?: number;
+  delayedContent?: ReactNode;
   delayedMessage?: ReactNode;
   description?: ReactNode;
+  emptyContent?: ReactNode;
   emptyMessage?: ReactNode;
+  errorContent?: ReactNode;
   errorMessage?: ReactNode;
   expandOnSuccess?: boolean;
   headingLevel?: 2 | 3 | 4 | 5 | 6;
+  idleContent?: ReactNode;
+  loadingContent?: ReactNode;
   loadingLabel?: ReactNode;
   onCollapsedChange?: (collapsed: boolean) => void;
   onRetry?: () => void;
   retryLabel?: ReactNode;
   statusDisplayMode?: "inline" | "badge" | "minimal";
+  surfaceAppearance?: SmartLoadingSurfaceAppearance;
   status: LoadingStatus;
   title: ReactNode;
 };

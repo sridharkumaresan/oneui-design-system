@@ -1,5 +1,5 @@
 import React from "react";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { expectNoAxeViolations } from "@functions-oneui/testing";
@@ -8,7 +8,7 @@ import { SmartProgressBar } from "./SmartProgressBar.js";
 import { renderWithOneUIProvider } from "./test/renderWithOneUIProvider.js";
 
 describe("SmartProgressBar", () => {
-  it("renders the explicit summary counters and progressbar", () => {
+  it("renders slim mode by default and expands to reveal details", () => {
     renderWithOneUIProvider(
       <SmartProgressBar
         completed={4}
@@ -16,7 +16,7 @@ describe("SmartProgressBar", () => {
         empty={1}
         error={1}
         items={[
-          { id: "news", label: "News", status: "success", count: 4 },
+          { count: 4, id: "news", label: "News", status: "success" },
           { id: "people", label: "People", status: "delayed" }
         ]}
         loading={0}
@@ -28,9 +28,14 @@ describe("SmartProgressBar", () => {
       />
     );
 
-    expect(screen.getByText("Enterprise search")).toBeTruthy();
+    const toggle = screen.getByRole("button", { name: /enterprise search/i });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
     expect(screen.getByRole("progressbar")).toBeTruthy();
-    expect(screen.getByText("4 of 7 sources completed • 1 delayed • 1 error")).toBeTruthy();
+
+    fireEvent.click(toggle);
+
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getAllByText("4 of 7 sources completed • 1 delayed • 1 error").length).toBe(2);
     expect(screen.getByText("2 success • 1 empty • 1 delayed • 1 error")).toBeTruthy();
     expect(screen.getByText("News")).toBeTruthy();
     expect(screen.getByText("People")).toBeTruthy();
@@ -38,13 +43,14 @@ describe("SmartProgressBar", () => {
     expect(screen.getByLabelText("People: Delayed")).toBeTruthy();
   });
 
-  it("supports summary-only rendering for embedded page layouts", () => {
+  it("supports full mode for always-expanded rendering", () => {
     renderWithOneUIProvider(
       <SmartProgressBar
         completed={2}
         error={0}
         items={[]}
         loading={1}
+        mode="full"
         percent={67}
         showChips={false}
         success={2}
@@ -55,6 +61,7 @@ describe("SmartProgressBar", () => {
     );
 
     expect(screen.getByText("2 of 3 sections ready")).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /task dashboard/i })).toBeNull();
     expect(screen.queryByRole("list")).toBeNull();
   });
 
@@ -70,6 +77,7 @@ describe("SmartProgressBar", () => {
           { id: "resources", label: "Resources", status: "error" }
         ]}
         loading={1}
+        mode="full"
         success={1}
         title="Enterprise search"
         total={7}
@@ -91,7 +99,7 @@ describe("SmartProgressBar", () => {
         empty={1}
         error={1}
         items={[
-          { id: "news", label: "News", status: "success", count: 4 },
+          { count: 4, id: "news", label: "News", status: "success" },
           { id: "people", label: "People", status: "delayed" }
         ]}
         loading={0}

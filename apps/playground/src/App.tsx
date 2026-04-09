@@ -2,7 +2,6 @@ import React from "react";
 
 import {
   OneUIBadge,
-  OneUIButton,
   OneUIHeading,
   OneUIStack,
   OneUIText
@@ -17,7 +16,8 @@ type DemoRoute = "search" | "tasks";
 export const App = (): React.JSX.Element => {
   const [route, setRoute] = React.useState<DemoRoute>("search");
   const [fluidEnabled, setFluidEnabled] = React.useState(true);
-  const [scale, setScale] = React.useState<OneUIFluidTypographyScale>("expressive");
+  const [scale, setScale] = React.useState<OneUIFluidTypographyScale>("comfortable");
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 
   const fluidTypography = React.useMemo(() => {
     return {
@@ -28,82 +28,104 @@ export const App = (): React.JSX.Element => {
     };
   }, [fluidEnabled, scale]);
 
+  React.useEffect(() => {
+    if (!isSettingsOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsSettingsOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isSettingsOpen]);
+
   return (
     <main className="playground-shell">
       <OneUIStack gap="lg">
-        <header className="playground-header">
-          <OneUIStack gap="sm">
+        <header className="playground-shell-header">
+          <div className="playground-shell-header-brand">
             <OneUIBadge appearance="soft" size="sm" tone="brand">
               Internal showcase
             </OneUIBadge>
-            <OneUIHeading level={1}>OneUI Progressive Loading Patterns</OneUIHeading>
-            <OneUIText tone="secondary">
-              Two realistic product-style demos showing the same organisms and shared loading logic
-              used with different layouts, content, and outcomes.
-            </OneUIText>
-          </OneUIStack>
-          <OneUIStack gap="sm">
-            <div className="playground-nav" role="tablist" aria-label="Demo pages">
-              <OneUIButton
-                appearance={route === "search" ? "primary" : "secondary"}
+            <div className="playground-shell-header-copy">
+              <OneUIHeading level={1}>OneUI Progressive Loading Patterns</OneUIHeading>
+              <OneUIText tone="secondary">
+                Presentable demo surfaces for search and dashboard loading flows.
+              </OneUIText>
+            </div>
+          </div>
+          <div className="playground-shell-header-actions">
+            <div className="playground-settings-segmented" role="tablist" aria-label="Demo pages">
+              <button
+                aria-selected={route === "search"}
+                className={`playground-settings-segment ${route === "search" ? "playground-settings-segment-active" : ""}`}
                 onClick={() => {
                   setRoute("search");
                 }}
                 role="tab"
-                aria-selected={route === "search"}
+                type="button"
               >
                 Enterprise search
-              </OneUIButton>
-              <OneUIButton
-                appearance={route === "tasks" ? "primary" : "secondary"}
+              </button>
+              <button
+                aria-selected={route === "tasks"}
+                className={`playground-settings-segment ${route === "tasks" ? "playground-settings-segment-active" : ""}`}
                 onClick={() => {
                   setRoute("tasks");
                 }}
                 role="tab"
-                aria-selected={route === "tasks"}
+                type="button"
               >
                 Task dashboard
-              </OneUIButton>
+              </button>
             </div>
-            <div className="playground-typography-controls">
-              <label className="playground-control-toggle">
-                <input
-                  checked={fluidEnabled}
-                  onChange={(event) => {
-                    setFluidEnabled(event.target.checked);
-                  }}
-                  type="checkbox"
-                />
-                <span>Fluid typography</span>
-              </label>
-
-              <label className="playground-control-field">
-                <span>Scale</span>
-                <select
-                  className="playground-control-select"
-                  onChange={(event) => {
-                    setScale(event.target.value as OneUIFluidTypographyScale);
-                  }}
-                  value={scale}
-                >
-                  <option value="compact">Compact</option>
-                  <option value="comfortable">Comfortable</option>
-                  <option value="expressive">Expressive</option>
-                </select>
-              </label>
-            </div>
-          </OneUIStack>
+            <button
+              aria-expanded={isSettingsOpen}
+              aria-haspopup="dialog"
+              className="playground-settings-trigger"
+              onClick={() => {
+                setIsSettingsOpen(true);
+              }}
+              type="button"
+            >
+              <span aria-hidden="true" className="playground-settings-trigger-icon">
+                ⚙
+              </span>
+              <span>Settings</span>
+            </button>
+          </div>
         </header>
 
-        <div className="playground-demo-meta">
-          <OneUIText tone="secondary">
-            The live demo below runs under a nested OneUI theme with optional fluid typography. Use
-            browser responsive mode to verify the layout and type scale.
-          </OneUIText>
-        </div>
-
         <OneUIProvider fluidTypography={fluidTypography} mode="light">
-          {route === "search" ? <SearchProgressiveLoadingDemoPage /> : <TaskDashboardDemoPage />}
+          {route === "search" ? (
+            <SearchProgressiveLoadingDemoPage
+              fluidEnabled={fluidEnabled}
+              isSettingsOpen={isSettingsOpen}
+              onCloseSettings={() => {
+                setIsSettingsOpen(false);
+              }}
+              onFluidEnabledChange={setFluidEnabled}
+              onScaleChange={setScale}
+              scale={scale}
+            />
+          ) : (
+            <TaskDashboardDemoPage
+              fluidEnabled={fluidEnabled}
+              isSettingsOpen={isSettingsOpen}
+              onCloseSettings={() => {
+                setIsSettingsOpen(false);
+              }}
+              onFluidEnabledChange={setFluidEnabled}
+              onScaleChange={setScale}
+              scale={scale}
+            />
+          )}
         </OneUIProvider>
       </OneUIStack>
     </main>

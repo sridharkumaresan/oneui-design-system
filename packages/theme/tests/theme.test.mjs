@@ -183,6 +183,40 @@ test("createOneuiTheme supports fluid typography settings across all fluent size
   }
 });
 
+test("createOneuiTheme fluid typography caps the upper bound at the static fluent size", () => {
+  const staticTheme = createOneuiTheme({ mode: "light" });
+  const fluidTheme = createOneuiTheme({
+    mode: "light",
+    fluidTypography: {
+      enabled: true,
+      maxViewport: 1440,
+      minViewport: 320,
+      scale: "expressive"
+    }
+  });
+
+  const toPxString = (value) => {
+    if (typeof value !== "string") {
+      return String(value);
+    }
+
+    if (value.endsWith("rem")) {
+      return `${(Number.parseFloat(value) * 16).toFixed(2)}px`;
+    }
+
+    return value;
+  };
+
+  assert.match(
+    String(fluidTheme.fontSizeHero700),
+    new RegExp(`${toPxString(staticTheme.fontSizeHero700).replace(".", "\\.")}\\)$`)
+  );
+  assert.match(
+    String(fluidTheme.fontSizeBase400),
+    new RegExp(`${toPxString(staticTheme.fontSizeBase400).replace(".", "\\.")}\\)$`)
+  );
+});
+
 test("createOneuiTheme fluid typography also applies to font-size overrides", () => {
   const fluidTheme = createOneuiTheme({
     mode: "light",

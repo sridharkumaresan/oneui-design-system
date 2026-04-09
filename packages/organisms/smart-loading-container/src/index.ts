@@ -4,5 +4,6 @@ export type {
   SmartLoadingContainerProps,
   SmartLoadingLayout,
   SmartLoadingSectionAccentTone,
-  SmartLoadingSectionProps
+  SmartLoadingSectionProps,
+  SmartLoadingSurfaceAppearance
 } from "./SmartLoadingContainer.types.js";
