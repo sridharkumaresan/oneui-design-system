@@ -8,7 +8,6 @@ import {
   OneUIText
 } from "@functions-oneui/atoms";
 import { ActionCard } from "@functions-oneui/organism-action-card";
-import { BrandedHeroBanner } from "@functions-oneui/organism-hero-banner";
 import {
   SmartLoadingContainer,
   SmartLoadingSection
@@ -173,6 +172,7 @@ type TaskDashboardDemoPageProps = {
   isSettingsOpen: boolean;
   onCloseSettings: () => void;
   onFluidEnabledChange: (value: boolean) => void;
+  onOpenSettings: () => void;
   onScaleChange: (scale: OneUIFluidTypographyScale) => void;
   scale: OneUIFluidTypographyScale;
 };
@@ -182,6 +182,7 @@ export const TaskDashboardDemoPage = ({
   isSettingsOpen,
   onCloseSettings,
   onFluidEnabledChange,
+  onOpenSettings,
   onScaleChange,
   scale
 }: TaskDashboardDemoPageProps): React.JSX.Element => {
@@ -243,91 +244,16 @@ export const TaskDashboardDemoPage = ({
   return (
     <OneUIStack gap="lg">
       {isSettingsOpen ? (
-        <div
-          className="playground-settings-overlay"
+        <button
+          aria-hidden="true"
+          className="playground-settings-dismiss"
           onClick={() => {
             onCloseSettings();
           }}
-        >
-          <section
-            aria-labelledby="playground-settings-title"
-            aria-modal="true"
-            className="playground-settings-modal"
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
-            role="dialog"
-          >
-            <div className="playground-settings-modal-header">
-              <OneUIStack gap="xs">
-                <OneUIBadge appearance="soft" size="sm" tone="brand">
-                  Showcase settings
-                </OneUIBadge>
-                <OneUIHeading level={2}>Demo controls</OneUIHeading>
-                <OneUIText id="playground-settings-title" tone="secondary">
-                  Manage route and typography from one frosted control surface.
-                </OneUIText>
-              </OneUIStack>
-              <button
-                aria-label="Close settings"
-                className="playground-settings-close"
-                onClick={() => {
-                  onCloseSettings();
-                }}
-                type="button"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="playground-settings-modal-body">
-              <div className="playground-settings-group">
-                <div className="playground-settings-group-header">
-                  <OneUIHeading level={3}>Showcase</OneUIHeading>
-                  <OneUIText tone="secondary">
-                    Switch demos and adjust the fluid typography system for the whole playground.
-                  </OneUIText>
-                </div>
-                <div className="playground-settings-grid">
-                  <label className="playground-settings-field">
-                    <span className="playground-settings-label">Fluid typography</span>
-                    <span className="playground-settings-toggle">
-                      <input
-                        checked={fluidEnabled}
-                        onChange={(event) => {
-                          onFluidEnabledChange(event.target.checked);
-                        }}
-                        type="checkbox"
-                      />
-                      <span>{fluidEnabled ? "Enabled" : "Disabled"}</span>
-                    </span>
-                  </label>
-
-                  <label className="playground-settings-field">
-                    <span className="playground-settings-label">Typography scale</span>
-                    <select
-                      className="playground-control-select"
-                      onChange={(event) => {
-                        onScaleChange(event.target.value as OneUIFluidTypographyScale);
-                      }}
-                      value={scale}
-                    >
-                      <option value="compact">Compact</option>
-                      <option value="comfortable">Comfortable</option>
-                      <option value="expressive">Expressive</option>
-                    </select>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+          tabIndex={-1}
+          type="button"
+        />
       ) : null}
-
-      <BrandedHeroBanner
-        height="tiny"
-        title="Task Inbox"
-      />
 
       <section className="demo-page-header">
         <div className="playground-toolbar">
@@ -338,6 +264,86 @@ export const TaskDashboardDemoPage = ({
             <OneUIButton appearance="secondary" size="small">
               Export
             </OneUIButton>
+            <div className="playground-settings-flyout-anchor">
+              <OneUIButton
+                appearance={isSettingsOpen ? "primary" : "secondary"}
+                onClick={() => {
+                  if (isSettingsOpen) {
+                    onCloseSettings();
+                    return;
+                  }
+                  onOpenSettings();
+                }}
+                size="small"
+              >
+                Display settings
+              </OneUIButton>
+              {isSettingsOpen ? (
+                <section
+                  aria-labelledby="task-settings-title"
+                  className="playground-settings-flyout playground-settings-flyout-compact"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  role="dialog"
+                >
+                  <div className="playground-settings-flyout-header">
+                    <OneUIStack gap="xs">
+                      <OneUIBadge appearance="soft" size="sm" tone="brand">
+                        Task dashboard
+                      </OneUIBadge>
+                      <OneUIHeading id="task-settings-title" level={3}>
+                        Display settings
+                      </OneUIHeading>
+                    </OneUIStack>
+                    <button
+                      aria-label="Close settings"
+                      className="playground-settings-close"
+                      onClick={() => {
+                        onCloseSettings();
+                      }}
+                      type="button"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="playground-settings-flyout-body">
+                    <div className="playground-settings-group">
+                      <div className="playground-settings-grid">
+                        <label className="playground-settings-field">
+                          <span className="playground-settings-label">Fluid typography</span>
+                          <span className="playground-settings-toggle">
+                            <input
+                              checked={fluidEnabled}
+                              onChange={(event) => {
+                                onFluidEnabledChange(event.target.checked);
+                              }}
+                              type="checkbox"
+                            />
+                            <span>{fluidEnabled ? "Enabled" : "Disabled"}</span>
+                          </span>
+                        </label>
+
+                        <label className="playground-settings-field">
+                          <span className="playground-settings-label">Typography scale</span>
+                          <select
+                            className="playground-control-select"
+                            onChange={(event) => {
+                              onScaleChange(event.target.value as OneUIFluidTypographyScale);
+                            }}
+                            value={scale}
+                          >
+                            <option value="compact">Compact</option>
+                            <option value="comfortable">Comfortable</option>
+                            <option value="expressive">Expressive</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              ) : null}
+            </div>
             <OneUIButton
               size="small"
               onClick={() => {

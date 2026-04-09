@@ -18,15 +18,33 @@ const breakpointCode = `import {
   oneuiBreakpoints
 } from "@functions-oneui/theme";
 
-const stackedCardQuery = createOneUIContainerQueryDown("md", "actionCard");
-const shellWideQuery = createOneUIMediaQueryUp("lg");
-const tabletBreakpoint = oneuiBreakpoints.md; // "768px"`;
+const stackedCardQuery = createOneUIContainerQueryDown("tablet", "actionCard");
+const shellWideQuery = createOneUIMediaQueryUp("desktop");
+const tabletBreakpoint = oneuiBreakpoints.tablet; // "768px"`;
 
 const breakpointSpecs = [
   {
+    name: "mobile",
+    intent: "Primary mobile breakpoint.",
+    usage: "Default handheld baseline for responsive component and shell design."
+  },
+  {
+    name: "tablet",
+    intent: "Primary tablet breakpoint.",
+    usage: "Default stack point for many organisms when horizontal layouts become cramped."
+  },
+  {
+    name: "desktop",
+    intent: "Primary desktop breakpoint.",
+    usage: "Use for the standard wide enterprise desktop canvas at 1440px."
+  }
+];
+
+const legacyBreakpointSpecs = [
+  {
     name: "xs",
-    intent: "Smallest supported mobile viewport baseline.",
-    usage: "Use sparingly for edge-case mobile compression, not as a default design target."
+    intent: "Alias retained for the mobile baseline.",
+    usage: "Equivalent to the 360px mobile baseline."
   },
   {
     name: "sm",
@@ -35,13 +53,13 @@ const breakpointSpecs = [
   },
   {
     name: "md",
-    intent: "Tablet and narrow content-column breakpoint.",
-    usage: "Default stack point for many organisms when horizontal layouts become cramped."
+    intent: "Alias retained for the tablet breakpoint.",
+    usage: "Equivalent to the 768px tablet baseline."
   },
   {
     name: "lg",
-    intent: "Desktop content breakpoint.",
-    usage: "Use for transitioning into roomier two-column or side-by-side layouts."
+    intent: "Legacy desktop content breakpoint.",
+    usage: "Useful for roomier two-column layouts below the 1440px desktop target."
   },
   {
     name: "xl",
@@ -211,7 +229,7 @@ const ResizableLab = ({ theme }) => {
           <div>
             <strong>Observed width: {width || "-"}px</strong>
             <p style={{ color: theme?.colorNeutralForeground3, lineHeight: 1.5, margin: 0 }}>
-              Shared token reference: sm {oneuiBreakpoints.sm}, md {oneuiBreakpoints.md}, lg {oneuiBreakpoints.lg}
+              Shared token reference: mobile {oneuiBreakpoints.mobile}, tablet {oneuiBreakpoints.tablet}, desktop {oneuiBreakpoints.desktop}
             </p>
           </div>
           <SmartBreadcrumb
@@ -367,7 +385,7 @@ const BreakpointPage = () => {
         <div>
           <h2 style={{ margin: 0 }}>Breakpoint contract</h2>
           <p style={leadStyle}>
-            The values below are the shared source of truth exported from @functions-oneui/tokens and re-exported from @functions-oneui/theme.
+            The values below are the shared source of truth exported from @functions-oneui/tokens and re-exported from @functions-oneui/theme. OneUI now exposes semantic aliases for the primary mobile, tablet, and desktop breakpoints while retaining the older scale for compatibility.
           </p>
         </div>
         <div style={panelStyle}>
@@ -423,9 +441,59 @@ const BreakpointPage = () => {
           </p>
         </div>
         <div style={{ display: "grid", gap: theme?.spacingHorizontalL ?? "1rem", gridTemplateColumns: "1fr" }}>
-          {breakpointSpecs.slice(0, 4).map((spec) => (
+          {breakpointSpecs.map((spec) => (
             <PreviewCanvas key={spec.name} theme={theme} widthLabel={spec.name} widthValue={oneuiBreakpoints[spec.name]} />
           ))}
+        </div>
+      </section>
+
+      <section style={{ display: "grid", gap: theme?.spacingVerticalL ?? "1rem" }}>
+        <div>
+          <h2 style={{ margin: 0 }}>Legacy compatibility scale</h2>
+          <p style={leadStyle}>
+            Existing responsive work can continue using the original aliases. These remain available so current organisms do not break while new work can target the semantic mobile, tablet, and desktop keys.
+          </p>
+        </div>
+        <div style={panelStyle}>
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={headerCellStyle}>Token</th>
+                <th style={headerCellStyle}>Value</th>
+                <th style={headerCellStyle}>Intent</th>
+                <th style={headerCellStyle}>Viewport query</th>
+                <th style={headerCellStyle}>Container query</th>
+              </tr>
+            </thead>
+            <tbody>
+              {legacyBreakpointSpecs.map((spec) => (
+                <tr key={spec.name}>
+                  <td style={bodyCellStyle}>
+                    <strong>{spec.name}</strong>
+                    <div style={{ ...leadStyle, fontSize: theme?.fontSizeBase200 }}>{spec.usage}</div>
+                  </td>
+                  <td style={bodyCellStyle}>
+                    <code style={{ fontFamily: theme?.fontFamilyMonospace }}>{oneuiBreakpoints[spec.name]}</code>
+                  </td>
+                  <td style={bodyCellStyle}>{spec.intent}</td>
+                  <td style={bodyCellStyle}>
+                    <code style={{ fontFamily: theme?.fontFamilyMonospace }}>{createOneUIMediaQueryUp(spec.name)}</code>
+                    <br />
+                    <code style={{ fontFamily: theme?.fontFamilyMonospace }}>{createOneUIMediaQueryDown(spec.name)}</code>
+                  </td>
+                  <td style={bodyCellStyle}>
+                    <code style={{ fontFamily: theme?.fontFamilyMonospace }}>
+                      {createOneUIContainerQueryUp(spec.name, "examplePanel")}
+                    </code>
+                    <br />
+                    <code style={{ fontFamily: theme?.fontFamilyMonospace }}>
+                      {createOneUIContainerQueryDown(spec.name, "examplePanel")}
+                    </code>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 

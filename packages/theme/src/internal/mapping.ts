@@ -128,10 +128,13 @@ export const semanticPathToThemeKeyMap = {
   },
   breakpoints: {
     xs: "oneuiBreakpointXs",
+    mobile: "oneuiBreakpointMobile",
     sm: "oneuiBreakpointSm",
     md: "oneuiBreakpointMd",
+    tablet: "oneuiBreakpointTablet",
     lg: "oneuiBreakpointLg",
     xl: "oneuiBreakpointXl",
+    desktop: "oneuiBreakpointDesktop",
     xxl: "oneuiBreakpointXxl"
   }
 };

@@ -162,10 +162,13 @@ export const semanticTokenContract = {
   },
   breakpoints: {
     xs: "",
+    mobile: "",
     sm: "",
     md: "",
+    tablet: "",
     lg: "",
     xl: "",
+    desktop: "",
     xxl: ""
   }
 };
@@ -276,5 +279,5 @@ export const requiredSemanticTokenPaths = {
   radius: ["none", "sm", "md", "lg", "full"],
   shadows: ["sm", "md", "lg", "xl", "focusRing"],
   components: ["button.typography.fontWeight"],
-  breakpoints: ["xs", "sm", "md", "lg", "xl", "xxl"]
+  breakpoints: ["xs", "mobile", "sm", "md", "tablet", "lg", "xl", "desktop", "xxl"]
 };

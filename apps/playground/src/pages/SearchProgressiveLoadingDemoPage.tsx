@@ -11,7 +11,6 @@ import {
 import { IllustratedState } from "@functions-oneui/organism-illustrated-state";
 import { SmartLoadingSection } from "@functions-oneui/organism-smart-loading-container";
 import { SmartProgressBar } from "@functions-oneui/organism-smart-progress-bar";
-import { BrandedHeroBanner } from "@functions-oneui/organism-hero-banner";
 import { useLoadingCoordinator } from "@functions-oneui/react-utils/progressive-loading";
 import { type OneUIFluidTypographyScale } from "@functions-oneui/theme";
 
@@ -232,7 +231,9 @@ type SearchProgressiveLoadingDemoPageProps = {
   isSettingsOpen: boolean;
   onCloseSettings: () => void;
   onFluidEnabledChange: (value: boolean) => void;
+  onOpenSettings: () => void;
   onScaleChange: (scale: OneUIFluidTypographyScale) => void;
+  query: string;
   scale: OneUIFluidTypographyScale;
 };
 
@@ -241,10 +242,11 @@ export const SearchProgressiveLoadingDemoPage = ({
   isSettingsOpen,
   onCloseSettings,
   onFluidEnabledChange,
+  onOpenSettings,
   onScaleChange,
+  query,
   scale
 }: SearchProgressiveLoadingDemoPageProps): React.JSX.Element => {
-  const [query, setQuery] = React.useState("sa");
   const [selectedPreset, setSelectedPreset] = React.useState<SearchDemoPresetId>("mixed");
   const [globalEmpty, setGlobalEmpty] = React.useState(false);
   const [visualStates, setVisualStates] = React.useState<
@@ -379,239 +381,27 @@ export const SearchProgressiveLoadingDemoPage = ({
   const mainSections = searchDemoSections.filter((section) => section.column === "main");
   const railSections = searchDemoSections.filter((section) => section.column === "rail");
   const visibleResultStats = globalEmpty ? { end: 0, start: 0, total: 0 } : searchDemoResultStats;
+  const visibleQuery = query.trim() || "leave policy";
 
   return (
     <OneUIStack gap="lg">
       {isSettingsOpen ? (
-        <div
-          className="playground-settings-overlay"
+        <button
+          aria-hidden="true"
+          className="playground-settings-dismiss"
           onClick={() => {
             onCloseSettings();
           }}
-        >
-          <section
-            aria-labelledby="playground-settings-title"
-            aria-modal="true"
-            className="playground-settings-modal"
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
-            role="dialog"
-          >
-            <div className="playground-settings-modal-header">
-              <OneUIStack gap="xs">
-                <OneUIBadge appearance="soft" size="sm" tone="brand">
-                  Showcase settings
-                </OneUIBadge>
-                <OneUIHeading level={2}>Demo controls</OneUIHeading>
-                <OneUIText id="playground-settings-title" tone="secondary">
-                  Manage route, typography, and search preview states in one polished overlay.
-                </OneUIText>
-              </OneUIStack>
-              <button
-                aria-label="Close settings"
-                className="playground-settings-close"
-                onClick={() => {
-                  onCloseSettings();
-                }}
-                type="button"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="playground-settings-modal-body">
-              <div className="playground-settings-group">
-                <div className="playground-settings-group-header">
-                  <OneUIHeading level={3}>Showcase</OneUIHeading>
-                  <OneUIText tone="secondary">
-                    Adjust the fluid typography system and preview behavior for the entire page.
-                  </OneUIText>
-                </div>
-                <div className="playground-settings-grid">
-                  <label className="playground-settings-field">
-                    <span className="playground-settings-label">Fluid typography</span>
-                    <span className="playground-settings-toggle">
-                      <input
-                        checked={fluidEnabled}
-                        onChange={(event) => {
-                          onFluidEnabledChange(event.target.checked);
-                        }}
-                        type="checkbox"
-                      />
-                      <span>{fluidEnabled ? "Enabled" : "Disabled"}</span>
-                    </span>
-                  </label>
-
-                  <label className="playground-settings-field">
-                    <span className="playground-settings-label">Typography scale</span>
-                    <select
-                      className="playground-control-select"
-                      onChange={(event) => {
-                        onScaleChange(event.target.value as OneUIFluidTypographyScale);
-                      }}
-                      value={scale}
-                    >
-                      <option value="compact">Compact</option>
-                      <option value="comfortable">Comfortable</option>
-                      <option value="expressive">Expressive</option>
-                    </select>
-                  </label>
-                </div>
-              </div>
-
-              <div className="playground-settings-group">
-                <div className="playground-settings-group-header">
-                  <OneUIHeading level={3}>Search preview</OneUIHeading>
-                  <OneUIText tone="secondary">
-                    Preset: {searchDemoPresets.find((preset) => preset.id === selectedPreset)?.label} •{" "}
-                    {coordinator.progress.completed}/{coordinator.progress.total} sources settled
-                  </OneUIText>
-                </div>
-
-                <div className="playground-settings-grid">
-                  <div className="playground-settings-field">
-                    <span className="playground-settings-label">Scenario presets</span>
-                    <div className="search-demo-preset-list">
-                      {searchDemoPresets.map((preset) => (
-                        <button
-                          className={`search-chip-button ${preset.id === selectedPreset ? "search-chip-button-active" : ""}`}
-                          key={preset.id}
-                          onClick={() => {
-                            applyPresetInstant(preset.id);
-                          }}
-                          type="button"
-                        >
-                          {preset.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="playground-settings-field">
-                    <span className="playground-settings-label">Quick actions</span>
-                    <div className="search-demo-controls-actions">
-                      <button
-                        aria-pressed={globalEmpty}
-                        className={`search-toggle ${globalEmpty ? "search-toggle-active" : ""}`}
-                        onClick={() => {
-                          setGlobalEmpty((current) => !current);
-                        }}
-                        type="button"
-                      >
-                        Global Empty
-                      </button>
-                      <OneUIButton
-                        onClick={() => {
-                          runSimulation(selectedPreset);
-                        }}
-                      >
-                        Simulate
-                      </OneUIButton>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="playground-settings-field">
-                  <span className="playground-settings-label">Section overrides</span>
-                  <div className="search-demo-state-grid">
-                    {searchDemoSections.map((section) => {
-                      const currentSection = sectionMap.get(section.id);
-
-                      return (
-                        <div className="search-demo-state-row" key={section.id}>
-                          <OneUIText>{section.title}</OneUIText>
-                          <div className="search-demo-state-options">
-                            {(["loaded", "loading", "slow", "error", "empty"] as const).map((state) => {
-                              const targetStatus =
-                                state === "loaded"
-                                  ? "success"
-                                  : state === "slow"
-                                    ? "delayed"
-                                    : state;
-                              const isActive = currentSection?.status === targetStatus;
-
-                              return (
-                                <button
-                                  className={`search-state-pill search-state-${state} ${isActive ? "search-state-pill-active" : ""}`}
-                                  key={state}
-                                  onClick={() => {
-                                    clearSimulation();
-                                    setVisualStates((currentState) => ({
-                                      ...currentState,
-                                      [section.id]: state
-                                    }));
-                                  }}
-                                  type="button"
-                                >
-                                  {state}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+          tabIndex={-1}
+          type="button"
+        />
       ) : null}
-
-      <BrandedHeroBanner
-        description="Welcome to Connections. Explore a refined progressive search experience below."
-        footer={
-          <div className="search-demo-support-links">
-            <span>Suggested:</span>
-            <button type="button">IT Policies</button>
-            <button type="button">Leave Policy</button>
-            <button type="button">Laptop Request</button>
-            <button type="button">Benefits</button>
-          </div>
-        }
-        headingLevel={1}
-        height="comfortable"
-        supportingContent={
-          <div className="search-demo-hero-search-panel">
-            <div className="search-demo-hero-search">
-              <label className="search-demo-hero-search-field">
-                <span aria-hidden="true" className="search-demo-search-leading-icon">
-                  ⌕
-                </span>
-                <input
-                  aria-label="Search query"
-                  className="search-demo-hero-search-native-input"
-                  onChange={(event) => {
-                    setQuery(event.target.value);
-                  }}
-                  placeholder="Search across enterprise systems"
-                  type="text"
-                  value={query}
-                />
-              </label>
-              <div className="search-demo-hero-search-actions" role="group" aria-label="Search actions">
-                <button className="search-demo-hero-search-primary" type="button">
-                  <span aria-hidden="true">⌕</span>
-                  <span>Search</span>
-                </button>
-                <button className="search-demo-hero-search-secondary" type="button">
-                  <span aria-hidden="true">✦</span>
-                  <span>AI Mode</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        }
-        title="Good morning, Hemal"
-      />
 
       <section className="search-results-shell">
         <div className="search-results-topbar">
           <OneUIText tone="secondary">
             Showing {visibleResultStats.start}–{visibleResultStats.end} of{" "}
-            {visibleResultStats.total} results for "{query}"
+            {visibleResultStats.total} results for "{visibleQuery}"
           </OneUIText>
           <div className="search-results-topbar-actions">
             <OneUIButton appearance="secondary" size="small">
@@ -620,6 +410,189 @@ export const SearchProgressiveLoadingDemoPage = ({
             <OneUIButton appearance="secondary" size="small">
               Filters
             </OneUIButton>
+            <div className="playground-settings-flyout-anchor">
+              <OneUIButton
+                appearance={isSettingsOpen ? "primary" : "secondary"}
+                onClick={() => {
+                  if (isSettingsOpen) {
+                    onCloseSettings();
+                    return;
+                  }
+                  onOpenSettings();
+                }}
+                size="small"
+              >
+                Preview settings
+              </OneUIButton>
+              {isSettingsOpen ? (
+                <section
+                  aria-labelledby="playground-settings-title"
+                  className="playground-settings-flyout"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  role="dialog"
+                >
+                  <div className="playground-settings-flyout-header">
+                    <OneUIStack gap="xs">
+                      <OneUIBadge appearance="soft" size="sm" tone="brand">
+                        Search preview
+                      </OneUIBadge>
+                      <OneUIHeading id="playground-settings-title" level={3}>
+                        Demo settings
+                      </OneUIHeading>
+                      <OneUIText tone="secondary">
+                        Typography and section-state controls without leaving the page.
+                      </OneUIText>
+                    </OneUIStack>
+                    <button
+                      aria-label="Close settings"
+                      className="playground-settings-close"
+                      onClick={() => {
+                        onCloseSettings();
+                      }}
+                      type="button"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  <div className="playground-settings-flyout-body">
+                    <div className="playground-settings-group">
+                      <div className="playground-settings-group-header">
+                        <OneUIHeading level={3}>Typography</OneUIHeading>
+                      </div>
+                      <div className="playground-settings-grid">
+                        <label className="playground-settings-field">
+                          <span className="playground-settings-label">Fluid typography</span>
+                          <span className="playground-settings-toggle">
+                            <input
+                              checked={fluidEnabled}
+                              onChange={(event) => {
+                                onFluidEnabledChange(event.target.checked);
+                              }}
+                              type="checkbox"
+                            />
+                            <span>{fluidEnabled ? "Enabled" : "Disabled"}</span>
+                          </span>
+                        </label>
+
+                        <label className="playground-settings-field">
+                          <span className="playground-settings-label">Typography scale</span>
+                          <select
+                            className="playground-control-select"
+                            onChange={(event) => {
+                              onScaleChange(event.target.value as OneUIFluidTypographyScale);
+                            }}
+                            value={scale}
+                          >
+                            <option value="compact">Compact</option>
+                            <option value="comfortable">Comfortable</option>
+                            <option value="expressive">Expressive</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="playground-settings-group">
+                      <div className="playground-settings-group-header">
+                        <OneUIHeading level={3}>Search preview</OneUIHeading>
+                        <OneUIText tone="secondary">
+                          Preset: {searchDemoPresets.find((preset) => preset.id === selectedPreset)?.label} •{" "}
+                          {coordinator.progress.completed}/{coordinator.progress.total} sources settled
+                        </OneUIText>
+                      </div>
+
+                      <div className="playground-settings-grid">
+                        <div className="playground-settings-field">
+                          <span className="playground-settings-label">Scenario presets</span>
+                          <div className="search-demo-preset-list">
+                            {searchDemoPresets.map((preset) => (
+                              <button
+                                className={`search-chip-button ${preset.id === selectedPreset ? "search-chip-button-active" : ""}`}
+                                key={preset.id}
+                                onClick={() => {
+                                  applyPresetInstant(preset.id);
+                                }}
+                                type="button"
+                              >
+                                {preset.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="playground-settings-field">
+                          <span className="playground-settings-label">Quick actions</span>
+                          <div className="search-demo-controls-actions">
+                            <button
+                              aria-pressed={globalEmpty}
+                              className={`search-toggle ${globalEmpty ? "search-toggle-active" : ""}`}
+                              onClick={() => {
+                                setGlobalEmpty((current) => !current);
+                              }}
+                              type="button"
+                            >
+                              Global Empty
+                            </button>
+                            <OneUIButton
+                              onClick={() => {
+                                runSimulation(selectedPreset);
+                              }}
+                            >
+                              Simulate
+                            </OneUIButton>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="playground-settings-field">
+                        <span className="playground-settings-label">Section overrides</span>
+                        <div className="search-demo-state-grid">
+                          {searchDemoSections.map((section) => {
+                            const currentSection = sectionMap.get(section.id);
+
+                            return (
+                              <div className="search-demo-state-row" key={section.id}>
+                                <OneUIText>{section.title}</OneUIText>
+                                <div className="search-demo-state-options">
+                                  {(["loaded", "loading", "slow", "error", "empty"] as const).map((state) => {
+                                    const targetStatus =
+                                      state === "loaded"
+                                        ? "success"
+                                        : state === "slow"
+                                          ? "delayed"
+                                          : state;
+                                    const isActive = currentSection?.status === targetStatus;
+
+                                    return (
+                                      <button
+                                        className={`search-state-pill search-state-${state} ${isActive ? "search-state-pill-active" : ""}`}
+                                        key={state}
+                                        onClick={() => {
+                                          clearSimulation();
+                                          setVisualStates((currentState) => ({
+                                            ...currentState,
+                                            [section.id]: state
+                                          }));
+                                        }}
+                                        type="button"
+                                      >
+                                        {state}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              ) : null}
+            </div>
           </div>
         </div>
 
@@ -646,7 +619,7 @@ export const SearchProgressiveLoadingDemoPage = ({
           />
           {globalEmpty ? (
             <IllustratedState
-              description={`No results were found across your connected systems for "${query}". Try a broader search, preview another preset, or switch off Global Empty to inspect section-level states.`}
+              description={`No results were found across your connected systems for "${visibleQuery}". Try a broader search, preview another preset, or switch off Global Empty to inspect section-level states.`}
               primaryAction={{
                 label: "Turn off Global Empty",
                 onClick: () => {
@@ -660,7 +633,7 @@ export const SearchProgressiveLoadingDemoPage = ({
                   applyPresetInstant("mixed");
                 }
               }}
-              title={`No results found for "${query}"`}
+              title={`No results found for "${visibleQuery}"`}
               variant="no-results"
             />
           ) : (

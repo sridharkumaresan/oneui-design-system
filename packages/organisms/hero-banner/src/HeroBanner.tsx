@@ -32,9 +32,8 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
   } = props;
   const surfaces = useOneUISurfaces();
   const titleId = useOneUIId("oneui-hero-banner-title");
-  const descriptionId = description
-    ? useOneUIId("oneui-hero-banner-description")
-    : undefined;
+  const heroBannerDescriptionId = useOneUIId("oneui-hero-banner-description");
+  const descriptionId = description ? heroBannerDescriptionId : undefined;
   const resolvedSurfaceKey = resolveOneUISurfaceVariantKey(surfaceKey);
   const resolvedSurface = surfaces[resolvedSurfaceKey];
   const resolvedContentTone =
