@@ -90,15 +90,32 @@ const getStatusBreakdownText = ({
 };
 
 const StatusGlyph = ({
+  accentTone,
   status
 }: {
+  accentTone?: SmartProgressBarItem["accentTone"];
   status: LoadingStatus;
 }): React.JSX.Element => {
   const classNames = useSmartProgressBarClassNames();
+  const accentClassName =
+    accentTone === "brand"
+      ? classNames.statusGlyphAccentBrand
+      : accentTone === "info"
+        ? classNames.statusGlyphAccentInfo
+        : accentTone === "success"
+          ? classNames.statusGlyphAccentSuccess
+          : accentTone === "warning"
+            ? classNames.statusGlyphAccentWarning
+            : accentTone === "danger"
+              ? classNames.statusGlyphAccentDanger
+              : classNames.statusGlyphAccentNeutral;
 
   if (status === "success") {
     return (
-      <span aria-hidden="true" className={classNames.statusGlyphSuccess}>
+      <span
+        aria-hidden="true"
+        className={mergeClasses(classNames.statusGlyphBase, accentClassName, classNames.statusGlyphSuccess)}
+      >
         <span className={classNames.statusGlyphSuccessMark} />
       </span>
     );
@@ -106,7 +123,10 @@ const StatusGlyph = ({
 
   if (status === "error") {
     return (
-      <span aria-hidden="true" className={classNames.statusGlyphError}>
+      <span
+        aria-hidden="true"
+        className={mergeClasses(classNames.statusGlyphBase, accentClassName, classNames.statusGlyphError)}
+      >
         <span className={classNames.statusGlyphErrorMark} />
       </span>
     );
@@ -114,7 +134,10 @@ const StatusGlyph = ({
 
   if (status === "empty") {
     return (
-      <span aria-hidden="true" className={classNames.statusGlyphEmpty}>
+      <span
+        aria-hidden="true"
+        className={mergeClasses(classNames.statusGlyphBase, accentClassName, classNames.statusGlyphEmpty)}
+      >
         <span className={classNames.statusGlyphEmptyMark} />
       </span>
     );
@@ -124,14 +147,21 @@ const StatusGlyph = ({
     return (
       <span
         aria-hidden="true"
-        className={
+        className={mergeClasses(
+          classNames.statusGlyphBase,
+          accentClassName,
           status === "delayed" ? classNames.statusGlyphDelayed : classNames.statusGlyphLoading
-        }
+        )}
       />
     );
   }
 
-  return <span aria-hidden="true" className={classNames.statusGlyphIdle} />;
+  return (
+    <span
+      aria-hidden="true"
+      className={mergeClasses(classNames.statusGlyphBase, accentClassName, classNames.statusGlyphIdle)}
+    />
+  );
 };
 
 const getDefaultSummaryText = ({
@@ -257,7 +287,7 @@ export const SmartProgressBar = (props: SmartProgressBarProps): React.JSX.Elemen
             ) : null}
           </div>
           <div className={classNames.headerRight}>
-            <span className={classNames.metricBadge}>
+            <span className={mergeClasses(classNames.metricBadge, classNames.metricBadgeSlim)}>
               <span className={classNames.metricBadgeValue}>{completed}</span>
               <span className={classNames.metricBadgeTotal}>/{total}</span>
             </span>
@@ -336,12 +366,20 @@ export const SmartProgressBar = (props: SmartProgressBarProps): React.JSX.Elemen
                     <OneUIBadge
                       aria-label={getItemAriaLabel(item)}
                       appearance={statusAppearanceMap[item.status]}
-                      icon={<StatusGlyph status={item.status} />}
+                      className={classNames.itemBadge}
+                      icon={<StatusGlyph accentTone={item.accentTone ?? item.tone} status={item.status} />}
                       shape="pill"
                       size="sm"
-                      tone={statusToneMap[item.status]}
+                      tone={item.accentTone ?? item.tone ?? statusToneMap[item.status]}
                     >
-                      <span className={classNames.itemLabel}>{item.label}</span>
+                      <span
+                        className={mergeClasses(
+                          classNames.itemLabel,
+                          typeof item.count === "number" ? classNames.itemLabelWithCount : undefined
+                        )}
+                      >
+                        {item.label}
+                      </span>
                     </OneUIBadge>
                   </li>
                 ))}

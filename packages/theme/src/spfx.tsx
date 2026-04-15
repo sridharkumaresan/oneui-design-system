@@ -97,11 +97,11 @@ export const createOneuiThemeOverridesFromSpfxTheme = (
       colorNeutralForegroundDisabled:
         semanticColors.disabledBodyText ?? palette.neutralTertiary,
       colorNeutralForegroundOnBrand:
-        semanticColors.primaryButtonText ?? palette.white,
+        semanticColors.primaryButtonText ?? palette.white ?? "#ffffff",
       colorNeutralForegroundOnBrandHover:
-        semanticColors.primaryButtonTextHovered ?? palette.white,
+        semanticColors.primaryButtonTextHovered ?? semanticColors.primaryButtonText ?? palette.white ?? "#ffffff",
       colorNeutralForegroundOnBrandPressed:
-        semanticColors.primaryButtonTextHovered ?? palette.white,
+        semanticColors.primaryButtonTextHovered ?? semanticColors.primaryButtonText ?? palette.white ?? "#ffffff",
       colorNeutralStroke1: semanticColors.inputBorder ?? palette.neutralLight,
       colorNeutralStroke1Hover:
         semanticColors.inputBorderHovered ?? palette.neutralLight,

@@ -71,10 +71,10 @@ describe("SmartProgressBar", () => {
         completed={3}
         error={1}
         items={[
-          { id: "news", label: "News", status: "success" },
-          { id: "people", label: "People", status: "loading" },
-          { id: "files", label: "Files", status: "empty" },
-          { id: "resources", label: "Resources", status: "error" }
+          { accentTone: "brand", id: "news", label: "News", status: "success" },
+          { accentTone: "success", id: "people", label: "People", status: "loading" },
+          { accentTone: "warning", id: "files", label: "Files", status: "empty" },
+          { accentTone: "danger", id: "resources", label: "Resources", status: "error" }
         ]}
         loading={1}
         mode="full"
@@ -89,6 +89,36 @@ describe("SmartProgressBar", () => {
     expect(chips.every((chip) => chip.getAttribute("data-oneui-badge-appearance") === "soft")).toBe(
       true
     );
+    expect(chips.map((chip) => chip.getAttribute("data-oneui-badge-tone"))).toEqual([
+      "brand",
+      "success",
+      "warning",
+      "danger"
+    ]);
+  });
+
+  it("prefers the shared accentTone prop for chip theming", () => {
+    const { container } = renderWithOneUIProvider(
+      <SmartProgressBar
+        completed={1}
+        items={[
+          {
+            accentTone: "warning",
+            id: "sites",
+            label: "Sites",
+            status: "loading",
+            tone: "brand"
+          }
+        ]}
+        loading={1}
+        mode="full"
+        title="Enterprise search"
+        total={3}
+      />
+    );
+
+    const chip = container.querySelector("[data-oneui-badge-tone]");
+    expect(chip?.getAttribute("data-oneui-badge-tone")).toBe("warning");
   });
 
   it("has no obvious axe violations", async () => {

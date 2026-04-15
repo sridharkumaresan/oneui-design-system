@@ -1,12 +1,15 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
 import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loading";
+import type { OneUIBadgeTone } from "@functions-oneui/atoms";
 
 export type SmartProgressBarItem = {
+  accentTone?: OneUIBadgeTone;
   count?: number;
   id: string;
   label: ReactNode;
   status: LoadingStatus;
+  tone?: OneUIBadgeTone;
 };
 
 export type SmartProgressBarMode = "full" | "slim";

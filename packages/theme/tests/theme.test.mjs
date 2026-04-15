@@ -569,3 +569,24 @@ test("OneUISpfxProvider applies SharePoint theme overrides while preserving OneU
   assert.equal(themedBackground, "#f5f5f5");
   assert.equal(gradientName, "deepSpectrum");
 });
+
+test("createOneuiThemeFromSpfxTheme preserves base theme tokens when SPFx overrides are partial", () => {
+  const theme = createOneuiThemeFromSpfxTheme({
+    palette: {
+      themePrimary: "#0078d4"
+    },
+    semanticColors: {
+      bodyBackground: "#f5f5f5"
+    }
+  });
+
+  assert.equal(theme.colorNeutralBackground1, "#f5f5f5");
+  assert.ok(typeof theme.colorBrandBackground === "string" && theme.colorBrandBackground.length > 0);
+  assert.ok(
+    typeof theme.colorNeutralForeground1 === "string" && theme.colorNeutralForeground1.length > 0
+  );
+  assert.ok(
+    typeof theme.oneuiColorBackgroundCanvas === "string" &&
+      theme.oneuiColorBackgroundCanvas.length > 0
+  );
+});

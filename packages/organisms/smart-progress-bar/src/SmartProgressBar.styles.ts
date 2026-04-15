@@ -1,6 +1,12 @@
 import { makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
 
 const spinnerSize = "0.75rem";
+const oneuiColorBackgroundBrandStrong = "var(--oneuiColorBackgroundBrandStrong)";
+const oneuiColorStatusInfo = "var(--oneuiColorStatusInfo)";
+const oneuiColorTextInfo = "var(--oneuiColorTextInfo)";
+const oneuiColorTextSuccess = "var(--oneuiColorTextSuccess)";
+const oneuiColorTextWarning = "var(--oneuiColorTextWarning)";
+const oneuiColorTextDanger = "var(--oneuiColorTextDanger)";
 
 const useStyles = makeStyles({
   root: {
@@ -80,30 +86,42 @@ const useStyles = makeStyles({
   },
   metricBadge: {
     alignItems: "center",
-    background: `linear-gradient(135deg, ${tokens.colorBrandBackground} 0%, ${tokens.colorPaletteLightTealBackground2} 100%)`,
-    borderBottom: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
-    borderLeft: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
+    background: `linear-gradient(135deg, ${oneuiColorBackgroundBrandStrong} 0%, ${tokens.colorBrandBackground} 100%)`,
+    borderBottom: `1px solid ${tokens.colorBrandStroke1}`,
+    borderLeft: `1px solid ${tokens.colorBrandStroke1}`,
     borderRadius: tokens.borderRadiusCircular,
-    borderRight: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
-    borderTop: `1px solid color-mix(in srgb, ${tokens.colorBrandStroke1} 72%, ${tokens.colorPaletteLightTealBorderActive} 28%)`,
-    boxShadow: `0 8px 18px color-mix(in srgb, ${tokens.colorBrandBackground} 18%, transparent)`,
+    borderRight: `1px solid ${tokens.colorBrandStroke1}`,
+    borderTop: `1px solid ${tokens.colorBrandStroke1}`,
+    boxShadow: `0 4px 10px color-mix(in srgb, ${tokens.colorBrandBackground} 14%, transparent)`,
     color: tokens.colorNeutralForegroundOnBrand,
     display: "inline-flex",
-    fontSize: tokens.fontSizeBase200,
+    fontSize: tokens.fontSizeBase100,
     fontWeight: tokens.fontWeightSemibold,
     gap: tokens.spacingHorizontalXS,
-    lineHeight: tokens.lineHeightBase200,
-    minHeight: "2rem",
-    paddingBottom: "0.25rem",
-    paddingLeft: tokens.spacingHorizontalM,
-    paddingRight: tokens.spacingHorizontalM,
-    paddingTop: "0.25rem"
+    justifyContent: "center",
+    lineHeight: tokens.lineHeightBase100,
+    minHeight: "1.5rem",
+    minWidth: "2.75rem",
+    paddingBottom: "0.125rem",
+    paddingLeft: "0.625rem",
+    paddingRight: "0.625rem",
+    paddingTop: "0.125rem",
+    whiteSpace: "nowrap"
+  },
+  metricBadgeSlim: {
+    gap: "0.125rem",
+    minWidth: "unset",
+    paddingLeft: "0.5rem",
+    paddingRight: "0.5rem"
   },
   metricBadgeValue: {
-    fontSize: tokens.fontSizeBase300
+    fontVariantNumeric: "tabular-nums",
+    fontSize: tokens.fontSizeBase200,
+    lineHeight: 1
   },
   metricBadgeTotal: {
     color: "color-mix(in srgb, white 82%, transparent)",
+    fontVariantNumeric: "tabular-nums",
     fontWeight: tokens.fontWeightMedium
   },
   chevronButtonGlyph: {
@@ -161,15 +179,15 @@ const useStyles = makeStyles({
   meterTrack: {
     backgroundColor: tokens.colorNeutralBackground3,
     borderRadius: tokens.borderRadiusCircular,
-    height: "0.375rem",
+    height: "0.5rem",
     overflow: "hidden",
     width: "100%"
   },
   meterTrackSlim: {
-    height: "0.25rem"
+    height: "0.3125rem"
   },
   meterFill: {
-    backgroundColor: tokens.colorBrandBackground,
+    background: `linear-gradient(90deg, ${tokens.colorBrandBackground} 0%, ${oneuiColorStatusInfo} 100%)`,
     borderRadius: tokens.borderRadiusCircular,
     height: "100%",
     transitionDuration: tokens.durationSlower,
@@ -191,12 +209,42 @@ const useStyles = makeStyles({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap"
   },
+  itemLabelWithCount: {
+    paddingRight: tokens.spacingHorizontalXXS
+  },
+  itemBadge: {
+    transitionDuration: tokens.durationNormal,
+    transitionProperty: "background-color, border-color, color",
+    transitionTimingFunction: tokens.curveEasyEase
+  },
+  statusGlyphBase: {
+    color: "currentColor",
+    flexShrink: 0
+  },
+  statusGlyphAccentBrand: {
+    color: tokens.colorBrandForeground1
+  },
+  statusGlyphAccentInfo: {
+    color: oneuiColorTextInfo
+  },
+  statusGlyphAccentSuccess: {
+    color: oneuiColorTextSuccess
+  },
+  statusGlyphAccentWarning: {
+    color: oneuiColorTextWarning
+  },
+  statusGlyphAccentDanger: {
+    color: oneuiColorTextDanger
+  },
+  statusGlyphAccentNeutral: {
+    color: tokens.colorNeutralForeground3
+  },
   statusGlyphIdle: {
-    backgroundColor: tokens.colorNeutralForeground4,
+    backgroundColor: "currentColor",
     borderRadius: tokens.borderRadiusCircular,
     display: "inline-block",
     height: spinnerSize,
-    opacity: 0.8,
+    opacity: 0.45,
     width: spinnerSize
   },
   statusGlyphLoading: {
@@ -211,11 +259,11 @@ const useStyles = makeStyles({
       }
     },
     animationTimingFunction: "linear",
-    borderBottom: `1.5px solid ${tokens.colorBrandForeground1}`,
-    borderLeft: `1.5px solid ${tokens.colorNeutralStroke2}`,
+    borderBottom: "1.5px solid currentColor",
+    borderLeft: `1.5px solid color-mix(in srgb, currentColor 26%, transparent)`,
     borderRadius: tokens.borderRadiusCircular,
-    borderRight: `1.5px solid ${tokens.colorNeutralStroke2}`,
-    borderTop: `1.5px solid ${tokens.colorNeutralStroke2}`,
+    borderRight: `1.5px solid color-mix(in srgb, currentColor 26%, transparent)`,
+    borderTop: `1.5px solid color-mix(in srgb, currentColor 26%, transparent)`,
     boxSizing: "border-box",
     display: "inline-block",
     height: spinnerSize,
@@ -239,79 +287,47 @@ const useStyles = makeStyles({
       }
     },
     animationTimingFunction: "ease-in-out",
-    borderBottom: `1.5px solid ${tokens.colorNeutralForeground3}`,
-    borderLeft: `1.5px solid ${tokens.colorNeutralStroke2}`,
+    borderBottom: "1.5px solid currentColor",
+    borderLeft: `1.5px solid color-mix(in srgb, currentColor 28%, transparent)`,
     borderRadius: tokens.borderRadiusCircular,
-    borderRight: `1.5px solid ${tokens.colorNeutralStroke2}`,
-    borderTop: `1.5px solid ${tokens.colorNeutralStroke2}`,
+    borderRight: `1.5px solid color-mix(in srgb, currentColor 28%, transparent)`,
+    borderTop: `1.5px solid color-mix(in srgb, currentColor 28%, transparent)`,
     boxSizing: "border-box",
     display: "inline-block",
     height: spinnerSize,
     width: spinnerSize
   },
   statusGlyphSuccess: {
-    alignItems: "center",
-    backgroundColor: tokens.colorPaletteGreenBackground3,
+    backgroundColor: "currentColor",
     borderRadius: tokens.borderRadiusCircular,
-    display: "inline-flex",
+    display: "inline-block",
     height: spinnerSize,
-    justifyContent: "center",
-    transformOrigin: "center",
     width: spinnerSize
   },
   statusGlyphSuccessMark: {
-    animationDuration: tokens.durationSlow,
-    animationFillMode: "both",
-    animationName: {
-      from: {
-        opacity: 0,
-        transform: "scale(0.65)"
-      },
-      to: {
-        opacity: 1,
-        transform: "scale(1)"
-      }
-    },
-    borderBottom: `1.5px solid ${tokens.colorPaletteGreenForeground1}`,
-    borderRight: `1.5px solid ${tokens.colorPaletteGreenForeground1}`,
-    boxSizing: "border-box",
-    display: "inline-block",
-    height: "0.35rem",
-    transform: "rotate(45deg)",
-    width: "0.2rem"
+    display: "none"
   },
   statusGlyphError: {
     alignItems: "center",
-    backgroundColor: tokens.colorPaletteRedBackground3,
+    border: "1.5px solid currentColor",
     borderRadius: tokens.borderRadiusCircular,
     display: "inline-flex",
     height: spinnerSize,
     justifyContent: "center",
+    position: "relative",
     width: spinnerSize
   },
   statusGlyphErrorMark: {
-    animationDuration: tokens.durationSlow,
-    animationFillMode: "both",
-    animationName: {
-      from: {
-        opacity: 0,
-        transform: "translateY(-1px)"
-      },
-      to: {
-        opacity: 1,
-        transform: "translateY(0)"
-      }
-    },
-    backgroundColor: tokens.colorPaletteRedForeground1,
+    backgroundColor: "currentColor",
     borderRadius: tokens.borderRadiusCircular,
     display: "inline-block",
-    height: "0.45rem",
+    height: "0.42rem",
     position: "relative",
     width: "1.5px"
   },
   statusGlyphEmpty: {
     alignItems: "center",
-    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    border: "1.5px solid currentColor",
     borderRadius: tokens.borderRadiusCircular,
     boxSizing: "border-box",
     display: "inline-flex",
@@ -320,7 +336,7 @@ const useStyles = makeStyles({
     width: spinnerSize
   },
   statusGlyphEmptyMark: {
-    backgroundColor: tokens.colorNeutralForeground4,
+    backgroundColor: "currentColor",
     borderRadius: tokens.borderRadiusCircular,
     display: "inline-block",
     height: "1.5px",
@@ -345,12 +361,22 @@ export const useSmartProgressBarClassNames = (className?: string) => {
     headerSlimButton: styles.headerSlimButton,
     headerTitleGroup: styles.headerTitleGroup,
     item: styles.item,
+    itemBadge: styles.itemBadge,
     itemLabel: styles.itemLabel,
+    itemLabelWithCount: styles.itemLabelWithCount,
     itemList: styles.itemList,
+    statusGlyphAccentBrand: styles.statusGlyphAccentBrand,
+    statusGlyphAccentDanger: styles.statusGlyphAccentDanger,
+    statusGlyphAccentInfo: styles.statusGlyphAccentInfo,
+    statusGlyphAccentNeutral: styles.statusGlyphAccentNeutral,
+    statusGlyphAccentSuccess: styles.statusGlyphAccentSuccess,
+    statusGlyphAccentWarning: styles.statusGlyphAccentWarning,
+    statusGlyphBase: styles.statusGlyphBase,
     meterFill: styles.meterFill,
     meterTrack: styles.meterTrack,
     meterTrackSlim: styles.meterTrackSlim,
     metricBadge: styles.metricBadge,
+    metricBadgeSlim: styles.metricBadgeSlim,
     metricBadgeTotal: styles.metricBadgeTotal,
     metricBadgeValue: styles.metricBadgeValue,
     root: mergeClasses(styles.root, className),

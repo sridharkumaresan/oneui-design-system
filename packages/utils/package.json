@@ -1,6 +1,6 @@
 {
   "name": "@functions-oneui/utils",
-  "version": "0.0.0",
+  "version": "0.0.0-local-20260410175351",
   "description": "Shared utility helpers for OneUI packages.",
   "type": "module",
   "main": "dist/index.js",
@@ -12,14 +12,28 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./content-preview": {
+      "types": "./dist/content-preview/index.d.ts",
+      "import": "./dist/content-preview/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "content-preview": [
+        "dist/content-preview/index.d.ts"
+      ]
     }
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "echo \"No tests for @functions-oneui/utils yet\""
+    "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {},
+  "devDependencies": {
+    "vitest": "2.1.9"
+  },
   "peerDependencies": {}
 }

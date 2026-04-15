@@ -13,6 +13,11 @@ import {
 import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  assertKnownWorkspacePackages,
+  parsePackageSelection,
+  resolveReleasePackageNames
+} from "./release-targets.mjs";
 
 const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const localRegistryRoot = path.join(workspaceRoot, ".local", "verdaccio");
@@ -53,6 +58,7 @@ const snapshotNote = "Temporary local Verdaccio smoke-test release. Do not commi
 const shouldUseShell = (command) => process.platform === "win32" && /\.(cmd|bat)$/i.test(command);
 
 const command = process.argv[2];
+const commandArgs = process.argv.slice(3);
 
 const commands = {
   start: startRegistry,
@@ -61,6 +67,7 @@ const commands = {
   login: loginToRegistry,
   whoami: printWhoAmI,
   "publish-snapshot": publishSnapshot,
+  "publish-beta": publishBeta,
   "publish-stable": publishStable,
   "print-consumer-config": printConsumerConfig,
   reset: resetRegistry
@@ -68,7 +75,7 @@ const commands = {
 
 if (!command || !(command in commands)) {
   console.error(
-    "Usage: node ./scripts/local-registry.mjs <start|stop|status|login|whoami|publish-snapshot|publish-stable|print-consumer-config|reset>"
+    "Usage: node ./scripts/local-registry.mjs <start|stop|status|login|whoami|publish-snapshot|publish-beta|publish-stable|print-consumer-config|reset>"
   );
   process.exit(1);
 }
@@ -82,6 +89,20 @@ try {
 
 function normalizeRegistryUrl(value) {
   return value.endsWith("/") ? value : `${value}/`;
+}
+
+function resolveExplicitReleasePackages() {
+  const selectedFlagIndex = commandArgs.findIndex((value) => value === "--packages");
+  const fromArgs =
+    selectedFlagIndex >= 0 ? parsePackageSelection(commandArgs[selectedFlagIndex + 1] ?? "") : [];
+  const fromEnvironment = parsePackageSelection(process.env.ONEUI_RELEASE_PACKAGES ?? "");
+  const selectedPackages = fromArgs.length > 0 ? fromArgs : fromEnvironment;
+
+  if (selectedPackages.length > 0) {
+    assertKnownWorkspacePackages(selectedPackages);
+  }
+
+  return selectedPackages;
 }
 
 function ensureRuntimeDirectory() {
@@ -314,8 +335,7 @@ function restoreReleaseFiles(files) {
   rmSync(backupRoot, { force: true, recursive: true });
 }
 
-function writeTemporarySnapshotChangeset() {
-  const packageNames = collectPublishablePackageManifests().map(({ manifest }) => manifest.name);
+function writeTemporarySnapshotChangeset(packageNames) {
   const lines = [
     "---",
     ...packageNames.map((name) => `\"${name}\": patch`),
@@ -521,26 +541,63 @@ async function printWhoAmI() {
 }
 
 async function publishSnapshot() {
+  await publishTemporaryRelease({
+    releaseKind: "snapshot",
+    versionTag: "local",
+    distTag: "local"
+  });
+}
+
+async function publishBeta() {
+  await publishTemporaryRelease({
+    releaseKind: "beta",
+    versionTag: "beta",
+    distTag: "beta"
+  });
+}
+
+async function publishTemporaryRelease({
+  releaseKind,
+  versionTag,
+  distTag
+}) {
   await ensureRegistryRunning();
   const username = ensureLoggedIn();
   const mutableFiles = collectMutableReleaseFiles();
   const environment = getLocalPublishEnvironment();
+  const explicitPackages = resolveExplicitReleasePackages();
+  const releasePackages = resolveReleasePackageNames({
+    explicitPackages,
+    fallbackToPendingChangesets: false,
+    includeAllPublishable: true
+  });
 
-  console.log(`[local-registry] publishing snapshot packages as ${username}`);
-  runCommand(pnpmCommand, ["run", "release:verify"]);
+  if (releasePackages.length === 0) {
+    throw new Error(`No publishable packages were selected for ${releaseKind} publishing.`);
+  }
+
+  console.log(
+    `[local-registry] publishing ${releaseKind} packages as ${username}: ${releasePackages.join(", ")}`
+  );
+  runCommand(pnpmCommand, ["run", "release:verify"], {
+    env: {
+      ...process.env,
+      ONEUI_RELEASE_PACKAGES: releasePackages.join(",")
+    }
+  });
 
   backupReleaseFiles(mutableFiles);
   let publishedVersions = [];
 
   try {
-    writeTemporarySnapshotChangeset();
-    runCommand(process.execPath, [changesetEntrypoint, "version", "--snapshot", "local"], {
+    writeTemporarySnapshotChangeset(releasePackages);
+    runCommand(process.execPath, [changesetEntrypoint, "version", "--snapshot", versionTag], {
       env: getSanitizedEnvironment()
     });
     publishedVersions = readPublishedSnapshotVersions();
     runCommand(
       process.execPath,
-      [changesetEntrypoint, "publish", "--tag", "local", "--no-git-tag"],
+      [changesetEntrypoint, "publish", "--tag", distTag, "--no-git-tag"],
       {
         env: environment
       }
@@ -549,7 +606,7 @@ async function publishSnapshot() {
     restoreReleaseFiles([...mutableFiles, temporaryChangesetPath]);
   }
 
-  console.log("[local-registry] published snapshot packages:");
+  console.log(`[local-registry] published ${releaseKind} packages:`);
   for (const value of publishedVersions) {
     console.log(`- ${value}`);
   }
@@ -559,9 +616,22 @@ async function publishStable() {
   await ensureRegistryRunning();
   const username = ensureLoggedIn();
   const environment = getLocalPublishEnvironment();
+  const explicitPackages = resolveExplicitReleasePackages();
+  const releasePackages = resolveReleasePackageNames({
+    explicitPackages
+  });
 
-  console.log(`[local-registry] publishing current package versions as ${username}`);
-  runCommand(pnpmCommand, ["run", "release:verify"]);
+  console.log(
+    releasePackages.length > 0
+      ? `[local-registry] publishing current package versions as ${username}: ${releasePackages.join(", ")}`
+      : `[local-registry] publishing current package versions as ${username}`
+  );
+  runCommand(pnpmCommand, ["run", "release:verify"], {
+    env: {
+      ...process.env,
+      ONEUI_RELEASE_PACKAGES: releasePackages.join(",")
+    }
+  });
   runCommand(process.execPath, [changesetEntrypoint, "publish", "--no-git-tag"], {
     env: environment
   });

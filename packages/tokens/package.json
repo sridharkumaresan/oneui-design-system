@@ -1,6 +1,6 @@
 {
   "name": "@functions-oneui/tokens",
-  "version": "0.0.0",
+  "version": "0.0.0-local-20260410175351",
   "description": "Design tokens for OneUI theming and components.",
   "type": "module",
   "main": "dist/index.js",

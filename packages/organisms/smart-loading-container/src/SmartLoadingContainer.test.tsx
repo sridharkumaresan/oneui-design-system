@@ -159,6 +159,30 @@ describe("SmartLoadingContainer", () => {
     );
   });
 
+  it("allows container-level square section shapes", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer shape="square" title="Enterprise search">
+        <SmartLoadingSection status="empty" title="People" />
+      </SmartLoadingContainer>
+    );
+
+    expect(screen.getByRole("region", { name: "People" }).getAttribute("data-oneui-shape")).toBe(
+      "square"
+    );
+  });
+
+  it("allows section-level shape override", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer shape="rounded" title="Enterprise search">
+        <SmartLoadingSection shape="square" status="empty" title="People" />
+      </SmartLoadingContainer>
+    );
+
+    expect(screen.getByRole("region", { name: "People" }).getAttribute("data-oneui-shape")).toBe(
+      "square"
+    );
+  });
+
   it("hides children when the section is not settled successfully", () => {
     renderWithOneUIProvider(
       <SmartLoadingContainer title="Enterprise search">
@@ -202,6 +226,16 @@ describe("SmartLoadingContainer", () => {
 
     expect(screen.getByText("24")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Collapse News" })).toBeTruthy();
+  });
+
+  it("derives default avatar initials from the section title", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer title="Enterprise search">
+        <SmartLoadingSection count={3} status="success" title="Sites and events" />
+      </SmartLoadingContainer>
+    );
+
+    expect(screen.getByText("SA")).toBeTruthy();
   });
 
   it("has no obvious axe violations", async () => {

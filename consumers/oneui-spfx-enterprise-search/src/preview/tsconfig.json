@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.preview.json",
+  "include": [
+    "./*.ts",
+    "./*.tsx"
+  ]
+}

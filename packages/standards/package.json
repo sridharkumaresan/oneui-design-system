@@ -1,6 +1,6 @@
 {
   "name": "@functions-oneui/standards",
-  "version": "0.0.0",
+  "version": "0.0.0-local-20260410175351",
   "description": "Accessibility and design standards shared across the system.",
   "type": "module",
   "main": "dist/index.js",

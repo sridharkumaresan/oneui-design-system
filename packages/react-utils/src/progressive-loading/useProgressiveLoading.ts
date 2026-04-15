@@ -187,11 +187,9 @@ export const useProgressiveLoading = <TData = unknown>(
   );
 
   React.useEffect(() => {
-    if (!autoStart) {
-      return;
+    if (autoStart) {
+      void loadAll();
     }
-
-    void loadAll();
 
     return () => {
       configs.forEach((config) => {

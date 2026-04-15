@@ -25,6 +25,8 @@ export type {
 } from "./oneui-heading/index.js";
 export { OneUIInput } from "./oneui-input/index.js";
 export type { OneUIInputProps } from "./oneui-input/index.js";
+export { OneUIImage } from "./oneui-image/index.js";
+export type { OneUIImageFit, OneUIImageProps } from "./oneui-image/index.js";
 export { OneUILink } from "./oneui-link/index.js";
 export type {
   OneUILinkIconPosition,

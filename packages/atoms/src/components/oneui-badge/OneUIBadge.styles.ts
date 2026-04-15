@@ -29,6 +29,7 @@ const useStyles = makeStyles({
     justifyContent: "center"
   },
   content: {
+    display: "inline-flex",
     minWidth: 0,
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -58,6 +59,12 @@ const useStyles = makeStyles({
   },
   outlined: {
     boxShadow: "none"
+  },
+  iconSizeSm: {
+    minWidth: "0.75rem"
+  },
+  iconSizeMd: {
+    minWidth: "0.875rem"
   }
 });
 
@@ -87,7 +94,10 @@ export const useOneUIBadgeClassNames = (options: {
 
   return {
     content: styles.content,
-    icon: styles.icon,
+    icon: mergeClasses(
+      styles.icon,
+      options.size === "sm" ? styles.iconSizeSm : styles.iconSizeMd
+    ),
     root: mergeClasses(
       styles.root,
       styles[sizeClassMap[options.size]],

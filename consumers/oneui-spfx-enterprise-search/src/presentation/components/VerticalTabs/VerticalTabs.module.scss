@@ -1,0 +1,22 @@
+.root {
+  align-items: center;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  gap: 0.5rem;
+  isolation: isolate;
+  margin-top: -2px;
+  min-width: 0;
+  overflow: visible;
+  padding-bottom: 4px;
+  position: relative;
+  z-index: 2;
+}
+
+.tabList {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+}

@@ -8,8 +8,17 @@ export default defineConfig({
     dedupe: ["react", "react-dom"]
   },
   test: {
+    fileParallelism: false,
     environment: "jsdom",
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    maxWorkers: 1,
+    minWorkers: 1,
+    pool: "forks",
+    poolOptions: {
+      forks: {
+        singleFork: true
+      }
+    },
     setupFiles: ["./src/test/setup.ts"],
     reporters: isCi ? ["default", "junit"] : ["default"],
     outputFile: isCi

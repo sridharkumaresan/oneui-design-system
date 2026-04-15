@@ -1,6 +1,6 @@
 {
   "name": "@functions-oneui/testing",
-  "version": "0.0.0",
+  "version": "0.0.0-local-20260410175351",
   "description": "Shared testing utilities and assertions for OneUI packages.",
   "type": "module",
   "main": "dist/index.js",

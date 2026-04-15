@@ -1,6 +1,6 @@
 {
   "name": "@functions-oneui/onboarding-core",
-  "version": "0.0.0",
+  "version": "0.0.0-local-20260410175351",
   "description": "Framework-agnostic onboarding orchestration for OneUI, backed by Driver.js.",
   "type": "module",
   "main": "dist/index.js",

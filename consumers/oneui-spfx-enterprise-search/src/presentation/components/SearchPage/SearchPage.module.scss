@@ -1,0 +1,132 @@
+.root {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: #5e5e5e;
+  max-width: 72ch;
+  margin-top: 6px;
+}
+
+.heroBanner {
+  isolation: isolate;
+  overflow: visible;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.backLink {
+  font-weight: 600;
+}
+
+.breadcrumb {
+  opacity: 0.85;
+}
+
+.breadcrumb::before {
+  content: "›";
+  margin-right: 10px;
+}
+
+.heroDescription {
+  max-width: 60ch;
+  opacity: 0.92;
+}
+
+.searchSurface {
+  max-width: 940px;
+  isolation: isolate;
+  position: relative;
+  z-index: 2;
+}
+
+.resultsColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(280px, 0.95fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.mainColumn,
+.sideColumn {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+@media (max-width: 1024px) {
+  .resultsColumns {
+    grid-template-columns: 1fr;
+  }
+}
+
+:global(.fui-PopoverSurface) {
+  backdrop-filter: none;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+}
+
+:global(.fui-Listbox) {
+  background: #ffffff;
+}
+
+:global([data-oneui-smart-loading-section]) {
+  box-shadow: none;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+:global([data-oneui-smart-loading-section-body]) {
+  opacity: 1;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+:global([data-oneui-smart-loading-section][aria-busy="true"] [data-oneui-smart-loading-section-body]) {
+  opacity: 0.96;
+}
+
+@keyframes progressPulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.88);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(0.88);
+  }
+}

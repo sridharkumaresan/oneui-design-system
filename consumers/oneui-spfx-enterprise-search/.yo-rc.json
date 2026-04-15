@@ -1,0 +1,23 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "whichFolder": "subdir",
+    "solutionName": "oneui-spfx-enterprise-search",
+    "environment": "spo",
+    "packageManager": "pnpm",
+    "skipFeatureDeployment": true,
+    "useGulp": false,
+    "componentType": "webpart",
+    "template": "react",
+    "componentName": "EnterpriseSearch",
+    "componentDescription": "Config-driven OneUI enterprise search web part",
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.22.2",
+    "sdksVersions": {},
+    "version": "1.22.2",
+    "libraryName": "oneui-spfx-enterprise-search",
+    "libraryId": "057c9196-e826-45d5-a998-355e71f25963",
+    "solutionShortDescription": "oneui-spfx-enterprise-search description",
+    "isDomainIsolated": false
+  }
+}

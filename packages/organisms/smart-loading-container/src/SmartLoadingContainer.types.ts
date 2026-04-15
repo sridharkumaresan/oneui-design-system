@@ -4,6 +4,7 @@ import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loa
 
 export type SmartLoadingLayout = "single" | "split";
 export type SmartLoadingSurfaceAppearance = "flat" | "raised";
+export type SmartLoadingShape = "rounded" | "square";
 export type SmartLoadingSectionAccentTone =
   | "neutral"
   | "brand"
@@ -20,6 +21,7 @@ export type SmartLoadingContainerProps = HTMLAttributes<HTMLElement> & {
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   layout?: SmartLoadingLayout;
   progressSlot?: ReactNode;
+  shape?: SmartLoadingShape;
   surfaceAppearance?: SmartLoadingSurfaceAppearance;
   title: ReactNode;
 };
@@ -53,6 +55,7 @@ export type SmartLoadingSectionProps = HTMLAttributes<HTMLElement> & {
   onCollapsedChange?: (collapsed: boolean) => void;
   onRetry?: () => void;
   retryLabel?: ReactNode;
+  shape?: SmartLoadingShape;
   statusDisplayMode?: "inline" | "badge" | "minimal";
   surfaceAppearance?: SmartLoadingSurfaceAppearance;
   status: LoadingStatus;

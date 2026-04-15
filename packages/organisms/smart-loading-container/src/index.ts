@@ -3,6 +3,7 @@ export { SmartLoadingSection } from "./SmartLoadingSection.js";
 export type {
   SmartLoadingContainerProps,
   SmartLoadingLayout,
+  SmartLoadingShape,
   SmartLoadingSectionAccentTone,
   SmartLoadingSectionProps,
   SmartLoadingSurfaceAppearance

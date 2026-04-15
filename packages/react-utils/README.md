@@ -2,6 +2,31 @@
 
 React-focused utilities shared by OneUI packages.
 
+## Image Loading
+
+Reusable image lifecycle utilities are exposed from:
+
+```ts
+import { useImageLoader } from "@functions-oneui/react-utils";
+// or
+import { useImageLoader } from "@functions-oneui/react-utils/image-loading";
+```
+
+### Default behavior
+
+- `empty` state when no `src` is provided
+- `loading` while the current source is in flight
+- optional `fallbackSrc` retry before surfacing `error`
+- optional timeout handling
+- `retry()` for consumers that need manual recovery
+- width/height metadata when the image loads successfully
+
+### Guidance
+
+- Use the hook when you need a custom rendering experience.
+- Use the higher-level `OneUIImage` atom from `@functions-oneui/atoms` for the common case.
+- Keep image loading lazy where possible for large result sets.
+
 ## Progressive Loading
 
 Shared contracts and helpers for coordinating multiple async sections are exposed from:

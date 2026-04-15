@@ -1,0 +1,164 @@
+.resultStack,
+.fileList,
+.personList {
+  display: grid;
+  gap: 16px;
+}
+
+.documentCard,
+.newsCard,
+.eventCard,
+.fileCard {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.documentMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.documentSource,
+.documentDate,
+.eventPath,
+.personMeta {
+  font-size: 12px;
+  color: #616161;
+}
+
+.documentTitle,
+.personName,
+.resourceTitle {
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: #0f6cbd;
+  text-decoration: none;
+}
+
+.documentSummary,
+.personRole,
+.resourceSummary {
+  color: #424242;
+  line-height: 1.45;
+}
+
+.documentTags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.eventCard {
+  grid-template-columns: 280px minmax(0, 1fr);
+  align-items: start;
+}
+
+.eventImageWrap {
+  overflow: hidden;
+  border-radius: 12px;
+  min-height: 180px;
+}
+
+.eventImage,
+.newsImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.eventImage :global(img),
+.newsImage :global(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.eventContent,
+.newsContent,
+.fileContent,
+.personContent {
+  display: grid;
+  gap: 8px;
+}
+
+.newsCard {
+  grid-template-columns: minmax(0, 1fr) 220px;
+  align-items: center;
+}
+
+.newsImage {
+  height: 140px;
+  border-radius: 12px;
+}
+
+.personCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 8px 0;
+}
+
+.resourceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.resourceCard {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.resourceIcon,
+.fileIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: inline-grid;
+  place-items: center;
+  background: linear-gradient(135deg, #0f6cbd, #6fddff);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fileCard {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .eventCard,
+  .newsCard,
+  .fileCard {
+    grid-template-columns: 1fr;
+  }
+
+  .resourceGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .resourceGrid {
+    grid-template-columns: 1fr;
+  }
+}

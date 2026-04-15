@@ -21,11 +21,11 @@ const meta = {
     empty: 1,
     error: 1,
     items: [
-      { count: 12, id: "news", label: "News", status: "success" },
-      { count: 8, id: "people", label: "People", status: "refreshing" },
-      { id: "resources", label: "Resources", status: "error" },
-      { id: "files", label: "Files", status: "empty" },
-      { id: "sites", label: "Sites", status: "delayed" }
+      { accentTone: "danger", count: 12, id: "news", label: "News", status: "success" },
+      { accentTone: "success", count: 8, id: "people", label: "People", status: "refreshing" },
+      { accentTone: "info", id: "resources", label: "Resources", status: "error" },
+      { accentTone: "neutral", id: "files", label: "Files", status: "empty" },
+      { accentTone: "warning", id: "sites", label: "Sites", status: "delayed" }
     ],
     loading: 0,
     mode: "slim",
@@ -75,9 +75,9 @@ export const LoadingHeavy: Story = {
     empty: 0,
     error: 0,
     items: [
-      { id: "approvals", label: "Approvals", status: "loading" },
-      { id: "tasks", label: "Tasks", status: "loading" },
-      { count: 5, id: "alerts", label: "Alerts", status: "success" }
+      { accentTone: "brand", id: "approvals", label: "Approvals", status: "loading" },
+      { accentTone: "warning", id: "tasks", label: "Tasks", status: "loading" },
+      { accentTone: "success", count: 5, id: "alerts", label: "Alerts", status: "success" }
     ],
     loading: 2,
     percent: 33,
@@ -111,11 +111,11 @@ export const MixedStates: Story = {
     empty: 1,
     error: 1,
     items: [
-      { count: 18, id: "sites", label: "Sites", status: "success" },
-      { count: 6, id: "people", label: "People", status: "success" },
-      { id: "resources", label: "Resources", status: "error" },
-      { id: "files", label: "Files", status: "empty" },
-      { id: "servicenow", label: "ServiceNow", status: "delayed" }
+      { accentTone: "warning", count: 18, id: "sites", label: "Sites", status: "success" },
+      { accentTone: "success", count: 6, id: "people", label: "People", status: "success" },
+      { accentTone: "info", id: "resources", label: "Resources", status: "error" },
+      { accentTone: "neutral", id: "files", label: "Files", status: "empty" },
+      { accentTone: "brand", id: "servicenow", label: "ServiceNow", status: "delayed" }
     ],
     loading: 0,
     percent: 50,
@@ -171,8 +171,14 @@ export const HookManagedExample: Story = {
         empty={0}
         error={0}
         items={[
-          { count: 2, id: "hr", label: "HR", status: "success" },
-          { count: 4, id: "it", label: "IT", status: completed < 3 ? "delayed" : "success" }
+          { accentTone: "success", count: 2, id: "hr", label: "HR", status: "success" },
+          {
+            accentTone: "brand",
+            count: 4,
+            id: "it",
+            label: "IT",
+            status: completed < 3 ? "delayed" : "success"
+          }
         ]}
         loading={0}
         percent={Math.round((completed / 3) * 100)}

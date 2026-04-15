@@ -1,6 +1,6 @@
 {
   "name": "@functions-oneui/storybook",
-  "version": "0.0.0",
+  "version": "0.0.0-local-20260410175351",
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @functions-oneui/fonts run build && pnpm --filter @functions-oneui/onboarding-react run build && pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-action-panel run build && pnpm --filter @functions-oneui/organism-illustrated-state run build && pnpm --filter @functions-oneui/organism-search-autocomplete run build && pnpm --filter @functions-oneui/organism-smart-breadcrumb run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && node ../../scripts/run-storybook.mjs dev",

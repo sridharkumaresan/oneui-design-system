@@ -11,7 +11,10 @@ import { useOneUIId } from "@functions-oneui/react-utils";
 import type { LoadingStatus } from "@functions-oneui/react-utils/progressive-loading";
 import { mergeClasses } from "@fluentui/react-components";
 
-import { SmartLoadingSurfaceAppearanceContext } from "./SmartLoadingContainer.context.js";
+import {
+  SmartLoadingShapeContext,
+  SmartLoadingSurfaceAppearanceContext
+} from "./SmartLoadingContainer.context.js";
 import { useSmartLoadingContainerClassNames } from "./SmartLoadingContainer.styles.js";
 import type { SmartLoadingSectionProps } from "./SmartLoadingContainer.types.js";
 
@@ -89,17 +92,21 @@ const SuccessIcon = (): React.JSX.Element => (
   </svg>
 );
 
-const AvatarFallbackIcon = (): React.JSX.Element => (
-  <svg aria-hidden="true" fill="none" height="16" viewBox="0 0 16 16" width="16">
-    <circle cx="8" cy="5.25" r="2.25" stroke="currentColor" strokeWidth="1.4" />
-    <path
-      d="M3.25 12a4.75 4.75 0 0 1 9.5 0"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeWidth="1.4"
-    />
-  </svg>
-);
+const getAvatarLabel = (title: React.ReactNode): string => {
+  const plainTitle = typeof title === "string" ? title.trim() : "";
+
+  if (!plainTitle) {
+    return "?";
+  }
+
+  const words = plainTitle.split(/\s+/).filter(Boolean);
+
+  if (words.length === 1) {
+    return words[0].slice(0, 1).toUpperCase();
+  }
+
+  return `${words[0].slice(0, 1)}${words[1].slice(0, 1)}`.toUpperCase();
+};
 
 const getStatusIcon = (
   effectiveStatus: LoadingStatus,
@@ -250,7 +257,7 @@ const getStatusSummaryText = ({
 }): React.ReactNode => {
   if (statusDisplayMode === "minimal") {
     if (effectiveStatus === "success") {
-      return typeof count === "number" ? `${count} results` : "Ready";
+      return "Ready";
     }
 
     if (effectiveStatus === "refreshing") {
@@ -275,7 +282,7 @@ const getStatusSummaryText = ({
   }
 
   if (effectiveStatus === "success") {
-    return typeof count === "number" ? `${count} results` : "Ready";
+    return "Ready";
   }
 
   if (effectiveStatus === "refreshing") {
@@ -484,6 +491,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
     onCollapsedChange,
     onRetry,
     retryLabel,
+    shape,
     surfaceAppearance,
     status,
     statusDisplayMode = "inline",
@@ -497,7 +505,9 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
   const classNames = useSmartLoadingContainerClassNames("single", className);
   const Component = as as React.ElementType;
   const inheritedSurfaceAppearance = React.useContext(SmartLoadingSurfaceAppearanceContext);
+  const inheritedShape = React.useContext(SmartLoadingShapeContext);
   const resolvedSurfaceAppearance = surfaceAppearance ?? inheritedSurfaceAppearance;
+  const resolvedShape = shape ?? inheritedShape;
   const previousEffectiveStatusRef = React.useRef<LoadingStatus | undefined>(undefined);
   const effectiveStatus = getEffectiveStatus({
     delayedTriggered,
@@ -648,7 +658,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
             className={classNames.countBadge}
             shape="pill"
             size="sm"
-            tone={accentTone === "info" ? "brand" : accentTone}
+            tone={accentTone}
           >
             {displayCount}
           </OneUIBadge>
@@ -665,7 +675,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
             {statusDisplayMode === "badge" ? summaryText : statusBadgeText}
           </OneUIBadge>
         ) : null}
-        {statusDisplayMode === "inline" ? statusIndicator : null}
+        {statusDisplayMode === "inline" && effectiveStatus !== "success" ? statusIndicator : null}
       </div>
     );
 
@@ -692,16 +702,28 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
       className: mergeClasses(
         classNames.section,
         accentClassNames.section,
+        resolvedShape === "square" ? classNames.sectionSquare : undefined,
         resolvedSurfaceAppearance === "flat" ? classNames.sectionFlat : undefined
       ),
       "data-oneui-surface-appearance": resolvedSurfaceAppearance,
+      "data-oneui-shape": resolvedShape,
       "data-oneui-smart-loading-section": ""
     },
     <>
-      <div className={mergeClasses(classNames.sectionHeader, accentClassNames.header)}>
+      <div
+        className={mergeClasses(
+          classNames.sectionHeader,
+          accentClassNames.header,
+          resolvedShape === "square" ? classNames.sectionHeaderSquare : undefined
+        )}
+      >
         <div className={classNames.sectionHeaderMain}>
           <span className={mergeClasses(classNames.sectionAvatar, accentClassNames.avatar)}>
-            {avatar ?? <AvatarFallbackIcon />}
+            {avatar ?? (
+              <span className={classNames.sectionAvatarLabel} aria-hidden="true">
+                {getAvatarLabel(title)}
+              </span>
+            )}
           </span>
           <div className={classNames.sectionHeading}>
             <OneUIHeading className={classNames.sectionTitle} id={titleId} level={headingLevel}>
@@ -741,7 +763,12 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
         id={bodyId}
       >
         <div className={classNames.bodyViewportInner}>
-          <div className={classNames.body}>
+          <div
+            className={mergeClasses(
+              classNames.body,
+              resolvedShape === "square" ? classNames.bodySquare : undefined
+            )}
+          >
             {showChildren ? (
               <>
                 {effectiveStatus === "refreshing" ? (

@@ -4,10 +4,10 @@ const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 const shouldUseShell = process.platform === "win32";
 
 const steps = [
-  ["run", "lint"],
-  ["run", "typecheck"],
-  ["run", "test"],
-  ["run", "build"]
+  ["exec", "node", "./scripts/run-release-task.mjs", "lint"],
+  ["exec", "node", "./scripts/run-release-task.mjs", "typecheck"],
+  ["exec", "node", "./scripts/run-release-task.mjs", "test"],
+  ["exec", "node", "./scripts/run-release-task.mjs", "build"]
 ];
 
 for (const args of steps) {

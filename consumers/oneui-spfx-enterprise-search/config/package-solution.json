@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "oneui-spfx-enterprise-search-client-side-solution",
+    "id": "057c9196-e826-45d5-a998-355e71f25963",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.22.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "oneui-spfx-enterprise-search description"
+      },
+      "longDescription": {
+        "default": "oneui-spfx-enterprise-search description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "oneui-spfx-enterprise-search Feature",
+        "description": "The feature that activates elements of the oneui-spfx-enterprise-search solution.",
+        "id": "59bd9588-07a2-45f2-b166-496e058483da",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/oneui-spfx-enterprise-search.sppkg"
+  }
+}

@@ -15,6 +15,10 @@ export const deepMerge = <T extends UnknownRecord>(
   const merged: UnknownRecord = { ...base };
 
   for (const [key, value] of Object.entries(overrides)) {
+    if (value === undefined) {
+      continue;
+    }
+
     const existing = merged[key];
 
     if (isPlainObject(value) && isPlainObject(existing)) {
