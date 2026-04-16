@@ -453,10 +453,67 @@ function writeTemporarySnapshotChangeset(packageNames) {
   writeFileSync(temporaryChangesetPath, lines.join("\n"), "utf8");
 }
 
-function readPublishedSnapshotVersions() {
-  return collectPublishablePackageManifests().map(
+function readPublishedSnapshotVersions(packageNames) {
+  const manifests = packageNames
+    ? readPackageManifestsByName(packageNames)
+    : collectPublishablePackageManifests();
+
+  return manifests.map(
     ({ manifest }) => `${manifest.name}@${manifest.version}`
   );
+}
+
+function readPackageManifestsByName(packageNames) {
+  const selected = new Set(packageNames);
+  return collectPublishablePackageManifests().filter(({ manifest }) => selected.has(manifest.name));
+}
+
+function readRegistryAuthToken() {
+  ensureUserConfig();
+
+  const authHost = new URL(registryUrl).host;
+  const tokenPrefix = `//${authHost}/:_authToken=`;
+  const tokenLine = readFileSync(userConfigPath, "utf8")
+    .split(/\r?\n/)
+    .find((line) => line.startsWith(tokenPrefix));
+
+  return tokenLine?.slice(tokenPrefix.length).replace(/^"|"$/g, "");
+}
+
+function getNpmPublishEnvironment() {
+  const token = readRegistryAuthToken();
+
+  return {
+    ...getLocalPublishEnvironment(),
+    ...(token ? { NODE_AUTH_TOKEN: token } : {})
+  };
+}
+
+function publishPackagesWithNpm(packageNames, distTag, environment) {
+  const manifests = readPackageManifestsByName(packageNames);
+
+  for (const { manifestPath, manifest } of manifests) {
+    const packageDirectory = path.dirname(manifestPath);
+    console.log(`[local-registry] npm publishing ${manifest.name}@${manifest.version}`);
+    runCommand(
+      npmCommand,
+      [
+        "publish",
+        packageDirectory,
+        "--tag",
+        distTag,
+        "--access",
+        "public",
+        "--registry",
+        registryUrl,
+        "--userconfig",
+        userConfigPath
+      ],
+      {
+        env: environment
+      }
+    );
+  }
 }
 
 async function ensureRegistryRunning() {
@@ -714,7 +771,7 @@ async function publishTemporaryRelease({
   await ensureRegistryRunning();
   const username = ensureLoggedIn();
   const mutableFiles = collectMutableReleaseFiles();
-  const environment = getLocalPublishEnvironment();
+  const environment = getNpmPublishEnvironment();
   const explicitPackages = resolveExplicitReleasePackages();
   const releasePackages = resolveReleasePackageNames({
     explicitPackages,
@@ -744,14 +801,8 @@ async function publishTemporaryRelease({
     runCommand(process.execPath, [changesetEntrypoint, "version", "--snapshot", versionTag], {
       env: getSanitizedEnvironment()
     });
-    publishedVersions = readPublishedSnapshotVersions();
-    runCommand(
-      process.execPath,
-      [changesetEntrypoint, "publish", "--tag", distTag, "--no-git-tag"],
-      {
-        env: environment
-      }
-    );
+    publishedVersions = readPublishedSnapshotVersions(releasePackages);
+    publishPackagesWithNpm(releasePackages, distTag, environment);
   } finally {
     restoreReleaseFiles([...mutableFiles, temporaryChangesetPath]);
   }
