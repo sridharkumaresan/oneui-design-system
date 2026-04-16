@@ -12,6 +12,7 @@ import {
 } from "node:fs";
 import http from "node:http";
 import path from "node:path";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import {
   assertKnownWorkspacePackages,
@@ -20,10 +21,12 @@ import {
 } from "./release-targets.mjs";
 
 const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const require = createRequire(import.meta.url);
 const localRegistryRoot = path.join(workspaceRoot, ".local", "verdaccio");
 const backupRoot = path.join(localRegistryRoot, "snapshot-backup");
 const npmCachePath = path.join(localRegistryRoot, "npm-cache");
-const configPath = path.join(workspaceRoot, "configs", "verdaccio", "config.yaml");
+const configTemplatePath = path.join(workspaceRoot, "configs", "verdaccio", "config.yaml");
+const configPath = path.join(localRegistryRoot, "config.yaml");
 const logPath = path.join(localRegistryRoot, "verdaccio.log");
 const pidPath = path.join(localRegistryRoot, "verdaccio.pid");
 const userConfigPath = path.join(localRegistryRoot, "user.npmrc");
@@ -40,13 +43,7 @@ const localWorkspaceDirectories = [
 const localPackageDirectories = [path.join(workspaceRoot, "packages")];
 const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
-const verdaccioEntrypoint = path.join(
-  workspaceRoot,
-  "node_modules",
-  "verdaccio",
-  "bin",
-  "verdaccio"
-);
+const verdaccioEntrypoint = resolvePackageBin("verdaccio");
 const changesetEntrypoint = path.join(
   workspaceRoot,
   "node_modules",
@@ -91,6 +88,24 @@ function normalizeRegistryUrl(value) {
   return value.endsWith("/") ? value : `${value}/`;
 }
 
+function resolvePackageBin(packageName) {
+  const manifestPath = require.resolve(`${packageName}/package.json`, {
+    paths: [workspaceRoot]
+  });
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  const binPath = typeof manifest.bin === "string" ? manifest.bin : manifest.bin?.[packageName];
+
+  if (!binPath) {
+    throw new Error(`${packageName} does not declare a package binary.`);
+  }
+
+  return path.join(path.dirname(manifestPath), binPath);
+}
+
+function toYamlPath(value) {
+  return value.replaceAll("\\", "/");
+}
+
 function resolveExplicitReleasePackages() {
   const selectedFlagIndex = commandArgs.findIndex((value) => value === "--packages");
   const fromArgs =
@@ -110,17 +125,39 @@ function ensureRuntimeDirectory() {
   mkdirSync(npmCachePath, { recursive: true });
 }
 
+function ensureVerdaccioConfig() {
+  ensureRuntimeDirectory();
+
+  const template = readFileSync(configTemplatePath, "utf8");
+  const contents = template
+    .replace(
+      /^storage:.*$/m,
+      `storage: "${toYamlPath(path.join(localRegistryRoot, "storage"))}"`
+    )
+    .replace(
+      /^(\s*)file:.*$/m,
+      `$1file: "${toYamlPath(path.join(localRegistryRoot, "htpasswd"))}"`
+    );
+
+  writeFileSync(configPath, contents, "utf8");
+}
+
 function ensureUserConfig() {
   ensureRuntimeDirectory();
 
+  const authHost = new URL(registryUrl).host;
+  const registryLine = `registry=${registryUrl}`;
   const lines = existsSync(userConfigPath)
     ? readFileSync(userConfigPath, "utf8")
         .split(/\r?\n/)
         .filter(Boolean)
         .filter((line) => !line.startsWith("@functions-oneui:registry="))
+        .filter((line) => !line.startsWith("registry="))
+        .filter((line) => line !== "always-auth=true")
+        .filter((line) => !line.startsWith(`//${authHost}/:always-auth=`))
     : [];
 
-  lines.unshift(scopedRegistryLine);
+  lines.unshift(scopedRegistryLine, registryLine);
   writeFileSync(userConfigPath, `${lines.join("\n")}\n`, "utf8");
 }
 
@@ -196,8 +233,8 @@ function isProcessAlive(pid) {
   try {
     process.kill(pid, 0);
     return true;
-  } catch {
-    return false;
+  } catch (error) {
+    return error?.code === "EPERM";
   }
 }
 
@@ -398,6 +435,7 @@ function ensureLoggedIn() {
 async function startRegistry() {
   ensureVerdaccioInstalled();
   ensureRuntimeDirectory();
+  ensureVerdaccioConfig();
 
   if (await pingRegistry()) {
     console.log(`[local-registry] Verdaccio is already responding at ${registryUrl}`);
@@ -428,6 +466,21 @@ async function startRegistry() {
       stdio: ["ignore", logFd, logFd]
     }
   );
+  let spawnError = null;
+  child.once("error", (error) => {
+    spawnError = error;
+  });
+
+  await sleep(250);
+  if (spawnError) {
+    removePidFile();
+    throw new Error(`Verdaccio failed to spawn: ${spawnError.message}. Check ${logPath}.`);
+  }
+
+  if (!child.pid) {
+    removePidFile();
+    throw new Error(`Verdaccio did not report a process id. Check ${logPath}.`);
+  }
 
   writeFileSync(pidPath, `${child.pid}\n`, "utf8");
   child.unref();

@@ -103,6 +103,23 @@ Also install required peers in the consumer app if they are not already present:
 pnpm add react react-dom @fluentui/react-components
 ```
 
+### Windows Verdaccio Notes
+
+Use the workspace scripts instead of a globally installed Verdaccio. The scripts resolve the workspace Verdaccio package, generate an absolute-path runtime config at `.local/verdaccio/config.yaml`, and keep registry auth in `.local/verdaccio/user.npmrc`.
+
+Recommended PowerShell flow:
+
+```powershell
+pnpm install
+pnpm run registry:local:reset
+pnpm run registry:local:start
+pnpm run registry:local:login
+pnpm run registry:local:whoami
+pnpm run registry:local:publish:snapshot
+```
+
+If `whoami` succeeds but publish returns `401`, rerun `pnpm run registry:local:login`. Do not use `localhost` for one command and `127.0.0.1` for another unless `ONEUI_LOCAL_REGISTRY` is set consistently for every command in that terminal.
+
 ### Reset the Local Registry
 
 Use this when you want a clean local registry state:
