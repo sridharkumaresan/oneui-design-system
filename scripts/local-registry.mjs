@@ -59,6 +59,7 @@ const dependencyFieldNames = [
   "peerDependencies",
   "optionalDependencies"
 ];
+const publishDependencyFieldNames = ["dependencies", "peerDependencies", "optionalDependencies"];
 
 const command = process.argv[2];
 const commandArgs = process.argv.slice(3);
@@ -474,6 +475,47 @@ function readPackageManifestsByName(packageNames) {
   return collectPublishablePackageManifests().filter(({ manifest }) => selected.has(manifest.name));
 }
 
+function expandWithWorkspaceDependencyClosure(packageNames) {
+  const manifests = collectPublishablePackageManifests();
+  const manifestByName = new Map(manifests.map(({ manifest }) => [manifest.name, manifest]));
+  const selected = new Set(packageNames);
+  const queue = [...packageNames];
+
+  for (let index = 0; index < queue.length; index += 1) {
+    const manifest = manifestByName.get(queue[index]);
+
+    if (!manifest) {
+      continue;
+    }
+
+    for (const fieldName of publishDependencyFieldNames) {
+      const dependencies = manifest[fieldName];
+
+      if (!dependencies || typeof dependencies !== "object") {
+        continue;
+      }
+
+      for (const [dependencyName, dependencyVersion] of Object.entries(dependencies)) {
+        if (
+          typeof dependencyVersion !== "string" ||
+          !dependencyVersion.startsWith("workspace:") ||
+          !manifestByName.has(dependencyName) ||
+          selected.has(dependencyName)
+        ) {
+          continue;
+        }
+
+        selected.add(dependencyName);
+        queue.push(dependencyName);
+      }
+    }
+  }
+
+  return manifests
+    .map(({ manifest }) => manifest.name)
+    .filter((packageName) => selected.has(packageName));
+}
+
 function readRegistryAuthToken() {
   ensureUserConfig();
 
@@ -813,11 +855,12 @@ async function publishTemporaryRelease({
   const mutableFiles = collectMutableReleaseFiles();
   const environment = getNpmPublishEnvironment();
   const explicitPackages = resolveExplicitReleasePackages();
-  const releasePackages = resolveReleasePackageNames({
+  const selectedReleasePackages = resolveReleasePackageNames({
     explicitPackages,
     fallbackToPendingChangesets: false,
     includeAllPublishable: true
   });
+  const releasePackages = expandWithWorkspaceDependencyClosure(selectedReleasePackages);
 
   if (releasePackages.length === 0) {
     throw new Error(`No publishable packages were selected for ${releaseKind} publishing.`);
