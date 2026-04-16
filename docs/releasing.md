@@ -120,6 +120,14 @@ pnpm run registry:local:publish:snapshot
 
 If `whoami` succeeds but publish returns `401`, rerun `pnpm run registry:local:login`. Do not use `localhost` for one command and `127.0.0.1` for another unless `ONEUI_LOCAL_REGISTRY` is set consistently for every command in that terminal.
 
+If detached startup fails on Windows, run Verdaccio in the foreground in one PowerShell window:
+
+```powershell
+pnpm run registry:local:start:foreground
+```
+
+Keep that window open, then run login and publish commands from a second PowerShell window in the same repo.
+
 ### Reset the Local Registry
 
 Use this when you want a clean local registry state:

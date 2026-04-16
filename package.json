@@ -23,6 +23,7 @@
     "audit:scripts": "node ./scripts/audit-scripts.mjs",
     "audit:registry": "node ./scripts/audit-registry-bom.mjs",
     "registry:local:start": "node ./scripts/local-registry.mjs start",
+    "registry:local:start:foreground": "node ./scripts/local-registry.mjs start-foreground",
     "registry:local:stop": "node ./scripts/local-registry.mjs stop",
     "registry:local:status": "node ./scripts/local-registry.mjs status",
     "registry:local:login": "node ./scripts/local-registry.mjs login",

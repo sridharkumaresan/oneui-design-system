@@ -59,6 +59,7 @@ const commandArgs = process.argv.slice(3);
 
 const commands = {
   start: startRegistry,
+  "start-foreground": startRegistryForeground,
   stop: stopRegistry,
   status: printStatus,
   login: loginToRegistry,
@@ -72,7 +73,7 @@ const commands = {
 
 if (!command || !(command in commands)) {
   console.error(
-    "Usage: node ./scripts/local-registry.mjs <start|stop|status|login|whoami|publish-snapshot|publish-beta|publish-stable|print-consumer-config|reset>"
+    "Usage: node ./scripts/local-registry.mjs <start|start-foreground|stop|status|login|whoami|publish-snapshot|publish-beta|publish-stable|print-consumer-config|reset>"
   );
   process.exit(1);
 }
@@ -320,6 +321,37 @@ function formatStartupFailure(reason) {
   return `${reason}. Check ${logPath} after restarting.${details}`;
 }
 
+function runStartupDiagnostic() {
+  const result = spawnSync(
+    process.execPath,
+    [verdaccioEntrypoint, "--config", configPath, "--listen", registryHost],
+    {
+      cwd: workspaceRoot,
+      encoding: "utf8",
+      env: getSanitizedEnvironment(),
+      timeout: 3000,
+      windowsHide: true
+    }
+  );
+
+  const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
+
+  if (result.error?.code === "ETIMEDOUT") {
+    return output
+      ? `Foreground startup probe stayed alive for 3 seconds. Captured output:\n${output}`
+      : "Foreground startup probe stayed alive for 3 seconds without output.";
+  }
+
+  if (result.error) {
+    return `Foreground startup probe failed: ${result.error.message}${output ? `\n${output}` : ""}`;
+  }
+
+  return [
+    `Foreground startup probe exited with code ${result.status ?? "null"}, signal ${result.signal ?? "null"}.`,
+    output || "No foreground startup output was captured."
+  ].join("\n");
+}
+
 function collectPublishablePackageManifests() {
   const manifests = [];
 
@@ -515,7 +547,10 @@ async function startRegistry() {
   await sleep(250);
   if (spawnError) {
     removePidFile();
-    throw new Error(formatStartupFailure(`Verdaccio failed to spawn: ${spawnError.message}`));
+    const diagnostic = runStartupDiagnostic();
+    throw new Error(
+      `${formatStartupFailure(`Verdaccio failed to spawn: ${spawnError.message}`)}\n\n${diagnostic}`
+    );
   }
 
   if (!child.pid) {
@@ -535,11 +570,29 @@ async function startRegistry() {
     const reason = exitInfo
       ? `Verdaccio exited before it became ready (code ${exitInfo.code ?? "null"}, signal ${exitInfo.signal ?? "null"})`
       : "Verdaccio failed to start";
-    throw new Error(formatStartupFailure(reason));
+    const diagnostic = readLogTail() ? "" : `\n\n${runStartupDiagnostic()}`;
+    throw new Error(`${formatStartupFailure(reason)}${diagnostic}`);
   }
 
   console.log(`[local-registry] Verdaccio started at ${registryUrl}`);
   console.log(`[local-registry] PID file: ${pidPath}`);
+}
+
+async function startRegistryForeground() {
+  ensureVerdaccioInstalled();
+  ensureRuntimeDirectory();
+  ensureVerdaccioConfig();
+
+  if (await pingRegistry()) {
+    console.log(`[local-registry] Verdaccio is already responding at ${registryUrl}`);
+    return;
+  }
+
+  console.log(`[local-registry] Starting Verdaccio in the foreground at ${registryUrl}`);
+  console.log("[local-registry] Keep this terminal open while publishing from another terminal.");
+  runCommand(process.execPath, [verdaccioEntrypoint, "--config", configPath, "--listen", registryHost], {
+    env: getSanitizedEnvironment()
+  });
 }
 
 async function stopRegistry() {
