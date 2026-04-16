@@ -53,6 +53,12 @@ const changesetEntrypoint = path.join(
 );
 const snapshotNote = "Temporary local Verdaccio smoke-test release. Do not commit.";
 const shouldUseShell = (command) => process.platform === "win32" && /\.(cmd|bat)$/i.test(command);
+const dependencyFieldNames = [
+  "dependencies",
+  "devDependencies",
+  "peerDependencies",
+  "optionalDependencies"
+];
 
 const command = process.argv[2];
 const commandArgs = process.argv.slice(3);
@@ -516,6 +522,40 @@ function publishPackagesWithNpm(packageNames, distTag, environment) {
   }
 }
 
+function replaceWorkspaceDependenciesForPublish() {
+  const manifests = collectPublishablePackageManifests();
+  const versionByName = new Map(manifests.map(({ manifest }) => [manifest.name, manifest.version]));
+
+  for (const { manifestPath, manifest } of manifests) {
+    let changed = false;
+
+    for (const fieldName of dependencyFieldNames) {
+      const dependencies = manifest[fieldName];
+
+      if (!dependencies || typeof dependencies !== "object") {
+        continue;
+      }
+
+      for (const [dependencyName, dependencyVersion] of Object.entries(dependencies)) {
+        if (
+          typeof dependencyVersion !== "string" ||
+          !dependencyVersion.startsWith("workspace:") ||
+          !versionByName.has(dependencyName)
+        ) {
+          continue;
+        }
+
+        dependencies[dependencyName] = versionByName.get(dependencyName);
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+    }
+  }
+}
+
 async function ensureRegistryRunning() {
   const available = await pingRegistry();
   if (available) {
@@ -801,6 +841,7 @@ async function publishTemporaryRelease({
     runCommand(process.execPath, [changesetEntrypoint, "version", "--snapshot", versionTag], {
       env: getSanitizedEnvironment()
     });
+    replaceWorkspaceDependenciesForPublish();
     publishedVersions = readPublishedSnapshotVersions(releasePackages);
     publishPackagesWithNpm(releasePackages, distTag, environment);
   } finally {
