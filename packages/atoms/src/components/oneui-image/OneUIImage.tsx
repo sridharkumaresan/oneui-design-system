@@ -21,6 +21,7 @@ export const OneUIImage = (props: OneUIImageProps): React.JSX.Element => {
   const {
     alt,
     aspectRatio,
+    borderRadius,
     className,
     emptyFallback,
     errorFallback,
@@ -44,7 +45,8 @@ export const OneUIImage = (props: OneUIImageProps): React.JSX.Element => {
   const resolvedAspectRatio = getAspectRatio(aspectRatio);
   const rootStyle: React.CSSProperties = {
     ...style,
-    aspectRatio: resolvedAspectRatio
+    aspectRatio: resolvedAspectRatio,
+    ...(borderRadius !== undefined ? { borderRadius } : {})
   };
   const customStatus = renderStatus?.({
     resolvedSrc,

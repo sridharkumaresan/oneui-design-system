@@ -12,6 +12,12 @@ type ResultCardFactoryProps = {
   items: NormalizedSearchResult[];
 };
 
+const resultImageStyle: React.CSSProperties = {
+  background: "transparent",
+  border: 0,
+  borderRadius: "12px"
+};
+
 const getSummaryPreview = (item: NormalizedSearchResult): string | undefined => {
   const preview = createDescriptionPreview(item.summary, {
     maxChars: item.type === "person" ? 90 : 180,
@@ -59,6 +65,7 @@ const renderEventCard = (item: NormalizedSearchResult): React.ReactElement => {
             aspectRatio="16 / 10"
             className={styles.eventImage}
             src={item.thumbnailUrl}
+            style={resultImageStyle}
           />
         </div>
       ) : null}
@@ -99,6 +106,7 @@ const renderNewsCard = (item: NormalizedSearchResult): React.ReactElement => {
           aspectRatio="11 / 7"
           className={styles.newsImage}
           src={item.thumbnailUrl}
+          style={resultImageStyle}
         />
       ) : null}
     </article>

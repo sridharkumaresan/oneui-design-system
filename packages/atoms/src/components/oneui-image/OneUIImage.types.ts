@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes, ReactNode } from "react";
+import type { CSSProperties, ImgHTMLAttributes, ReactNode } from "react";
 
 import type { ImageLoadState } from "@functions-oneui/react-utils";
 
@@ -7,6 +7,7 @@ export type OneUIImageFit = "cover" | "contain" | "fill" | "none" | "scale-down"
 export type OneUIImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "children" | "src"> & {
   alt: string;
   aspectRatio?: number | string;
+  borderRadius?: CSSProperties["borderRadius"];
   emptyFallback?: ReactNode;
   errorFallback?: ReactNode;
   fallbackSrc?: string;

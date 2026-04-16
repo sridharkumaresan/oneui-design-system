@@ -15,6 +15,7 @@ Resilient image atom for OneUI consumers.
 - empty placeholder when no `src` is provided
 - error placeholder when all sources fail
 - optional `fallbackSrc`
+- optional `borderRadius` for content-specific image shape
 - optional retry button for error states
 
 ## Advanced usage

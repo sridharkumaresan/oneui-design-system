@@ -52,6 +52,16 @@ describe("OneUIImage", () => {
     });
   });
 
+  it("applies a custom root border radius", () => {
+    const { container } = renderWithOneUIProvider(
+      <OneUIImage alt="Custom radius" borderRadius="12px" src={undefined} />
+    );
+
+    expect(container.querySelector("[data-oneui-image]")?.getAttribute("style")).toContain(
+      "border-radius: 12px"
+    );
+  });
+
   it("renders the fallback source after a primary load error", async () => {
     let attempt = 0;
     globalThis.Image = class extends MockImage {

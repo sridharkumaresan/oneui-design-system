@@ -11,6 +11,9 @@ const meta = {
     src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
   },
   argTypes: {
+    borderRadius: {
+      control: "text"
+    },
     fit: {
       control: "inline-radio",
       options: ["cover", "contain", "fill", "none", "scale-down"]

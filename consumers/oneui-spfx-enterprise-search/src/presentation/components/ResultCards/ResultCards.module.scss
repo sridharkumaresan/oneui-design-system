@@ -71,19 +71,6 @@
   width: 100%;
   height: 100%;
   display: block;
-  border: 0;
-  background: transparent;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.eventImage :global(img),
-.newsImage :global(img) {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 12px;
 }
 
 .eventContent,
@@ -101,7 +88,6 @@
 
 .newsImage {
   height: 140px;
-  border-radius: 12px;
 }
 
 .personCard {
