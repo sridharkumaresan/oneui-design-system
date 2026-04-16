@@ -250,6 +250,15 @@ function sleep(delayMs) {
   });
 }
 
+function readLogTail(lineCount = 40) {
+  if (!existsSync(logPath)) {
+    return "";
+  }
+
+  const lines = readFileSync(logPath, "utf8").trimEnd().split(/\r?\n/);
+  return lines.slice(-lineCount).join("\n");
+}
+
 function pingRegistry(timeoutMs = 1000) {
   return new Promise((resolve) => {
     const request = http.get(new URL("-/ping", registryUrl), (response) => {
@@ -280,6 +289,35 @@ async function waitForRegistryState(expectedUp, attempts = 30, delayMs = 500) {
   }
 
   return false;
+}
+
+async function waitForRegistryStart(child, attempts = 30, delayMs = 500) {
+  let exitInfo = null;
+
+  child.once("exit", (code, signal) => {
+    exitInfo = { code, signal };
+  });
+
+  for (let index = 0; index < attempts; index += 1) {
+    if (await pingRegistry()) {
+      return { ready: true, exitInfo };
+    }
+
+    if (exitInfo) {
+      return { ready: false, exitInfo };
+    }
+
+    await sleep(delayMs);
+  }
+
+  return { ready: false, exitInfo };
+}
+
+function formatStartupFailure(reason) {
+  const tail = readLogTail();
+  const details = tail ? `\n\nRecent Verdaccio log output:\n${tail}` : "\n\nNo Verdaccio log output was captured.";
+
+  return `${reason}. Check ${logPath} after restarting.${details}`;
 }
 
 function collectPublishablePackageManifests() {
@@ -463,18 +501,21 @@ async function startRegistry() {
     {
       cwd: workspaceRoot,
       detached: true,
-      stdio: ["ignore", logFd, logFd]
+      env: getSanitizedEnvironment(),
+      stdio: ["ignore", logFd, logFd],
+      windowsHide: true
     }
   );
   let spawnError = null;
   child.once("error", (error) => {
     spawnError = error;
   });
+  const startupState = waitForRegistryStart(child);
 
   await sleep(250);
   if (spawnError) {
     removePidFile();
-    throw new Error(`Verdaccio failed to spawn: ${spawnError.message}. Check ${logPath}.`);
+    throw new Error(formatStartupFailure(`Verdaccio failed to spawn: ${spawnError.message}`));
   }
 
   if (!child.pid) {
@@ -485,13 +526,16 @@ async function startRegistry() {
   writeFileSync(pidPath, `${child.pid}\n`, "utf8");
   child.unref();
 
-  const ready = await waitForRegistryState(true);
+  const { ready, exitInfo } = await startupState;
   if (!ready) {
     if (isProcessAlive(child.pid)) {
       process.kill(child.pid, "SIGTERM");
     }
     removePidFile();
-    throw new Error(`Verdaccio failed to start. Check ${logPath} after restarting.`);
+    const reason = exitInfo
+      ? `Verdaccio exited before it became ready (code ${exitInfo.code ?? "null"}, signal ${exitInfo.signal ?? "null"})`
+      : "Verdaccio failed to start";
+    throw new Error(formatStartupFailure(reason));
   }
 
   console.log(`[local-registry] Verdaccio started at ${registryUrl}`);
