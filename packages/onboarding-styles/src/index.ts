@@ -39,7 +39,7 @@ export const createOneUIOnboardingCssVariables = (
       theme.fontSizeBase500,
       "var(--oneui-fluent-fontSizeBase500)"
     ),
-    "--oneui-onboarding-title-weight": resolveThemeValue(theme.fontWeightSemibold, "600"),
+    "--oneui-onboarding-title-weight": resolveThemeValue(theme.fontWeightMedium, "500"),
     "--oneui-onboarding-body-size": resolveThemeValue(
       theme.fontSizeBase300,
       "var(--oneui-fluent-fontSizeBase300)"
@@ -52,6 +52,26 @@ export const createOneUIOnboardingCssVariables = (
     "--oneui-onboarding-surface-background": resolveThemeValue(
       theme.colorNeutralBackground1,
       "var(--oneui-colors-background-canvas)"
+    ),
+    "--oneui-onboarding-brand-surface-background": resolveThemeValue(
+      theme.colorBrandBackground,
+      "var(--oneui-fluent-colorBrandBackground)"
+    ),
+    "--oneui-onboarding-brand-surface-background-hover": resolveThemeValue(
+      theme.colorBrandBackgroundHover,
+      "var(--oneui-fluent-colorBrandBackgroundHover)"
+    ),
+    "--oneui-onboarding-brand-surface-foreground": resolveThemeValue(
+      theme.colorNeutralForegroundOnBrand,
+      "var(--oneui-fluent-colorNeutralForegroundOnBrand)"
+    ),
+    "--oneui-onboarding-brand-surface-muted": resolveThemeValue(
+      theme.colorNeutralForegroundOnBrand,
+      "var(--oneui-fluent-colorNeutralForegroundOnBrand)"
+    ),
+    "--oneui-onboarding-brand-surface-border": resolveThemeValue(
+      theme.colorBrandStroke1,
+      "var(--oneui-fluent-colorBrandStroke1)"
     ),
     "--oneui-onboarding-surface-foreground": resolveThemeValue(
       theme.colorNeutralForeground1,
@@ -124,6 +144,14 @@ export const createOneUIOnboardingCssVariables = (
     "--oneui-onboarding-button-font-weight": resolveThemeValue(
       theme.fontWeightRegular,
       "400"
+    ),
+    "--oneui-onboarding-pagination-dot": resolveThemeValue(
+      theme.colorNeutralStroke1,
+      "var(--oneui-fluent-colorNeutralStroke1)"
+    ),
+    "--oneui-onboarding-pagination-dot-active": resolveThemeValue(
+      theme.colorBrandBackground,
+      "var(--oneui-fluent-colorBrandBackground)"
     )
   };
 };

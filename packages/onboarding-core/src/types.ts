@@ -95,10 +95,18 @@ export type OnboardingRunContext = {
   tour: OnboardingTourDefinition;
 };
 
+export type OnboardingProgressDisplay = "count" | "dots" | "dots-and-count";
+
+export type OnboardingVisualConfig = {
+  appearance?: "neutral" | "brand";
+  progressDisplay?: OnboardingProgressDisplay;
+};
+
 export type OnboardingStepDefinition = {
   id: string;
   title?: string;
   description?: string;
+  visual?: OnboardingVisualConfig;
   target?: OnboardingStepTarget;
   side?: Side;
   align?: Alignment;
@@ -126,6 +134,7 @@ export type OnboardingTourDefinition = {
   steps: OnboardingStepDefinition[];
   allowRestart?: boolean;
   targetMissingBehavior?: "skip" | "abort";
+  visual?: OnboardingVisualConfig;
   shouldRun?: (context: OnboardingRunContext) => boolean;
   driverConfig?: Omit<Config, "steps">;
 };
@@ -184,5 +193,10 @@ export const oneuiOnboardingClassNames = {
   nextButton: "oneui-onboarding-button-next",
   closeButton: "oneui-onboarding-button-close",
   button: "oneui-onboarding-button",
-  navigation: "oneui-onboarding-navigation"
+  navigation: "oneui-onboarding-navigation",
+  footerCenter: "oneui-onboarding-footer-center",
+  pagination: "oneui-onboarding-pagination",
+  paginationDot: "oneui-onboarding-pagination-dot",
+  paginationDotActive: "oneui-onboarding-pagination-dot-active",
+  progressCount: "oneui-onboarding-progress-count"
 } as const;

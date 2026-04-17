@@ -1,14 +1,17 @@
 import * as React from "react";
 
-import { Text } from "@fluentui/react-components";
+import { IllustratedState } from "@functions-oneui/organism-illustrated-state";
 
 import styles from "./States.module.scss";
 
 export const PreSearchEmptyState = (): React.ReactElement => (
   <div className={styles.stateCard}>
-    <Text className={styles.stateTitle}>Start with a query</Text>
-    <Text className={styles.stateBody}>
-      Enter a topic, person, site, file, or Barclays process to load grouped enterprise results.
-    </Text>
+    <IllustratedState
+      description="Search for a topic, colleague, site, file, or process to load grouped results from the configured enterprise sources."
+      headingLevel={2}
+      surfaceAppearance="borderless"
+      title="Start with a search"
+      variant="no-results"
+    />
   </div>
 );

@@ -109,7 +109,7 @@ export const VerticalTabs = (props: VerticalTabsProps): React.ReactElement => {
 
   return (
     <Overflow minimumVisible={1} overflowAxis="horizontal" overflowDirection="end" padding={24}>
-      <div className={styles.root}>
+      <div className={styles.root} data-search-onboarding="verticals">
         <TabList
           className={styles.tabList}
           onTabSelect={(_, data) => onSelect(data.value as VerticalKey).then(() => undefined)}

@@ -16,6 +16,7 @@ import {
   type OnboardingStepTarget,
   type OnboardingTargetResolveContext,
   type OnboardingTourDefinition,
+  type OnboardingVisualConfig,
   type StartOnboardingTourOptions
 } from "./types.js";
 
@@ -48,9 +49,20 @@ const memoryPersistenceAdapter: OnboardingPersistenceAdapter = {
 
 const decoratePopoverDom = (
   popover: PopoverDOM,
-  classNames: typeof oneuiOnboardingClassNames
+  classNames: typeof oneuiOnboardingClassNames,
+  options: {
+    activeIndex: number;
+    stepCount: number;
+    visual?: OnboardingVisualConfig;
+  }
 ): void => {
+  const progressDisplay = options.visual?.progressDisplay ?? "count";
+  const appearance = options.visual?.appearance ?? "neutral";
+
   popover.wrapper.classList.add(classNames.popover);
+  popover.wrapper.setAttribute("data-oneui-onboarding-appearance", appearance);
+  popover.arrow.setAttribute("data-oneui-onboarding-arrow", "");
+  popover.arrow.setAttribute("data-oneui-onboarding-appearance", appearance);
   popover.title.classList.add(classNames.title);
   popover.description.classList.add(classNames.description);
   popover.footer.classList.add(classNames.footer);
@@ -59,6 +71,48 @@ const decoratePopoverDom = (
   popover.nextButton.classList.add(classNames.button, classNames.nextButton);
   popover.closeButton.classList.add(classNames.closeButton);
   popover.footerButtons.classList.add(classNames.navigation);
+
+  popover.footer.querySelector(`.${classNames.pagination}`)?.remove();
+  popover.footer.querySelector(`.${classNames.footerCenter}`)?.remove();
+  popover.progress.classList.toggle(classNames.progressCount, progressDisplay !== "dots");
+  popover.progress.setAttribute(
+    "aria-label",
+    `Step ${options.activeIndex + 1} of ${options.stepCount}`
+  );
+
+  const footerCenter = popover.wrapper.ownerDocument.createElement("div");
+  footerCenter.className = classNames.footerCenter;
+
+  if (progressDisplay === "dots" || progressDisplay === "dots-and-count") {
+    const pagination = popover.wrapper.ownerDocument.createElement("div");
+    pagination.className = classNames.pagination;
+    pagination.setAttribute("aria-hidden", "true");
+
+    for (let index = 0; index < options.stepCount; index += 1) {
+      const dot = popover.wrapper.ownerDocument.createElement("span");
+      dot.className =
+        index === options.activeIndex
+          ? `${classNames.paginationDot} ${classNames.paginationDotActive}`
+          : classNames.paginationDot;
+      pagination.append(dot);
+    }
+
+    footerCenter.append(pagination);
+  }
+
+  footerCenter.append(popover.progress);
+  popover.footer.replaceChildren(popover.previousButton, footerCenter, popover.nextButton);
+
+  if (progressDisplay === "dots") {
+    popover.progress.style.position = "absolute";
+    popover.progress.style.inlineSize = "1px";
+    popover.progress.style.blockSize = "1px";
+    popover.progress.style.margin = "-1px";
+    popover.progress.style.overflow = "hidden";
+    popover.progress.style.clip = "rect(0 0 0 0)";
+  } else {
+    popover.progress.removeAttribute("style");
+  }
 };
 
 const resolveElement = (
@@ -115,6 +169,16 @@ const buildAnalyticsEvent = (
 };
 
 const nowIso = (): string => new Date().toISOString();
+
+const resolveStepVisual = (
+  tour: OnboardingTourDefinition,
+  step: OnboardingStepDefinition
+): OnboardingVisualConfig => {
+  return {
+    ...(tour.visual ?? {}),
+    ...(step.visual ?? {})
+  };
+};
 
 export const createOnboardingController = (
   options: OnboardingControllerOptions
@@ -303,7 +367,14 @@ export const createOnboardingController = (
       ...(tour.driverConfig ?? {}),
       steps: resolvedSteps.map((resolvedStep) => resolvedStep.driveStep),
       onPopoverRender: (popover, opts) => {
-        decoratePopoverDom(popover, classNames);
+        const stepIndex = opts.state.activeIndex ?? 0;
+        const sourceStep = resolvedSteps[stepIndex]?.source;
+
+        decoratePopoverDom(popover, classNames, {
+          activeIndex: stepIndex,
+          stepCount: resolvedSteps.length,
+          visual: sourceStep ? resolveStepVisual(tour, sourceStep) : tour.visual
+        });
         tour.driverConfig?.onPopoverRender?.(popover, opts);
       },
       onHighlighted: (element, currentStep, opts) => {

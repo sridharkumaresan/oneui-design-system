@@ -18,15 +18,16 @@ export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.R
 
   return (
     <SmartLoadingContainer
-      description="Results from all configured enterprise systems are grouped below."
+      aria-label="Search result groups"
+      data-search-onboarding="loaded-results"
       layout="single"
       progressSlot={<SearchResultsProgress progress={result.progress} />}
       shape="square"
       surfaceAppearance="flat"
-      title="All sources loaded"
+      title=""
     >
       <div className={styles.resultsColumns}>
-        <div className={styles.mainColumn}>
+        <div className={styles.mainColumn} data-search-onboarding="main-sections">
           {mainSections.map((section) => (
             <SmartLoadingSection
               accentTone={section.vertical.rendering.sectionAccentTone}
@@ -42,6 +43,7 @@ export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.R
               expandOnSuccess
               collapsible
               count={section.total}
+              data-search-section={section.vertical.key}
               emptyContent={section.vertical.rendering.emptyMessage}
               errorContent={section.errorMessage}
               key={section.vertical.key}
@@ -56,7 +58,7 @@ export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.R
             </SmartLoadingSection>
           ))}
         </div>
-        <aside className={styles.sideColumn}>
+        <aside className={styles.sideColumn} data-search-onboarding="supporting-sections">
           {sideSections.map((section) => (
             <SmartLoadingSection
               accentTone={section.vertical.rendering.sectionAccentTone}
@@ -72,6 +74,7 @@ export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.R
               expandOnSuccess
               collapsible
               count={section.total}
+              data-search-section={section.vertical.key}
               emptyContent={section.vertical.rendering.emptyMessage}
               key={section.vertical.key}
               loadingLabel={`Loading ${section.vertical.title.toLowerCase()}...`}

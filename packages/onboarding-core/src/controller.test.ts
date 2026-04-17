@@ -51,6 +51,35 @@ const makeDriverFactory = () => {
   };
 };
 
+const createPopoverDom = () => {
+  const wrapper = document.createElement("div");
+  const title = document.createElement("h2");
+  const description = document.createElement("p");
+  const footer = document.createElement("div");
+  const progress = document.createElement("span");
+  const previousButton = document.createElement("button");
+  const nextButton = document.createElement("button");
+  const closeButton = document.createElement("button");
+  const footerButtons = document.createElement("div");
+
+  footer.append(progress, footerButtons);
+  footerButtons.append(previousButton, nextButton);
+  wrapper.append(title, description, footer, closeButton);
+
+  return {
+    wrapper,
+    arrow: document.createElement("span"),
+    title,
+    description,
+    footer,
+    progress,
+    previousButton,
+    nextButton,
+    closeButton,
+    footerButtons
+  };
+};
+
 describe("createOnboardingController", () => {
   it("starts a tour and tracks analytics for visible steps", async () => {
     const events: OnboardingAnalyticsEvent[] = [];
@@ -171,5 +200,47 @@ describe("createOnboardingController", () => {
     });
     expect(driverFactory.api.drive).toHaveBeenLastCalledWith(0);
     expect(persistence.get("welcome")?.status).toBe("in-progress");
+  });
+
+  it("decorates branded tours with pagination indicators", async () => {
+    const driverFactory = makeDriverFactory();
+    const controller = createOnboardingController({
+      tours: [
+        {
+          id: "welcome",
+          version: "1",
+          visual: {
+            appearance: "brand",
+            progressDisplay: "dots-and-count"
+          },
+          steps: [
+            { id: "first", target: { kind: "selector", selector: "body" } },
+            { id: "second", target: { kind: "selector", selector: "body" } },
+            { id: "third", target: { kind: "selector", selector: "body" } }
+          ]
+        }
+      ],
+      driverFactory: driverFactory.factory,
+      document
+    });
+
+    await controller.startTour("welcome");
+
+    const popover = createPopoverDom();
+    const config = driverFactory.api.getConfig();
+    config.onPopoverRender?.(popover, {
+      config,
+      state: { activeIndex: 1 },
+      driver: driverFactory.api
+    });
+
+    expect(popover.wrapper.getAttribute("data-oneui-onboarding-appearance")).toBe("brand");
+    expect(popover.arrow.getAttribute("data-oneui-onboarding-appearance")).toBe("brand");
+    expect(popover.footer.children[0]).toBe(popover.previousButton);
+    expect(popover.footer.children[1]?.classList.contains("oneui-onboarding-footer-center")).toBe(true);
+    expect(popover.footer.children[2]).toBe(popover.nextButton);
+    expect(popover.footer.children[1]?.querySelectorAll(".oneui-onboarding-pagination-dot")).toHaveLength(3);
+    expect(popover.footer.children[1]?.querySelectorAll(".oneui-onboarding-pagination-dot-active")).toHaveLength(1);
+    expect(popover.progress.getAttribute("aria-label")).toBe("Step 2 of 3");
   });
 });

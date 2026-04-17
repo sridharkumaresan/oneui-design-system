@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { PAGE_SUBTITLE, PAGE_TITLE } from "../../../common/constants/searchDefaults";
 import { SearchOrchestrator } from "../../../application/search/orchestrators/SearchOrchestrator";
 import { useSearchPageController } from "../../hooks/useSearchPageController";
 import { SearchHeader } from "../SearchHeader/SearchHeader";
@@ -18,13 +17,6 @@ export const SearchPage = ({ orchestrator, userDisplayName }: SearchPageProps): 
 
   return (
     <div className={styles.root}>
-      <header className={styles.pageHeader}>
-        <div>
-          <div className={styles.pageTitle}>{PAGE_TITLE}</div>
-          <div className={styles.pageSubtitle}>{PAGE_SUBTITLE}</div>
-        </div>
-      </header>
-
       <SearchHeader
         onQueryChange={controller.onQueryChange}
         onSubmit={controller.onSearchSubmit}

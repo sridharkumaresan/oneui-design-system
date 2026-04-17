@@ -4,26 +4,6 @@
   padding: 16px;
 }
 
-.pageHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.pageTitle {
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.15;
-}
-
-.pageSubtitle {
-  font-size: 14px;
-  color: #5e5e5e;
-  max-width: 72ch;
-  margin-top: 6px;
-}
-
 .heroBanner {
   isolation: isolate;
   overflow: visible;
@@ -50,11 +30,6 @@
 .breadcrumb::before {
   content: "›";
   margin-right: 10px;
-}
-
-.heroDescription {
-  max-width: 60ch;
-  opacity: 0.92;
 }
 
 .searchSurface {

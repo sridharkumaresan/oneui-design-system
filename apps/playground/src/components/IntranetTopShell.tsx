@@ -5,7 +5,7 @@ import { OneUIBadge, OneUIText } from "@functions-oneui/atoms";
 import { BrandedHeroBanner } from "@functions-oneui/organism-hero-banner";
 import barclaysWordmark from "../assets/barclays-wordmark.svg";
 
-type DemoRoute = "search" | "tasks";
+type DemoRoute = "search" | "tasks" | "onboarding";
 
 type IntranetTopShellProps = {
   onQueryChange: (value: string) => void;
@@ -93,6 +93,7 @@ export const IntranetTopShell = ({
   route
 }: IntranetTopShellProps): React.JSX.Element => {
   const isTaskRoute = route === "tasks";
+  const isOnboardingRoute = route === "onboarding";
 
   return (
     <div className="connections-shell-stack">
@@ -179,16 +180,27 @@ export const IntranetTopShell = ({
           >
             Task dashboard
           </button>
+          <button
+            aria-selected={route === "onboarding"}
+            className={`connections-route-switch-button ${route === "onboarding" ? "connections-route-switch-button-active" : ""}`}
+            onClick={() => {
+              onRouteChange("onboarding");
+            }}
+            role="tab"
+            type="button"
+          >
+            Onboarding
+          </button>
         </div>
       </nav>
 
       <div className="connections-shell-banner">
-        {isTaskRoute ? (
+        {isTaskRoute || isOnboardingRoute ? (
           <BrandedHeroBanner
             className="connections-task-banner"
             height="tiny"
             surfaceKey="gradientCyanLightBlue"
-            title="Task Inbox"
+            title={isOnboardingRoute ? "Onboarding Demo" : "Task Inbox"}
           />
         ) : (
           <BrandedHeroBanner

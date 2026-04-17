@@ -20,9 +20,21 @@ importers:
       '@functions-oneui/fonts':
         specifier: 0.0.0-local-20260415025043
         version: 0.0.0-local-20260415025043
+      '@functions-oneui/onboarding-core':
+        specifier: 0.0.0-local-20260417114740
+        version: 0.0.0-local-20260417114740
+      '@functions-oneui/onboarding-react':
+        specifier: 0.0.0-local-20260417114740
+        version: 0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      '@functions-oneui/onboarding-styles':
+        specifier: 0.0.0-local-20260417114740
+        version: 0.0.0-local-20260417114740
       '@functions-oneui/organism-hero-banner':
         specifier: 0.0.0-local-20260415025043
         version: 0.0.0-local-20260415025043(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      '@functions-oneui/organism-illustrated-state':
+        specifier: 0.0.0-local-20260417114740
+        version: 0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       '@functions-oneui/organism-search-autocomplete':
         specifier: 0.0.0-local-20260415025043
         version: 0.0.0-local-20260415025043(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
@@ -1149,11 +1161,38 @@ packages:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  '@functions-oneui/atoms@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-qgGyEtE7oqrk2DXv4HUCzCR8gcG3RAPTCWYqIP7D2v4QRs/tMaMDputOjfDHsz7r2LX7Cx5BjDDgul7nedD1+A==}
+    peerDependencies:
+      '@fluentui/react-components': ^9.0.0
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+
   '@functions-oneui/fonts@0.0.0-local-20260415025043':
     resolution: {integrity: sha512-Z93wzgZ1NobIHGnDzFXGx2i0m8jsw3EasGuNGosIy5vvV0+ygoRK/709aBz5wk5nU2xlTUN59urVsAN2fR4yhQ==}
 
+  '@functions-oneui/onboarding-core@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-p6CSTRiggoOif6A+hLT7gvtwacQsVa9/89RyxTetE/rgYmpryWO6UXogWSXVSs2C65x7B96CZ9TBMaWppc1TmQ==}
+
+  '@functions-oneui/onboarding-react@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-Fm0hrV80vdlEjwYlXqkLkWnqfimPygdfqQl8W+VUcZLOCZWKWo0G0SGUhLT5wA/CpSrjrQvex80oU5RyIBcA2A==}
+    peerDependencies:
+      '@fluentui/react-components': ^9.0.0
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@functions-oneui/onboarding-styles@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-Mx9Tq+7rSKh8zNYuj3Pq/Ruzq7fqTdryvsTbJ/cPELb1nZGBkY4Q0MxYHUJICxWATXn6OyqyvlqvUSBCx2YVfQ==}
+
   '@functions-oneui/organism-hero-banner@0.0.0-local-20260415025043':
     resolution: {integrity: sha512-YpClixos7bpRhhabqOI+Heh8NqmG2bDdDNdUZ+1L0EiFDhhWESTwpANYIJosn3Jzdke6An/xRJyf4CDyRfwd6g==}
+    peerDependencies:
+      '@fluentui/react-components': ^9.0.0
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@functions-oneui/organism-illustrated-state@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-uufrkphMvpPrrswRt/hh6NqhtpuG+N0T8RMUR6bXlp9VI8I6ircsD1P7bAWsw7bcmWIPHDoqgZWwMchIv7tEKw==}
     peerDependencies:
       '@fluentui/react-components': ^9.0.0
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1186,8 +1225,28 @@ packages:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  '@functions-oneui/react-utils@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-YOnHntzjQ2GCze4XA+2A4rAmQiqzevFpI6OZzgMjbCbxA+LvsRqQ+0GXSoqbWDDWukVwEQhVd70TfBKsOq3/TQ==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+
   '@functions-oneui/theme@0.0.0-local-20260415025043':
     resolution: {integrity: sha512-TI79dljMAZBzQzr1oqi3WJMxxvdufAEC/Liuhd6wkEgws3t2X258obfhQSqRrg7Zd5pJi6b8++RXKRKu0yMCag==}
+    peerDependencies:
+      '@fluentui/react-components': ^9.0.0
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@fluentui/react-components':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
+  '@functions-oneui/theme@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-cPWGk4zFqJNq/OR70M0mrqb7BBZ9Y4yvug8jRFICThPNO4u9blpQRAmIs3jGln+id3wNeWLE292bVmHOmovLfg==}
     peerDependencies:
       '@fluentui/react-components': ^9.0.0
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1203,8 +1262,14 @@ packages:
   '@functions-oneui/tokens@0.0.0-local-20260415025043':
     resolution: {integrity: sha512-EuSeVz5bIzH5WWaRY/zO4LHc4B+UuEupDdmj31d+x/pRqF/wx9aRRpj8NVtm7gh043VdlKeZBi7ufbv2Rdc6ZA==}
 
+  '@functions-oneui/tokens@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-OTl/5gd/dJQ/5sLf+pMKwp4Hi7dyq5NoDQ3EcVitrYMLAqBl6+frYTEV6L2CciKzBRQDEzT8TqWHeheR9nifQA==}
+
   '@functions-oneui/utils@0.0.0-local-20260415025043':
     resolution: {integrity: sha512-aewCy4ODZAC0E13VpDE6d5vm0hLmc5oMejUUYyi1FRgr4ZTCwk6QvH645mUTr+7hpckObe+Ki8R+rgDxHlK24g==}
+
+  '@functions-oneui/utils@0.0.0-local-20260417114740':
+    resolution: {integrity: sha512-S0Hlpt7JibdbdtXxQMfzYCr/RUn5zLfbssos+MpKNLkjuDQQOQ8Bj55PdATU46eATWuFnVTSGB5ciyr3Pyy86A==}
 
   '@griffel/core@1.20.1':
     resolution: {integrity: sha512-ld1mX04zpmeHn8agx4slSEh8kJ+8or3Y0x9gsJNKSKn6GdCkZBSiGUh+oBXCBn8RKzz8l60TA9IhVSStnyKekA==}
@@ -3126,6 +3191,9 @@ packages:
 
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
+
+  driver.js@1.4.0:
+    resolution: {integrity: sha512-Gm64jm6PmcU+si21sQhBrTAM1JvUrR0QhNmjkprNLxohOBzul9+pNHXgQaT9lW84gwg9GMLB3NZGuGolsz5uew==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -7553,7 +7621,35 @@ snapshots:
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
 
+  '@functions-oneui/atoms@0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
+    dependencies:
+      '@fluentui/react-components': 9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2)
+      '@functions-oneui/react-utils': 0.0.0-local-20260417114740(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      '@functions-oneui/theme': 0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      '@functions-oneui/tokens': 0.0.0-local-20260417114740
+      react: 17.0.1
+      react-dom: 17.0.1(react@17.0.1)
+
   '@functions-oneui/fonts@0.0.0-local-20260415025043': {}
+
+  '@functions-oneui/onboarding-core@0.0.0-local-20260417114740':
+    dependencies:
+      driver.js: 1.4.0
+
+  '@functions-oneui/onboarding-react@0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
+    dependencies:
+      '@fluentui/react-components': 9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2)
+      '@functions-oneui/onboarding-core': 0.0.0-local-20260417114740
+      '@functions-oneui/onboarding-styles': 0.0.0-local-20260417114740
+      '@functions-oneui/theme': 0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      react: 17.0.1
+      react-dom: 17.0.1(react@17.0.1)
+
+  '@functions-oneui/onboarding-styles@0.0.0-local-20260417114740':
+    dependencies:
+      '@functions-oneui/onboarding-core': 0.0.0-local-20260417114740
+      '@functions-oneui/tokens': 0.0.0-local-20260417114740
+      driver.js: 1.4.0
 
   '@functions-oneui/organism-hero-banner@0.0.0-local-20260415025043(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
     dependencies:
@@ -7561,6 +7657,14 @@ snapshots:
       '@functions-oneui/atoms': 0.0.0-local-20260415025043(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       '@functions-oneui/react-utils': 0.0.0-local-20260415025043(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       '@functions-oneui/theme': 0.0.0-local-20260415025043(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      react: 17.0.1
+      react-dom: 17.0.1(react@17.0.1)
+
+  '@functions-oneui/organism-illustrated-state@0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
+    dependencies:
+      '@fluentui/react-components': 9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2)
+      '@functions-oneui/atoms': 0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
+      '@functions-oneui/theme': 0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
 
@@ -7596,6 +7700,12 @@ snapshots:
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
 
+  '@functions-oneui/react-utils@0.0.0-local-20260417114740(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
+    dependencies:
+      '@functions-oneui/utils': 0.0.0-local-20260417114740
+      react: 17.0.1
+      react-dom: 17.0.1(react@17.0.1)
+
   '@functions-oneui/theme@0.0.0-local-20260415025043(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
     dependencies:
       '@functions-oneui/tokens': 0.0.0-local-20260415025043
@@ -7604,9 +7714,21 @@ snapshots:
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
 
+  '@functions-oneui/theme@0.0.0-local-20260417114740(@fluentui/react-components@9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2))(react-dom@17.0.1(react@17.0.1))(react@17.0.1)':
+    dependencies:
+      '@functions-oneui/tokens': 0.0.0-local-20260417114740
+    optionalDependencies:
+      '@fluentui/react-components': 9.73.0(@types/react-dom@17.0.17)(@types/react@17.0.45)(react-dom@17.0.1(react@17.0.1))(react@17.0.1)(scheduler@0.20.2)
+      react: 17.0.1
+      react-dom: 17.0.1(react@17.0.1)
+
   '@functions-oneui/tokens@0.0.0-local-20260415025043': {}
 
+  '@functions-oneui/tokens@0.0.0-local-20260417114740': {}
+
   '@functions-oneui/utils@0.0.0-local-20260415025043': {}
+
+  '@functions-oneui/utils@0.0.0-local-20260417114740': {}
 
   '@griffel/core@1.20.1':
     dependencies:
@@ -10212,6 +10334,8 @@ snapshots:
     dependencies:
       no-case: 3.0.4
       tslib: 2.3.1
+
+  driver.js@1.4.0: {}
 
   dunder-proto@1.0.1:
     dependencies:

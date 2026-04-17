@@ -59,6 +59,18 @@ importers:
       '@functions-oneui/atoms':
         specifier: workspace:*
         version: link:../../packages/atoms
+      '@functions-oneui/fonts':
+        specifier: workspace:*
+        version: link:../../packages/fonts
+      '@functions-oneui/onboarding-core':
+        specifier: workspace:*
+        version: link:../../packages/onboarding-core
+      '@functions-oneui/onboarding-react':
+        specifier: workspace:*
+        version: link:../../packages/onboarding-react
+      '@functions-oneui/onboarding-styles':
+        specifier: workspace:*
+        version: link:../../packages/onboarding-styles
       '@functions-oneui/organism-action-card':
         specifier: workspace:*
         version: link:../../packages/organisms/action-card

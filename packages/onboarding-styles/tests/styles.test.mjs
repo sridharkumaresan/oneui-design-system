@@ -10,6 +10,7 @@ test("createOneUIOnboardingCssVariables returns token-driven defaults", () => {
   const variables = createOneUIOnboardingCssVariables();
 
   assert.equal(variables["--oneui-onboarding-button-primary-background"], "var(--oneui-fluent-colorBrandBackground)");
+  assert.equal(variables["--oneui-onboarding-brand-surface-background"], "var(--oneui-fluent-colorBrandBackground)");
   assert.ok(variables["--oneui-onboarding-surface-background"]);
 });
 

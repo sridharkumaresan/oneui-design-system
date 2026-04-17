@@ -26,7 +26,7 @@ export const SearchHeader = (props: SearchHeaderProps): React.ReactElement => {
     <HeroBanner
       className={styles.heroBanner}
       contentTone="inverse"
-      description="Search across enterprise knowledge, colleague data, sites, files, and reusable resources."
+      data-search-onboarding="search"
       eyebrow={
         <div className={styles.heroEyebrow}>
           <span className={styles.backLink}>Back</span>
@@ -38,6 +38,7 @@ export const SearchHeader = (props: SearchHeaderProps): React.ReactElement => {
       supportingContent={
         <div className={styles.searchSurface}>
           <SearchAutocomplete
+            emptyStateText={null}
             formAriaLabel="Enterprise search"
             inputAriaLabel="Search"
             onQueryChange={onQueryChange}

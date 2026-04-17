@@ -6,10 +6,11 @@ import {
 import { OneUIProvider, type OneUIFluidTypographyScale } from "@functions-oneui/theme";
 
 import { IntranetTopShell } from "./components/IntranetTopShell.js";
+import { OnboardingCustomizationDemoPage } from "./pages/OnboardingCustomizationDemoPage.js";
 import { SearchProgressiveLoadingDemoPage } from "./pages/SearchProgressiveLoadingDemoPage.js";
 import { TaskDashboardDemoPage } from "./pages/TaskDashboardDemoPage.js";
 
-type DemoRoute = "search" | "tasks";
+type DemoRoute = "search" | "tasks" | "onboarding";
 
 export const App = (): React.JSX.Element => {
   const [route, setRoute] = React.useState<DemoRoute>("search");
@@ -69,7 +70,7 @@ export const App = (): React.JSX.Element => {
               query={searchQuery}
               scale={scale}
             />
-          ) : (
+          ) : route === "tasks" ? (
             <TaskDashboardDemoPage
               fluidEnabled={fluidEnabled}
               isSettingsOpen={isSettingsOpen}
@@ -83,6 +84,8 @@ export const App = (): React.JSX.Element => {
               onScaleChange={setScale}
               scale={scale}
             />
+          ) : (
+            <OnboardingCustomizationDemoPage />
           )}
         </OneUIProvider>
       </OneUIStack>

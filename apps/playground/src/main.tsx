@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "@functions-oneui/fonts/styles.css";
+import "@functions-oneui/onboarding-styles/styles.css";
 import { OneUIProvider } from "@functions-oneui/theme";
 
 import { App } from "./App.js";

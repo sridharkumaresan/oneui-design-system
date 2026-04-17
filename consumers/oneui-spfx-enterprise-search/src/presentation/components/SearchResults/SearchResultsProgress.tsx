@@ -12,6 +12,7 @@ export const SearchResultsProgress = ({
   progress
 }: SearchResultsProgressProps): React.ReactElement => (
   <SmartProgressBar
+    data-search-onboarding="progress"
     completed={progress.completed}
     delayed={progress.delayed}
     description={progress.description}
