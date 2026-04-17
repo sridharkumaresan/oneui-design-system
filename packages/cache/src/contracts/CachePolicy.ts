@@ -1,9 +1,6 @@
-export type CacheStoragePreference = "memory" | "localStorage" | "sessionStorage" | "indexedDB" | string;
-
 export type CachePolicy = {
   staleTimeMs?: number;
   expireTimeMs?: number;
-  storage?: CacheStoragePreference;
   version?: string;
   bustOnVersionChange?: boolean;
   metadata?: Record<string, unknown>;
@@ -12,7 +9,7 @@ export type CachePolicy = {
 export type ResolvedCachePolicy = Required<
   Pick<CachePolicy, "staleTimeMs" | "expireTimeMs" | "bustOnVersionChange">
 > &
-  Pick<CachePolicy, "storage" | "version" | "metadata">;
+  Pick<CachePolicy, "version" | "metadata">;
 
 export const defaultCachePolicy: ResolvedCachePolicy = {
   bustOnVersionChange: true,

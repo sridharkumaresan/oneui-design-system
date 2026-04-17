@@ -1,6 +1,7 @@
 import type { CacheEventListener, CacheUnsubscribe } from "./CacheEvent.js";
 import type { CachePolicy } from "./CachePolicy.js";
 import type { CacheRecord, CacheRecordMetadata } from "./CacheRecord.js";
+import type { CacheLifecycleState } from "./CacheSnapshot.js";
 import type { CacheSnapshot } from "./CacheSnapshot.js";
 import type { CachePartialScope, CacheScope } from "./CacheScope.js";
 import type { CacheStorageAdapter } from "./CacheStorageAdapter.js";
@@ -25,13 +26,24 @@ export type CacheSetOptions = {
 
 export type CacheGetOptions = {
   includeExpired?: boolean;
+  policy?: CachePolicy;
 };
 
 export type CacheGetOrFetchOptions = {
   allowStale?: boolean;
+  revalidateIfStale?: boolean;
 };
 
 export type CacheRefreshOptions = CacheSetOptions;
+
+export type CacheGetOrFetchSource = "cache" | "network" | "none";
+
+export type CacheGetOrFetchSnapshotResult<TData = unknown> = {
+  data?: TData;
+  snapshot: CacheSnapshot<TData>;
+  source: CacheGetOrFetchSource;
+  state: CacheLifecycleState;
+};
 
 export type CacheEngine<TData = unknown> = {
   getSnapshot: <TResult = TData>(scope: CacheScope, policy?: CachePolicy) => Promise<CacheSnapshot<TResult>>;
@@ -48,6 +60,12 @@ export type CacheEngine<TData = unknown> = {
     policy?: CachePolicy,
     options?: CacheGetOrFetchOptions
   ) => Promise<TResult>;
+  getOrFetchSnapshot: <TResult = TData>(
+    scope: CacheScope,
+    fetcher: CacheFetcher<TResult>,
+    policy?: CachePolicy,
+    options?: CacheGetOrFetchOptions
+  ) => Promise<CacheGetOrFetchSnapshotResult<TResult>>;
   refresh: <TResult = TData>(
     scope: CacheScope,
     fetcher: CacheFetcher<TResult>,

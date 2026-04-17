@@ -4,6 +4,8 @@ Framework-agnostic scoped cache and resource engine for OneUI consumers.
 
 This package is the Phase 1 cache foundation. It does not include React hooks, UI components, polling, SPFx-specific logic, or demo app integrations.
 
+All cache engine methods are asynchronous, including memory and Web Storage backed engines. This keeps the public contract consistent with IndexedDB.
+
 ## Scope Model
 
 Every entry is addressed by a hierarchy:
@@ -65,12 +67,15 @@ createCacheEngine({
 });
 ```
 
+Storage is selected when the engine is created. Cache policies do not choose storage per resource in Phase 1.5.
+
 Engine methods:
 
 - `getSnapshot(scope, policy?)`
-- `get(scope, options?)`
+- `get(scope, { includeExpired?, policy? })`
 - `set(scope, data, policy?, options?)`
 - `getOrFetch(scope, fetcher, policy?, options?)`
+- `getOrFetchSnapshot(scope, fetcher, policy?, options?)`
 - `refresh(scope, fetcher, policy?, options?)`
 - `remove(scope)`
 - `invalidate(partialScope)`
@@ -96,6 +101,8 @@ Use `createSessionStorageCacheAdapter()` for small browser data that should be c
 
 Use `createIndexedDbCacheAdapter()` for durable structured browser data. This is the recommended persistent adapter for larger app/resource data because it avoids the size and sync limitations of Web Storage. The adapter safely behaves as unavailable when IndexedDB cannot be opened or is not present.
 
+For adapter portability, cache data should be JSON-compatible. Memory and IndexedDB can preserve more structured values than Web Storage, but portable consumers should avoid functions, class instances, and prototype-dependent data.
+
 ## Lifecycle
 
 Each record stores:
@@ -106,7 +113,6 @@ Each record stores:
 - `version`
 - `createdAt`
 - `updatedAt`
-- `lastAccessedAt`
 - `staleAt`
 - `expiresAt`
 - optional `etag`, `checksum`, and metadata
@@ -118,7 +124,20 @@ The engine resolves snapshots as:
 - `stale`: `staleAt <= now < expiresAt`
 - `expired`: `now >= expiresAt`
 
-Stale records are usable by default in `getOrFetch`. Pass `{ allowStale: false }` to force a fetch when a record is stale. This prepares the package for stale-while-revalidate patterns in a future phase without adding hidden background refresh behavior now.
+Stale records are usable by default in `getOrFetch`. Pass `{ allowStale: false }` to force a fetch when a record is stale. Stale does not trigger automatic background refresh in Phase 1.5; callers or future scheduler adapters must explicitly call `refresh`.
+
+Use `getOrFetchSnapshot` when a caller needs hook-friendly cache semantics:
+
+```ts
+const result = await cache.getOrFetchSnapshot(scope, fetcher, policy);
+
+result.source; // "cache" | "network" | "none"
+result.state; // "fresh" | "stale" | "expired" | "missing"
+result.snapshot; // full cache snapshot after the operation
+result.data; // resolved data when available
+```
+
+`getOrFetch` remains the convenience API for callers that only need data.
 
 ## Policies
 
@@ -142,9 +161,21 @@ Defaults:
 - `expireTimeMs`: 30 minutes
 - `bustOnVersionChange`: true
 
+`get(scope, { policy })`, `getSnapshot(scope, policy)`, and `getOrFetch(scope, fetcher, policy)` all apply version busting when `version` changes and `bustOnVersionChange` is enabled.
+
 ## Request Deduplication
 
-`getOrFetch` and `refresh` dedupe concurrent requests by normalized scoped key. If multiple callers request the same scope while a fetch is in flight, only one fetcher runs and all callers receive the same promise result.
+`getOrFetch`, `getOrFetchSnapshot`, and `refresh` dedupe concurrent requests by normalized scoped key. If multiple callers request the same scope while a fetch is in flight, only one fetcher runs and all callers receive the same promise result. `refresh` bypasses cache freshness, but it is still deduped by scoped key.
+
+By default, stale records are returned without revalidation. Consumers can opt into explicit stale revalidation:
+
+```ts
+await cache.getOrFetchSnapshot(scope, fetcher, policy, {
+  revalidateIfStale: true
+});
+```
+
+This returns the stale cached data and refreshes the cache through the existing deduped refresh path. It does not add polling or UI behavior.
 
 ## Invalidation And Busting
 
@@ -158,6 +189,10 @@ await cache.remove({ tenantId: "barclays", siteId: "dcw-home", namespace: "weath
 ```
 
 If a policy supplies `version` and `bustOnVersionChange` is true, a cached record with a different version is removed and treated as `missing`.
+
+Partial-scope invalidation in Web Storage and IndexedDB is scan-based in Phase 1.5. This is acceptable for small and moderate cache sets. If future consumers store large datasets, IndexedDB indexes can be added without changing the engine API.
+
+Persisted records are structurally validated before use. Malformed or partially corrupted records are ignored safely.
 
 ## Events
 
@@ -177,7 +212,6 @@ Events include:
 - `set`
 - `removed`
 - `cleared`
-- `refreshed`
 - `refresh-start`
 - `refresh-success`
 - `refresh-error`

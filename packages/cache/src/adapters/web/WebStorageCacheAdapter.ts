@@ -2,6 +2,7 @@ import type { CacheRecord } from "../../contracts/CacheRecord.js";
 import type { CachePartialScope, CacheStorageKey } from "../../contracts/CacheScope.js";
 import type { CacheStorageAdapter } from "../../contracts/CacheStorageAdapter.js";
 import { doesScopeMatch } from "../../core/CacheKeyBuilder.js";
+import { validateCacheRecord } from "../../core/CacheRecordValidation.js";
 
 export type WebStorageLike = {
   readonly length: number;
@@ -38,7 +39,7 @@ const safeParseRecord = <TData>(value: string | null): CacheRecord<TData> | unde
   }
 
   try {
-    return JSON.parse(value) as CacheRecord<TData>;
+    return validateCacheRecord<TData>(JSON.parse(value));
   } catch {
     return undefined;
   }

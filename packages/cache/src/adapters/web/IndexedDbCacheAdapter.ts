@@ -2,6 +2,7 @@ import type { CacheRecord } from "../../contracts/CacheRecord.js";
 import type { CachePartialScope } from "../../contracts/CacheScope.js";
 import type { CacheStorageAdapter } from "../../contracts/CacheStorageAdapter.js";
 import { doesScopeMatch } from "../../core/CacheKeyBuilder.js";
+import { validateCacheRecord } from "../../core/CacheRecordValidation.js";
 
 export type IndexedDbCacheAdapterOptions = {
   id?: string;
@@ -79,7 +80,11 @@ export const createIndexedDbCacheAdapter = <TData = unknown>(
       return [];
     }
 
-    const records = await requestToPromise<Array<CacheRecord<TData>>>(store.getAll());
+    const records = (await requestToPromise<Array<unknown>>(store.getAll())).flatMap((record) => {
+      const validRecord = validateCacheRecord<TData>(record);
+
+      return validRecord ? [validRecord] : [];
+    });
 
     return partialScope ? records.filter((record) => doesScopeMatch(record.scope, partialScope)) : records;
   };
@@ -90,7 +95,9 @@ export const createIndexedDbCacheAdapter = <TData = unknown>(
     get: async (storageKey) => {
       const store = await transactionStore("readonly");
 
-      return store ? requestToPromise<CacheRecord<TData> | undefined>(store.get(storageKey)) : undefined;
+      return store
+        ? validateCacheRecord<TData>(await requestToPromise<unknown>(store.get(storageKey)))
+        : undefined;
     },
     set: async (record) => {
       const store = await transactionStore("readwrite");

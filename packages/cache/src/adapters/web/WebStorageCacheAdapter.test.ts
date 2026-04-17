@@ -9,7 +9,11 @@ import {
 import type { CacheRecord } from "../../contracts/CacheRecord.js";
 import { buildCacheStorageKey } from "../../core/CacheKeyBuilder.js";
 
-const createStorage = (): WebStorageLike => {
+type TestWebStorage = WebStorageLike & {
+  values: Map<string, string>;
+};
+
+const createStorage = (): TestWebStorage => {
   const values = new Map<string, string>();
 
   return {
@@ -23,7 +27,8 @@ const createStorage = (): WebStorageLike => {
     },
     setItem: (key, value) => {
       values.set(key, value);
-    }
+    },
+    values
   };
 };
 
@@ -72,6 +77,32 @@ describe("WebStorageCacheAdapter", () => {
     await expect(adapter.get("missing")).resolves.toBeUndefined();
     await expect(adapter.list()).resolves.toEqual([]);
     expect(await adapter.isAvailable?.()).toBe(false);
+  });
+
+  it("ignores structurally invalid persisted records", async () => {
+    const storage = createStorage();
+    const adapter = createWebStorageCacheAdapter({
+      kind: "localStorage",
+      storage
+    });
+    const invalidStorageKey = "oneui-cache-record:oneui-cache:v1:tenant:site:weather:key";
+
+    storage.values.set(
+      invalidStorageKey,
+      JSON.stringify({
+        data: "broken",
+        scope: {
+          tenantId: "tenant",
+          namespace: "weather",
+          key: "key"
+        },
+        storageKey: "wrong-key"
+      })
+    );
+
+    expect(await adapter.get("oneui-cache:v1:tenant:site:weather:key")).toBeUndefined();
+    expect(await adapter.list()).toEqual([]);
+    await expect(adapter.clearByScope?.({ namespace: "weather" })).resolves.toBe(0);
   });
 
   it("creates session storage adapters with the expected kind", () => {

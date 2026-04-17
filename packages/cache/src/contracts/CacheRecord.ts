@@ -10,7 +10,6 @@ export type CacheRecord<TData = unknown> = {
   version?: string;
   createdAt: number;
   updatedAt: number;
-  lastAccessedAt?: number;
   staleAt: number;
   expiresAt: number;
   policy?: CachePolicy;

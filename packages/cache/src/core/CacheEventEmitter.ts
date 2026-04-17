@@ -13,7 +13,11 @@ export class CacheEventEmitter<TData = unknown> {
 
   emit(event: CacheEvent<TData>): void {
     for (const listener of this.listeners) {
-      listener(event);
+      try {
+        listener(event);
+      } catch {
+        continue;
+      }
     }
   }
 }

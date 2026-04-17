@@ -4,6 +4,7 @@ import type {
   CacheFetcher,
   CacheGetOptions,
   CacheGetOrFetchOptions,
+  CacheGetOrFetchSnapshotResult,
   CacheRefreshOptions,
   CacheSetOptions
 } from "../contracts/CacheEngine.js";
@@ -18,6 +19,7 @@ import { systemCacheClock } from "../environment/CacheEnvironment.js";
 import { buildCacheStorageKey, normalizeCacheScope } from "./CacheKeyBuilder.js";
 import { CacheEventEmitter } from "./CacheEventEmitter.js";
 import { InFlightRequestRegistry } from "./InFlightRequestRegistry.js";
+import { validateCacheRecord } from "./CacheRecordValidation.js";
 import { isVersionBusted, resolveCachePolicy, resolveCacheState } from "./CacheStateResolver.js";
 
 const resolveTimestamp = (now: number, durationMs: number | undefined): number => {
@@ -55,7 +57,12 @@ export const createCacheEngine = <TData = unknown>(
     const normalizedScope = normalizeCacheScope(scope);
     const storageKey = buildCacheStorageKey(normalizedScope);
     const resolvedPolicy = resolveCachePolicy(policy, options.defaultPolicy);
-    const record = (await storage.get(storageKey)) as CacheRecord<TResult> | undefined;
+    const storedRecord = await storage.get(storageKey);
+    const record = validateCacheRecord<TResult>(storedRecord);
+
+    if (!record && storedRecord) {
+      await storage.remove(storageKey);
+    }
 
     if (isVersionBusted(record, resolvedPolicy)) {
       await storage.remove(storageKey);
@@ -114,7 +121,6 @@ export const createCacheEngine = <TData = unknown>(
       data,
       etag: setOptions.etag,
       expiresAt: resolveTimestamp(now, resolvedPolicy.expireTimeMs),
-      lastAccessedAt: now,
       metadata: {
         ...(resolvedPolicy.metadata ?? {}),
         ...(setOptions.metadata ?? {})
@@ -143,7 +149,7 @@ export const createCacheEngine = <TData = unknown>(
     scope: CacheScope,
     getOptions: CacheGetOptions = {}
   ): Promise<TResult | undefined> => {
-    const snapshot = await getSnapshot<TResult>(scope);
+    const snapshot = await getSnapshot<TResult>(scope, getOptions.policy);
 
     if (!snapshot.record) {
       emit({
@@ -201,12 +207,6 @@ export const createCacheEngine = <TData = unknown>(
           scope: normalizedScope,
           storageKey
         });
-        emit({
-          data: data as unknown as TData,
-          name: "refreshed",
-          scope: normalizedScope,
-          storageKey
-        });
 
         return data;
       } catch (error) {
@@ -227,7 +227,23 @@ export const createCacheEngine = <TData = unknown>(
     policy?: CachePolicy,
     getOrFetchOptions: CacheGetOrFetchOptions = {}
   ): Promise<TResult> => {
+    const result = await getOrFetchSnapshot(scope, fetcher, policy, getOrFetchOptions);
+
+    if (result.data === undefined) {
+      throw new Error("Cache fetch completed without data.");
+    }
+
+    return result.data;
+  };
+
+  const getOrFetchSnapshot = async <TResult = TData>(
+    scope: CacheScope,
+    fetcher: CacheFetcher<TResult>,
+    policy?: CachePolicy,
+    getOrFetchOptions: CacheGetOrFetchOptions = {}
+  ): Promise<CacheGetOrFetchSnapshotResult<TResult>> => {
     const allowStale = getOrFetchOptions.allowStale ?? true;
+    const revalidateIfStale = getOrFetchOptions.revalidateIfStale ?? false;
     const snapshot = await getSnapshot<TResult>(scope, policy);
 
     if (snapshot.record && snapshot.state === "fresh") {
@@ -239,7 +255,12 @@ export const createCacheEngine = <TData = unknown>(
         storageKey: snapshot.storageKey
       });
 
-      return snapshot.record.data;
+      return {
+        data: snapshot.record.data,
+        snapshot,
+        source: "cache",
+        state: snapshot.state
+      };
     }
 
     if (snapshot.record && snapshot.state === "stale" && allowStale) {
@@ -251,7 +272,16 @@ export const createCacheEngine = <TData = unknown>(
         storageKey: snapshot.storageKey
       });
 
-      return snapshot.record.data;
+      if (revalidateIfStale) {
+        await refresh(scope, fetcher, policy);
+      }
+
+      return {
+        data: snapshot.record.data,
+        snapshot,
+        source: "cache",
+        state: snapshot.state
+      };
     }
 
     if (snapshot.record && snapshot.state === "expired") {
@@ -270,7 +300,15 @@ export const createCacheEngine = <TData = unknown>(
       });
     }
 
-    return refresh(scope, fetcher, policy);
+    const data = await refresh(scope, fetcher, policy);
+    const refreshedSnapshot = await getSnapshot<TResult>(scope, policy);
+
+    return {
+      data,
+      snapshot: refreshedSnapshot,
+      source: "network",
+      state: snapshot.state
+    };
   };
 
   const remove = async (scope: CacheScope): Promise<void> => {
@@ -284,11 +322,21 @@ export const createCacheEngine = <TData = unknown>(
     });
   };
 
-  const clearByScope = async (partialScope: CachePartialScope): Promise<number> => {
-    const records = await storage.list(partialScope);
+  const removeByScope = async (partialScope: CachePartialScope): Promise<number> => {
+    const records = (await storage.list(partialScope)).flatMap((record) => {
+      const validRecord = validateCacheRecord<TData>(record);
+
+      return validRecord ? [validRecord] : [];
+    });
     const count = storage.clearByScope
       ? await storage.clearByScope(partialScope)
       : await Promise.all(records.map((record) => storage.remove(record.storageKey))).then(() => records.length);
+
+    return count;
+  };
+
+  const clearByScope = async (partialScope: CachePartialScope): Promise<number> => {
+    const count = await removeByScope(partialScope);
 
     emit({
       name: "cleared",
@@ -300,7 +348,7 @@ export const createCacheEngine = <TData = unknown>(
   };
 
   const invalidate = async (partialScope: CachePartialScope): Promise<number> => {
-    const count = await clearByScope(partialScope);
+    const count = await removeByScope(partialScope);
     emit({
       name: "invalidated",
       partialScope,
@@ -325,6 +373,7 @@ export const createCacheEngine = <TData = unknown>(
     clearByScope,
     get,
     getOrFetch,
+    getOrFetchSnapshot,
     getSnapshot,
     invalidate,
     refresh,

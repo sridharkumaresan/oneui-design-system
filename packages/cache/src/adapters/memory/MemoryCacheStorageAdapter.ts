@@ -2,6 +2,7 @@ import type { CacheRecord } from "../../contracts/CacheRecord.js";
 import type { CachePartialScope, CacheStorageKey } from "../../contracts/CacheScope.js";
 import type { CacheStorageAdapter } from "../../contracts/CacheStorageAdapter.js";
 import { doesScopeMatch } from "../../core/CacheKeyBuilder.js";
+import { validateCacheRecord } from "../../core/CacheRecordValidation.js";
 
 export type MemoryCacheStorageAdapterOptions = {
   id?: string;
@@ -15,7 +16,7 @@ export const createMemoryCacheStorageAdapter = <TData = unknown>(
   return {
     id: options.id ?? "memory",
     kind: "memory",
-    get: async (storageKey) => records.get(storageKey),
+    get: async (storageKey) => validateCacheRecord<TData>(records.get(storageKey)),
     set: async (record) => {
       records.set(record.storageKey, record);
     },
@@ -26,7 +27,11 @@ export const createMemoryCacheStorageAdapter = <TData = unknown>(
       records.clear();
     },
     list: async (partialScope?: CachePartialScope) => {
-      const values = [...records.values()];
+      const values = [...records.values()].flatMap((record) => {
+        const validRecord = validateCacheRecord<TData>(record);
+
+        return validRecord ? [validRecord] : [];
+      });
 
       return partialScope ? values.filter((record) => doesScopeMatch(record.scope, partialScope)) : values;
     },

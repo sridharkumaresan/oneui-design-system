@@ -8,7 +8,6 @@ export type CacheEventName =
   | "set"
   | "removed"
   | "cleared"
-  | "refreshed"
   | "refresh-start"
   | "refresh-success"
   | "refresh-error"

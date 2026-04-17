@@ -1,7 +1,15 @@
-export type { CacheEngine, CacheEngineOptions, CacheFetcher, CacheGetOptions, CacheGetOrFetchOptions } from "./CacheEngine.js";
+export type {
+  CacheEngine,
+  CacheEngineOptions,
+  CacheFetcher,
+  CacheGetOptions,
+  CacheGetOrFetchOptions,
+  CacheGetOrFetchSnapshotResult,
+  CacheGetOrFetchSource
+} from "./CacheEngine.js";
 export type { CacheEvent, CacheEventListener, CacheEventName, CacheUnsubscribe } from "./CacheEvent.js";
 export { defaultCachePolicy } from "./CachePolicy.js";
-export type { CachePolicy, CacheStoragePreference, ResolvedCachePolicy } from "./CachePolicy.js";
+export type { CachePolicy, ResolvedCachePolicy } from "./CachePolicy.js";
 export type { CacheRecord, CacheRecordMetadata } from "./CacheRecord.js";
 export type { CacheLifecycleState, CacheSnapshot } from "./CacheSnapshot.js";
 export { cacheScopeSegmentNames } from "./CacheScope.js";
