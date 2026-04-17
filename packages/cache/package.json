@@ -1,0 +1,29 @@
+{
+  "name": "@functions-oneui/cache",
+  "version": "0.0.0-local-20260410175351",
+  "description": "Framework-agnostic scoped cache and resource engine for OneUI consumers.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vitest": "2.1.9"
+  },
+  "peerDependencies": {}
+}

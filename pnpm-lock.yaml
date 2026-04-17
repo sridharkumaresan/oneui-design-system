@@ -231,6 +231,12 @@ importers:
         specifier: 2.1.9
         version: 2.1.9(@types/node@25.3.0)(@vitest/ui@2.1.9)(jsdom@25.0.1)
 
+  packages/cache:
+    devDependencies:
+      vitest:
+        specifier: 2.1.9
+        version: 2.1.9(@types/node@25.3.0)(@vitest/ui@2.1.9)(jsdom@25.0.1)
+
   packages/fonts: {}
 
   packages/onboarding-core:
