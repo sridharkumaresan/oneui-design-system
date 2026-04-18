@@ -1,5 +1,6 @@
 import * as fluentReactComponents from "@fluentui/react-components";
 import {
+  oneuiBorderScale,
   oneuiFluentThemeOverrides,
   requiredSemanticTokenPaths,
   semanticTokens
@@ -133,7 +134,8 @@ const mapSemanticTokensToFluentTheme = (tokens: SemanticTokenSet): OneUIFluentTh
     mappedTheme.spacingHorizontalXXL,
     "spacingVerticalXXL"
   );
-  mappedTheme.strokeWidthThick = assertThemeValue(tokens.shadows.focusRing, "shadows.focusRing");
+  mappedTheme.strokeWidthThin = oneuiBorderScale.thin;
+  mappedTheme.strokeWidthThick = oneuiBorderScale.thick;
 
   return mappedTheme;
 };

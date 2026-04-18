@@ -13,7 +13,14 @@ export type { CachePolicy, ResolvedCachePolicy } from "./CachePolicy.js";
 export type { CacheRecord, CacheRecordMetadata } from "./CacheRecord.js";
 export type { CacheLifecycleState, CacheSnapshot } from "./CacheSnapshot.js";
 export { cacheScopeSegmentNames } from "./CacheScope.js";
-export type { CachePartialScope, CacheScope, CacheScopeSegmentName, CacheStorageKey } from "./CacheScope.js";
+export type {
+  CachePartialScope,
+  CacheScope,
+  CacheScopeSegmentName,
+  CacheScopeSegments,
+  CacheScopeSegmentValue,
+  CacheStorageKey
+} from "./CacheScope.js";
 export type {
   CacheStorageAdapter,
   CacheStorageAdapterFactory,

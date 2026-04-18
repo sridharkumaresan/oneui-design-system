@@ -5,10 +5,13 @@ import { SmartLoadingContainer, SmartLoadingSection } from "@functions-oneui/org
 
 import type { DedicatedSearchExecutionResult } from "../../../domain/search/contracts/SearchExecutionResult";
 import { ResultCardFactory } from "../ResultCards/ResultCardFactory";
+import styles from "../SearchPage/SearchPage.module.scss";
 
 type VerticalResultListProps = {
   result: DedicatedSearchExecutionResult;
 };
+
+const classNames = styles as unknown as Record<string, string>;
 
 export const VerticalResultList = ({ result }: VerticalResultListProps): React.ReactElement => {
   return (
@@ -29,9 +32,11 @@ export const VerticalResultList = ({ result }: VerticalResultListProps): React.R
           ) : undefined
         }
         collapsible
+        className={classNames.resultSection}
         count={result.result.total}
         delayedMessage="This source is taking longer than expected."
         delayedThresholdMs={450}
+        defaultCollapsed={false}
         emptyContent={result.selectedVertical.rendering.emptyMessage}
         errorContent={result.result.errorMessage}
         expandOnSuccess

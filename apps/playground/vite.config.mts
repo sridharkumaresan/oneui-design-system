@@ -8,7 +8,7 @@ type WorkspaceAlias = {
   replacement: string;
 };
 
-const workspaceRoot = path.resolve(__dirname, "../..");
+const workspaceRoot = path.resolve(import.meta.dirname, "../..");
 const packageRoots = [
   path.join(workspaceRoot, "packages"),
   path.join(workspaceRoot, "packages", "organisms")
@@ -63,6 +63,18 @@ const collectWorkspaceAliases = (): WorkspaceAlias[] => {
 };
 
 export default defineConfig({
+  build: {
+    chunkSizeWarningLimit: 900,
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+          return;
+        }
+
+        warn(warning);
+      }
+    }
+  },
   resolve: {
     alias: collectWorkspaceAliases()
   },

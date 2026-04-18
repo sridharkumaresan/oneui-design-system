@@ -65,10 +65,66 @@ const createFakeIndexedDb = (): IDBFactory => {
   } as unknown as IDBFactory;
 };
 
+const createRecoverableIndexedDb = (): IDBFactory & { breakActiveDatabase: () => void; openCount: () => number } => {
+  const records = new Map<string, CacheRecord>();
+  let broken = false;
+  let openCount = 0;
+  const store = {
+    clear: () => {
+      records.clear();
+      return completeRequest(undefined);
+    },
+    delete: (key: IDBValidKey) => {
+      records.delete(String(key));
+      return completeRequest(undefined);
+    },
+    get: (key: IDBValidKey) => completeRequest(records.get(String(key))),
+    getAll: () => completeRequest([...records.values()]),
+    put: (record: CacheRecord) => {
+      records.set(record.storageKey, record);
+      return completeRequest(record.storageKey);
+    }
+  };
+  const createDatabase = (): IDBDatabase =>
+    ({
+      close: () => undefined,
+      objectStoreNames: {
+        contains: () => true
+      },
+      createObjectStore: () => store,
+      transaction: () => {
+        if (broken) {
+          broken = false;
+          throw new DOMException("The database connection is invalid.", "InvalidStateError");
+        }
+
+        return {
+          objectStore: () => store
+        };
+      }
+    }) as unknown as IDBDatabase;
+
+  return {
+    breakActiveDatabase: () => {
+      broken = true;
+    },
+    open: () => {
+      openCount += 1;
+      const request = new FakeIdbRequest<IDBDatabase>() as unknown as IDBOpenDBRequest;
+      (request as unknown as FakeIdbRequest<IDBDatabase>).result = createDatabase();
+      queueMicrotask(() => {
+        (request as unknown as FakeIdbRequest<IDBDatabase>).onupgradeneeded?.();
+        (request as unknown as FakeIdbRequest<IDBDatabase>).onsuccess?.();
+      });
+
+      return request;
+    },
+    openCount: () => openCount
+  } as unknown as IDBFactory & { breakActiveDatabase: () => void; openCount: () => number };
+};
+
 const createRecord = (namespace: string): CacheRecord<string> => {
   const scope = {
-    tenantId: "tenant",
-    siteId: "site",
     namespace,
     key: "key"
   };
@@ -110,5 +166,21 @@ describe("IndexedDbCacheAdapter", () => {
 
     expect(await adapter.isAvailable?.()).toBe(false);
     await expect(adapter.list()).resolves.toEqual([]);
+  });
+
+  it("reopens and recovers when the active database handle becomes invalid", async () => {
+    const indexedDB = createRecoverableIndexedDb();
+    const adapter = createIndexedDbCacheAdapter<string>({
+      indexedDB
+    });
+    const weather = createRecord("weather");
+
+    await adapter.set(weather);
+    expect(indexedDB.openCount()).toBe(1);
+
+    indexedDB.breakActiveDatabase();
+
+    await expect(adapter.get(weather.storageKey)).resolves.toEqual(weather);
+    expect(indexedDB.openCount()).toBe(2);
   });
 });

@@ -1,15 +1,17 @@
+export type CacheScopeSegmentValue = string | number | boolean;
+
+export type CacheScopeSegments = Record<string, CacheScopeSegmentValue | undefined>;
+
 export type CacheScope = {
-  tenantId: string;
-  siteId?: string;
   namespace: string;
   key: string;
+  segments?: CacheScopeSegments;
 };
 
 export type CachePartialScope = {
-  tenantId?: string;
-  siteId?: string;
   namespace?: string;
   key?: string;
+  segments?: CacheScopeSegments;
 };
 
 export type CacheStorageKey = string;
@@ -17,8 +19,7 @@ export type CacheStorageKey = string;
 export type CacheScopeSegmentName = keyof CacheScope;
 
 export const cacheScopeSegmentNames: CacheScopeSegmentName[] = [
-  "tenantId",
-  "siteId",
   "namespace",
-  "key"
+  "key",
+  "segments"
 ];

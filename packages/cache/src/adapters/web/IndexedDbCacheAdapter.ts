@@ -29,14 +29,43 @@ const requestToPromise = <TResult>(request: IDBRequest<TResult>): Promise<TResul
     request.onerror = () => reject(request.error);
   });
 
+const isRecoverableIndexedDbError = (error: unknown): boolean => {
+  const name = error instanceof DOMException || error instanceof Error ? error.name : "";
+
+  return (
+    name === "AbortError" ||
+    name === "InvalidStateError" ||
+    name === "NotFoundError" ||
+    name === "TransactionInactiveError" ||
+    name === "UnknownError" ||
+    name === "VersionError"
+  );
+};
+
 export const createIndexedDbCacheAdapter = <TData = unknown>(
   options: IndexedDbCacheAdapterOptions = {}
 ): CacheStorageAdapter<TData> => {
   const databaseName = options.databaseName ?? defaultDatabaseName;
   const storeName = options.storeName ?? defaultStoreName;
   let databasePromise: Promise<IDBDatabase | undefined> | undefined;
+  let databaseHandle: IDBDatabase | undefined;
+
+  const resetDatabase = (): void => {
+    try {
+      databaseHandle?.close();
+    } catch {
+      // Ignore close failures while recovering from a broken IndexedDB handle.
+    }
+
+    databaseHandle = undefined;
+    databasePromise = undefined;
+  };
 
   const openDatabase = (): Promise<IDBDatabase | undefined> => {
+    if (databaseHandle) {
+      return Promise.resolve(databaseHandle);
+    }
+
     if (databasePromise) {
       return databasePromise;
     }
@@ -60,7 +89,19 @@ export const createIndexedDbCacheAdapter = <TData = unknown>(
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
       request.onblocked = () => reject(new Error(`IndexedDB database '${databaseName}' is blocked.`));
-    }).catch((): undefined => undefined);
+    })
+      .then((database) => {
+        databaseHandle = database;
+        database.onversionchange = () => {
+          resetDatabase();
+        };
+
+        return database;
+      })
+      .catch((): undefined => {
+        resetDatabase();
+        return undefined;
+      });
 
     return databasePromise;
   };
@@ -71,67 +112,128 @@ export const createIndexedDbCacheAdapter = <TData = unknown>(
       return undefined;
     }
 
-    return database.transaction(storeName, mode).objectStore(storeName);
+    try {
+      return database.transaction(storeName, mode).objectStore(storeName);
+    } catch (error) {
+      resetDatabase();
+      throw error;
+    }
+  };
+
+  const runWithRecovery = async <TResult>(
+    operation: (store: IDBObjectStore | undefined) => Promise<TResult>,
+    fallback: TResult
+  ): Promise<TResult> => {
+    try {
+      const store = await transactionStore("readonly");
+      return await operation(store);
+    } catch (error) {
+      if (!isRecoverableIndexedDbError(error)) {
+        return fallback;
+      }
+
+      resetDatabase();
+    }
+
+    try {
+      const store = await transactionStore("readonly");
+      return await operation(store);
+    } catch (error) {
+      resetDatabase();
+      throw error;
+    }
+  };
+
+  const runWriteWithRecovery = async (
+    operation: (store: IDBObjectStore | undefined) => Promise<void>
+  ): Promise<void> => {
+    try {
+      const store = await transactionStore("readwrite");
+      await operation(store);
+      return;
+    } catch (error) {
+      if (!isRecoverableIndexedDbError(error)) {
+        return;
+      }
+
+      resetDatabase();
+    }
+
+    try {
+      const store = await transactionStore("readwrite");
+      await operation(store);
+    } catch (error) {
+      resetDatabase();
+      throw error;
+    }
   };
 
   const listRecords = async (partialScope?: CachePartialScope): Promise<Array<CacheRecord<TData>>> => {
-    const store = await transactionStore("readonly");
-    if (!store) {
-      return [];
-    }
+    return runWithRecovery(
+      async (store) => {
+        if (!store) {
+          return [];
+        }
 
-    const records = (await requestToPromise<Array<unknown>>(store.getAll())).flatMap((record) => {
-      const validRecord = validateCacheRecord<TData>(record);
+        const records = (await requestToPromise<Array<unknown>>(store.getAll())).flatMap((record) => {
+          const validRecord = validateCacheRecord<TData>(record);
 
-      return validRecord ? [validRecord] : [];
-    });
+          return validRecord ? [validRecord] : [];
+        });
 
-    return partialScope ? records.filter((record) => doesScopeMatch(record.scope, partialScope)) : records;
+        return partialScope ? records.filter((record) => doesScopeMatch(record.scope, partialScope)) : records;
+      },
+      []
+    );
   };
 
   return {
     id: options.id ?? "indexedDB",
     kind: "indexedDB",
     get: async (storageKey) => {
-      const store = await transactionStore("readonly");
-
-      return store
-        ? validateCacheRecord<TData>(await requestToPromise<unknown>(store.get(storageKey)))
-        : undefined;
+      return runWithRecovery(
+        async (store) =>
+          store ? validateCacheRecord<TData>(await requestToPromise<unknown>(store.get(storageKey))) : undefined,
+        undefined
+      );
     },
     set: async (record) => {
-      const store = await transactionStore("readwrite");
-      if (!store) {
-        return;
-      }
+      await runWriteWithRecovery(async (store) => {
+        if (!store) {
+          return;
+        }
 
-      await requestToPromise(store.put(record));
+        await requestToPromise(store.put(record));
+      });
     },
     remove: async (storageKey) => {
-      const store = await transactionStore("readwrite");
-      if (!store) {
-        return;
-      }
+      await runWriteWithRecovery(async (store) => {
+        if (!store) {
+          return;
+        }
 
-      await requestToPromise(store.delete(storageKey));
+        await requestToPromise(store.delete(storageKey));
+      });
     },
     clear: async () => {
-      const store = await transactionStore("readwrite");
-      if (!store) {
-        return;
-      }
+      await runWriteWithRecovery(async (store) => {
+        if (!store) {
+          return;
+        }
 
-      await requestToPromise(store.clear());
+        await requestToPromise(store.clear());
+      });
     },
     list: listRecords,
     clearByScope: async (partialScope) => {
       const records = await listRecords(partialScope);
-      const store = await transactionStore("readwrite");
-      if (!store) {
-        return 0;
-      }
+      await runWriteWithRecovery(async (store) => {
+        if (!store) {
+          return;
+        }
 
-      await Promise.all(records.map((record) => requestToPromise(store.delete(record.storageKey))));
+        await Promise.all(records.map((record) => requestToPromise(store.delete(record.storageKey))));
+      });
 
       return records.length;
     },

@@ -12,13 +12,15 @@ All engine and adapter methods are async. Memory and Web Storage could be synchr
 
 ## Scope Hierarchy
 
-Every record is addressed as:
+Every record is addressed through a generic structured scope:
 
 ```text
-tenantId -> siteId -> namespace -> key
+namespace -> key -> optional segments
 ```
 
-`tenantId`, `namespace`, and `key` are required. `siteId` is optional. The structured scope is normalized into an internal storage key, but consumers should continue to use structured scopes so invalidation remains understandable.
+`namespace` and `key` are required. `segments` is optional and can represent whatever hierarchy a consumer needs, such as tenant/site, workspace/dashboard, region/market, app/environment, user/feature, or another domain-specific grouping.
+
+The structured scope is normalized into an internal storage key, but consumers should continue to use structured scopes so invalidation remains understandable. Segment names are sorted before key generation, which keeps equivalent segment objects deterministic and collision-safe without making tenant/site a core requirement.
 
 ## Lifecycle State
 
@@ -47,6 +49,8 @@ Exact remove is key-based. Partial-scope invalidation is scan-based for memory, 
 
 `getOrFetch` returns data for simple consumers. `getOrFetchSnapshot` returns data plus source/state/snapshot metadata so future React hooks can render stale, refreshing, expired, or network-loaded states without re-deriving cache semantics.
 
-## Phase 2 Direction
+## React Adapter
 
-Phase 2 should build React hooks and demo integration on top of the existing engine. Hooks should use `getOrFetchSnapshot`, subscriptions, and explicit refresh/revalidation options rather than duplicating lifecycle logic.
+`@functions-oneui/cache-react` is the Phase 2 React adapter package. It keeps React-specific behavior outside the core cache package and exposes `useCachedResource` for cached-data-first rendering, stale revalidation, empty/error state, and explicit refresh.
+
+The adapter uses the engine for storage, lifecycle state, version busting, and request dedupe. It also owns optional React-side scheduling such as interval refresh and visibility-aware refresh. It does not introduce framework logic into `@functions-oneui/cache`.

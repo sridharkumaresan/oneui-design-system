@@ -12,6 +12,8 @@ type AllVerticalResultsProps = {
   result: AllSearchExecutionResult;
 };
 
+const classNames = styles as unknown as Record<string, string>;
+
 export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.ReactElement => {
   const mainSections = result.sections.filter((section) => section.vertical.layoutRegion === "main");
   const sideSections = result.sections.filter((section) => section.vertical.layoutRegion === "side");
@@ -43,7 +45,9 @@ export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.R
               expandOnSuccess
               collapsible
               count={section.total}
+              className={classNames.resultSection}
               data-search-section={section.vertical.key}
+              defaultCollapsed={false}
               emptyContent={section.vertical.rendering.emptyMessage}
               errorContent={section.errorMessage}
               key={section.vertical.key}
@@ -74,7 +78,9 @@ export const AllVerticalResults = ({ result }: AllVerticalResultsProps): React.R
               expandOnSuccess
               collapsible
               count={section.total}
+              className={classNames.resultSection}
               data-search-section={section.vertical.key}
+              defaultCollapsed={false}
               emptyContent={section.vertical.rendering.emptyMessage}
               key={section.vertical.key}
               loadingLabel={`Loading ${section.vertical.title.toLowerCase()}...`}

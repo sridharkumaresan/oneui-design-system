@@ -59,6 +59,12 @@ importers:
       '@functions-oneui/atoms':
         specifier: workspace:*
         version: link:../../packages/atoms
+      '@functions-oneui/cache':
+        specifier: workspace:*
+        version: link:../../packages/cache
+      '@functions-oneui/cache-react':
+        specifier: workspace:*
+        version: link:../../packages/cache-react
       '@functions-oneui/fonts':
         specifier: workspace:*
         version: link:../../packages/fonts
@@ -120,6 +126,9 @@ importers:
       '@functions-oneui/atoms':
         specifier: workspace:*
         version: link:../../packages/atoms
+      '@functions-oneui/cache':
+        specifier: workspace:*
+        version: link:../../packages/cache
       '@functions-oneui/fonts':
         specifier: workspace:*
         version: link:../../packages/fonts
@@ -233,6 +242,34 @@ importers:
 
   packages/cache:
     devDependencies:
+      vitest:
+        specifier: 2.1.9
+        version: 2.1.9(@types/node@25.3.0)(@vitest/ui@2.1.9)(jsdom@25.0.1)
+
+  packages/cache-react:
+    dependencies:
+      '@functions-oneui/cache':
+        specifier: workspace:*
+        version: link:../cache
+    devDependencies:
+      '@testing-library/react':
+        specifier: 16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      jsdom:
+        specifier: 25.0.1
+        version: 25.0.1
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
       vitest:
         specifier: 2.1.9
         version: 2.1.9(@types/node@25.3.0)(@vitest/ui@2.1.9)(jsdom@25.0.1)

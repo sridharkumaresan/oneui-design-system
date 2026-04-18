@@ -40,6 +40,7 @@ import {
   useOneUISurfaces
 } from "../dist/index.js";
 import {
+  oneuiBorderScale,
   rawGradientTokenNames,
   rawGradientTokens,
   requiredSemanticTokenPaths,
@@ -54,6 +55,72 @@ const getByPath = (source, path) => {
 
     return undefined;
   }, source);
+};
+
+const cssLengthPattern =
+  /^(?:0|-?\d+(?:\.\d+)?(?:px|rem|em|vh|vw|vmin|vmax|%))$/;
+const cssDurationPattern = /^\d+(?:\.\d+)?(?:ms|s)$/;
+const cssCurvePattern =
+  /^(?:linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\([^)]+\))$/;
+const cssColorPattern =
+  /^(?:#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|transparent|currentColor|var\([^)]+\)|[a-zA-Z]+)$/;
+
+const assertCssLengthToken = (theme, key) => {
+  assert.match(String(theme[key]), cssLengthPattern, `${key} must be a CSS length`);
+};
+
+const assertCssColorToken = (theme, key) => {
+  const value = String(theme[key]);
+
+  assert.match(value, cssColorPattern, `${key} must be a CSS color`);
+  assert.doesNotMatch(value, /\d+\s+\d+\s+\d+/, `${key} must not be a shadow value`);
+};
+
+const assertThemeTokenShapes = (theme, label) => {
+  const colorKeys = Object.keys(theme).filter((key) => {
+    return (
+      key.startsWith("color") ||
+      key.startsWith("oneuiColorBackground") ||
+      key.startsWith("oneuiColorBorder") ||
+      key.startsWith("oneuiColorIcon") ||
+      key.startsWith("oneuiColorInteraction") ||
+      key.startsWith("oneuiColorStatus") ||
+      key.startsWith("oneuiColorText")
+    );
+  });
+  const lengthKeys = Object.keys(theme).filter((key) => {
+    return (
+      key.startsWith("borderRadius") ||
+      key.startsWith("spacingHorizontal") ||
+      key.startsWith("spacingVertical") ||
+      key.startsWith("strokeWidth") ||
+      key.startsWith("oneuiSize")
+    );
+  });
+
+  assert.ok(colorKeys.length > 0, `${label}: expected color tokens`);
+  assert.ok(lengthKeys.length > 0, `${label}: expected length tokens`);
+
+  for (const key of colorKeys) {
+    assertCssColorToken(theme, key);
+  }
+
+  for (const key of lengthKeys) {
+    assertCssLengthToken(theme, key);
+  }
+
+  for (const key of ["durationNormal", "durationGentle"]) {
+    assert.match(String(theme[key]), cssDurationPattern, `${label}: ${key} must be a duration`);
+  }
+
+  for (const key of ["curveEasyEase", "curveAccelerateMid"]) {
+    assert.match(String(theme[key]), cssCurvePattern, `${label}: ${key} must be a timing curve`);
+  }
+
+  for (const key of ["shadow4", "shadow8", "shadow16", "shadow64", "shadowFocusRing"]) {
+    assert.equal(typeof theme[key], "string", `${label}: ${key} must be a string`);
+    assert.ok(theme[key].length > 0, `${label}: ${key} must not be empty`);
+  }
 };
 
 const testSurfacePolicies = defineOneUISurfacePolicyMap({
@@ -96,6 +163,56 @@ test("exports light and dark OneUI themes", () => {
   assert.notEqual(oneuiDarkTheme.colorNeutralBackground1, undefined);
   assert.match(String(oneuiLightTheme.fontFamilyBase), /Barclays Effra/);
   assert.equal(oneuiLightTheme.oneuiButtonFontWeight, 400);
+});
+
+test("maps Fluent stroke widths to CSS length border tokens", () => {
+  for (const theme of [oneuiLightTheme, oneuiDarkTheme, createOneuiTheme({ mode: "light" })]) {
+    assert.equal(theme.strokeWidthThin, oneuiBorderScale.thin);
+    assert.equal(theme.strokeWidthThick, oneuiBorderScale.thick);
+    assert.doesNotMatch(String(theme.strokeWidthThick), /0 0 0/);
+  }
+});
+
+test("keeps OneUI Fluent theme values in compatible CSS value categories", () => {
+  const spfxTheme = createOneuiThemeFromSpfxTheme({
+    palette: {
+      neutralLight: "#dddddd",
+      neutralLighter: "#eeeeee",
+      neutralLighterAlt: "#fafafa",
+      neutralPrimary: "#1a1a1a",
+      neutralSecondary: "#555555",
+      neutralTertiary: "#888888",
+      themeDark: "#003f8f",
+      themeDarkAlt: "#0057b8",
+      themeDarker: "#002b63",
+      themePrimary: "#006de3",
+      white: "#ffffff"
+    },
+    semanticColors: {
+      bodyBackground: "#fafafa",
+      bodyText: "#1a1a1a",
+      disabledBackground: "#eeeeee",
+      disabledBodyText: "#888888",
+      inputBorder: "#dddddd",
+      inputBorderHovered: "#bbbbbb",
+      link: "#006de3",
+      linkHovered: "#0057b8",
+      primaryButtonBackground: "#006de3",
+      primaryButtonBackgroundHovered: "#0057b8",
+      primaryButtonText: "#ffffff",
+      primaryButtonTextHovered: "#ffffff"
+    }
+  });
+
+  for (const [label, theme] of [
+    ["light", oneuiLightTheme],
+    ["dark", oneuiDarkTheme],
+    ["created-light", createOneuiTheme({ mode: "light" })],
+    ["created-dark", createOneuiTheme({ mode: "dark" })],
+    ["spfx", spfxTheme]
+  ]) {
+    assertThemeTokenShapes(theme, label);
+  }
 });
 
 test("exports centralized viewport and container query helpers", () => {

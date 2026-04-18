@@ -59,17 +59,28 @@ const useStyles = makeStyles({
     alignContent: "start",
     alignSelf: "start",
     backgroundColor: tokens.colorNeutralBackground1,
-    border: `1px solid ${tokens.colorNeutralStroke2}`,
-    borderRadius: tokens.borderRadiusLarge,
+    borderBottomColor: tokens.colorNeutralStroke2,
+    borderBottomStyle: "solid",
+    borderBottomWidth: "1px",
+    borderLeftStyle: "solid",
+    borderLeftWidth: "1px",
+    borderLeftColor: tokens.colorNeutralStroke2,
+    borderRadius: 0,
+    borderRightColor: tokens.colorNeutralStroke2,
+    borderRightStyle: "solid",
+    borderRightWidth: "1px",
     borderTopStyle: "solid",
-    borderTopWidth: "3px",
-    borderTopColor: tokens.colorTransparentStroke,
+    borderTopWidth: "2px",
+    borderTopColor: tokens.colorNeutralStroke2,
     boxSizing: "border-box",
     display: "grid",
     gap: 0,
     gridTemplateRows: "auto auto",
     overflow: "hidden",
-    boxShadow: tokens.shadow4
+    boxShadow: "none"
+  },
+  sectionRounded: {
+    borderRadius: tokens.borderRadiusLarge
   },
   sectionSquare: {
     borderRadius: 0
@@ -98,11 +109,11 @@ const useStyles = makeStyles({
   sectionHeader: {
     alignItems: "center",
     backgroundColor: tokens.colorNeutralBackground1,
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
     display: "grid",
     gap: tokens.spacingHorizontalM,
     gridTemplateColumns: "minmax(0, 1fr) auto",
-    minHeight: "4rem",
+    minHeight: "3rem",
     paddingBottom: tokens.spacingVerticalXS,
     paddingLeft: tokens.spacingHorizontalL,
     paddingRight: tokens.spacingHorizontalL,
@@ -114,27 +125,31 @@ const useStyles = makeStyles({
       rowGap: tokens.spacingVerticalS
     }
   },
+  sectionHeaderRounded: {
+    borderTopLeftRadius: tokens.borderRadiusLarge,
+    borderTopRightRadius: tokens.borderRadiusLarge
+  },
   sectionHeaderSquare: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
   },
   sectionHeaderAccentBrand: {
-    backgroundColor: `color-mix(in srgb, ${tokens.colorBrandBackground} 14%, ${tokens.colorNeutralBackground1} 86%)`
+    backgroundColor: `color-mix(in srgb, ${tokens.colorBrandBackground} 3%, ${tokens.colorNeutralBackground1} 97%)`
   },
   sectionHeaderAccentInfo: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundInfoSubtle} 36%, ${tokens.colorNeutralBackground1} 64%)`
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundInfoSubtle} 6%, ${tokens.colorNeutralBackground1} 94%)`
   },
   sectionHeaderAccentSuccess: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundSuccessSubtle} 42%, ${tokens.colorNeutralBackground1} 58%)`
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundSuccessSubtle} 6%, ${tokens.colorNeutralBackground1} 94%)`
   },
   sectionHeaderAccentWarning: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundWarningSubtle} 48%, ${tokens.colorNeutralBackground1} 52%)`
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundWarningSubtle} 7%, ${tokens.colorNeutralBackground1} 93%)`
   },
   sectionHeaderAccentDanger: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundDangerSubtle} 42%, ${tokens.colorNeutralBackground1} 58%)`
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundDangerSubtle} 6%, ${tokens.colorNeutralBackground1} 94%)`
   },
   sectionHeaderAccentNeutral: {
-    backgroundColor: `color-mix(in srgb, ${tokens.colorNeutralBackground2} 55%, ${tokens.colorNeutralBackground1} 45%)`
+    backgroundColor: tokens.colorNeutralBackground1
   },
   sectionHeaderMain: {
     alignItems: "center",
@@ -148,40 +163,65 @@ const useStyles = makeStyles({
   },
   sectionAvatar: {
     alignItems: "center",
-    backgroundColor: tokens.colorNeutralBackground2,
-    borderRadius: tokens.borderRadiusMedium,
+    backgroundColor: tokens.colorNeutralBackground1,
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    borderRadius: 0,
     color: tokens.colorBrandForeground1,
     display: "inline-flex",
     flexShrink: 0,
     fontSize: tokens.fontSizeBase200,
     fontWeight: tokens.fontWeightSemibold,
-    height: "2.375rem",
+    height: "1.75rem",
     justifyContent: "center",
     lineHeight: 1,
-    width: "2.375rem"
+    width: "1.75rem"
   },
   sectionAvatarAccentBrand: {
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: `color-mix(in srgb, ${tokens.colorBrandBackground} 5%, ${tokens.colorNeutralBackground1} 95%)`,
+    borderBottomColor: tokens.colorBrandStroke1,
+    borderLeftColor: tokens.colorBrandStroke1,
+    borderRightColor: tokens.colorBrandStroke1,
+    borderTopColor: tokens.colorBrandStroke1,
     color: tokens.colorBrandForeground1
   },
   sectionAvatarAccentInfo: {
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundInfoSubtle} 18%, ${tokens.colorNeutralBackground1} 82%)`,
+    borderBottomColor: oneuiColorBorderInfo,
+    borderLeftColor: oneuiColorBorderInfo,
+    borderRightColor: oneuiColorBorderInfo,
+    borderTopColor: oneuiColorBorderInfo,
     color: tokens.colorBrandForeground1
   },
   sectionAvatarAccentSuccess: {
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundSuccessSubtle} 18%, ${tokens.colorNeutralBackground1} 82%)`,
+    borderBottomColor: oneuiColorBorderSuccess,
+    borderLeftColor: oneuiColorBorderSuccess,
+    borderRightColor: oneuiColorBorderSuccess,
+    borderTopColor: oneuiColorBorderSuccess,
     color: oneuiColorTextSuccess
   },
   sectionAvatarAccentWarning: {
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundWarningSubtle} 20%, ${tokens.colorNeutralBackground1} 80%)`,
+    borderBottomColor: oneuiColorBorderWarning,
+    borderLeftColor: oneuiColorBorderWarning,
+    borderRightColor: oneuiColorBorderWarning,
+    borderTopColor: oneuiColorBorderWarning,
     color: oneuiColorTextWarning
   },
   sectionAvatarAccentDanger: {
-    backgroundColor: tokens.colorNeutralBackground1,
+    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundDangerSubtle} 18%, ${tokens.colorNeutralBackground1} 82%)`,
+    borderBottomColor: oneuiColorBorderDanger,
+    borderLeftColor: oneuiColorBorderDanger,
+    borderRightColor: oneuiColorBorderDanger,
+    borderTopColor: oneuiColorBorderDanger,
     color: oneuiColorTextDanger
   },
   sectionAvatarAccentNeutral: {
     backgroundColor: tokens.colorNeutralBackground1,
+    borderBottomColor: tokens.colorNeutralStroke1,
+    borderLeftColor: tokens.colorNeutralStroke1,
+    borderRightColor: tokens.colorNeutralStroke1,
+    borderTopColor: tokens.colorNeutralStroke1,
     color: tokens.colorNeutralForeground3
   },
   sectionHeading: {
@@ -191,10 +231,10 @@ const useStyles = makeStyles({
   },
   sectionTitle: {
     color: tokens.colorNeutralForeground2,
-    fontSize: tokens.fontSizeBase500,
+    fontSize: tokens.fontSizeBase400,
     fontWeight: tokens.fontWeightSemibold,
-    letterSpacing: "-0.01em",
-    lineHeight: tokens.lineHeightBase500,
+    letterSpacing: 0,
+    lineHeight: tokens.lineHeightBase400,
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
@@ -207,7 +247,7 @@ const useStyles = makeStyles({
   },
   sectionAvatarLabel: {
     display: "inline-flex",
-    fontSize: "0.875rem",
+    fontSize: tokens.fontSizeBase200,
     fontWeight: tokens.fontWeightSemibold,
     letterSpacing: "0.03em",
     lineHeight: 1,
@@ -217,7 +257,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     display: "flex",
     flexWrap: "nowrap",
-    gap: tokens.spacingHorizontalS,
+    gap: tokens.spacingHorizontalXS,
     justifyContent: "flex-end",
     minWidth: 0,
     "@media (max-width: 960px)": {
@@ -230,7 +270,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     display: "flex",
     flexWrap: "nowrap",
-    gap: tokens.spacingHorizontalS,
+    gap: tokens.spacingHorizontalXS,
     justifyContent: "flex-end",
     minWidth: 0,
     "@media (max-width: 960px)": {
@@ -239,11 +279,11 @@ const useStyles = makeStyles({
   },
   statusInline: {
     alignItems: "center",
-    backgroundColor: tokens.colorNeutralBackground2,
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
-    borderRadius: tokens.borderRadiusCircular,
+    backgroundColor: tokens.colorTransparentBackground,
+    border: `1px solid ${tokens.colorTransparentStroke}`,
+    borderRadius: 0,
     display: "inline-flex",
-    gap: tokens.spacingHorizontalXS,
+    gap: "0.25rem",
     maxWidth: "18rem",
     minWidth: 0,
     "@media (max-width: 960px)": {
@@ -252,25 +292,25 @@ const useStyles = makeStyles({
     }
   },
   statusInlineInfo: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundInfoSubtle} 52%, ${tokens.colorNeutralBackground1} 48%)`,
-    borderBottomColor: oneuiColorBorderInfo,
-    borderLeftColor: oneuiColorBorderInfo,
-    borderRightColor: oneuiColorBorderInfo,
-    borderTopColor: oneuiColorBorderInfo
+    backgroundColor: tokens.colorTransparentBackground,
+    borderBottomColor: tokens.colorTransparentStroke,
+    borderLeftColor: tokens.colorTransparentStroke,
+    borderRightColor: tokens.colorTransparentStroke,
+    borderTopColor: tokens.colorTransparentStroke
   },
   statusInlineWarning: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundWarningSubtle} 56%, ${tokens.colorNeutralBackground1} 44%)`,
-    borderBottomColor: oneuiColorBorderWarning,
-    borderLeftColor: oneuiColorBorderWarning,
-    borderRightColor: oneuiColorBorderWarning,
-    borderTopColor: oneuiColorBorderWarning
+    backgroundColor: tokens.colorTransparentBackground,
+    borderBottomColor: tokens.colorTransparentStroke,
+    borderLeftColor: tokens.colorTransparentStroke,
+    borderRightColor: tokens.colorTransparentStroke,
+    borderTopColor: tokens.colorTransparentStroke
   },
   statusInlineDanger: {
-    backgroundColor: `color-mix(in srgb, ${oneuiColorBackgroundDangerSubtle} 48%, ${tokens.colorNeutralBackground1} 52%)`,
-    borderBottomColor: oneuiColorBorderDanger,
-    borderLeftColor: oneuiColorBorderDanger,
-    borderRightColor: oneuiColorBorderDanger,
-    borderTopColor: oneuiColorBorderDanger
+    backgroundColor: tokens.colorTransparentBackground,
+    borderBottomColor: tokens.colorTransparentStroke,
+    borderLeftColor: tokens.colorTransparentStroke,
+    borderRightColor: tokens.colorTransparentStroke,
+    borderTopColor: tokens.colorTransparentStroke
   },
   statusInlineIcon: {
     alignItems: "center",
@@ -278,7 +318,7 @@ const useStyles = makeStyles({
     display: "inline-flex",
     flexShrink: 0,
     justifyContent: "center",
-    paddingLeft: tokens.spacingHorizontalS
+    paddingLeft: 0
   },
   statusInlineIconInfo: {
     color: oneuiColorTextInfo
@@ -297,9 +337,9 @@ const useStyles = makeStyles({
     fontWeight: tokens.fontWeightMedium,
     lineHeight: tokens.lineHeightBase200,
     overflow: "hidden",
-    paddingBottom: "0.3125rem",
-    paddingRight: tokens.spacingHorizontalS,
-    paddingTop: "0.3125rem",
+    paddingBottom: 0,
+    paddingRight: 0,
+    paddingTop: 0,
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     "@media (max-width: 960px)": {
@@ -323,6 +363,12 @@ const useStyles = makeStyles({
   },
   countBadge: {
     flexShrink: 0,
+    borderRadius: tokens.borderRadiusCircular,
+    minHeight: "1.5rem",
+    paddingBottom: "0.125rem",
+    paddingLeft: tokens.spacingHorizontalS,
+    paddingRight: tokens.spacingHorizontalS,
+    paddingTop: "0.125rem",
     whiteSpace: "nowrap"
   },
   spinnerIcon: {
@@ -348,6 +394,12 @@ const useStyles = makeStyles({
   },
   statusBadge: {
     flexShrink: 0,
+    borderRadius: tokens.borderRadiusCircular,
+    minHeight: "1.5rem",
+    paddingBottom: "0.125rem",
+    paddingLeft: tokens.spacingHorizontalS,
+    paddingRight: tokens.spacingHorizontalS,
+    paddingTop: "0.125rem",
     whiteSpace: "nowrap"
   },
   statusSummary: {
@@ -389,7 +441,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     display: "inline-flex",
     flexWrap: "wrap",
-    gap: tokens.spacingHorizontalS,
+    gap: tokens.spacingHorizontalXS,
     justifyContent: "flex-end",
     "@media (max-width: 960px)": {
       justifyContent: "flex-start"
@@ -398,26 +450,26 @@ const useStyles = makeStyles({
   chevronButton: {
     alignItems: "center",
     appearance: "none",
-    backgroundColor: tokens.colorNeutralBackground1,
-    border: `1px solid ${tokens.colorNeutralStroke2}`,
-    borderRadius: tokens.borderRadiusCircular,
+    backgroundColor: tokens.colorTransparentBackground,
+    border: `1px solid ${tokens.colorTransparentStroke}`,
+    borderRadius: 0,
     color: tokens.colorNeutralForeground2,
     cursor: "pointer",
     display: "inline-flex",
     flexShrink: 0,
-    height: "2.125rem",
+    height: "1.5rem",
     justifyContent: "center",
     padding: 0,
     transitionDuration: tokens.durationNormal,
     transitionProperty: "background-color, border-color, color, transform",
     transitionTimingFunction: tokens.curveEasyEase,
-    width: "2.125rem",
+    width: "1.5rem",
     ":hover": {
       backgroundColor: tokens.colorNeutralBackground2,
-      borderBottomColor: tokens.colorNeutralStrokeAccessible,
-      borderLeftColor: tokens.colorNeutralStrokeAccessible,
-      borderRightColor: tokens.colorNeutralStrokeAccessible,
-      borderTopColor: tokens.colorNeutralStrokeAccessible
+      borderBottomColor: tokens.colorNeutralStroke2,
+      borderLeftColor: tokens.colorNeutralStroke2,
+      borderRightColor: tokens.colorNeutralStroke2,
+      borderTopColor: tokens.colorNeutralStroke2
     },
     ":focus-visible": {
       outline: `2px solid ${tokens.colorStrokeFocus2}`,
@@ -431,23 +483,23 @@ const useStyles = makeStyles({
     borderBottom: `2px solid ${tokens.colorNeutralForeground2}`,
     borderRight: `2px solid ${tokens.colorNeutralForeground2}`,
     display: "inline-block",
-    height: "0.5rem",
+    height: "0.375rem",
     transform: "rotate(45deg)",
     transitionDuration: tokens.durationNormal,
     transitionProperty: "transform",
     transitionTimingFunction: tokens.curveEasyEase,
-    width: "0.5rem"
+    width: "0.375rem"
   },
   chevronCollapsed: {
     borderBottom: `2px solid ${tokens.colorNeutralForeground2}`,
     borderRight: `2px solid ${tokens.colorNeutralForeground2}`,
     display: "inline-block",
-    height: "0.5rem",
+    height: "0.375rem",
     transform: "rotate(-45deg)",
     transitionDuration: tokens.durationNormal,
     transitionProperty: "transform",
     transitionTimingFunction: tokens.curveEasyEase,
-    width: "0.5rem"
+    width: "0.375rem"
   },
   bodyViewport: {
     display: "grid",
@@ -477,7 +529,7 @@ const useStyles = makeStyles({
     paddingBottom: tokens.spacingVerticalL,
     paddingLeft: tokens.spacingHorizontalL,
     paddingRight: tokens.spacingHorizontalL,
-    paddingTop: tokens.spacingVerticalM,
+    paddingTop: tokens.spacingVerticalS,
     "@media (max-width: 640px)": {
       paddingLeft: tokens.spacingHorizontalM,
       paddingRight: tokens.spacingHorizontalM
@@ -639,6 +691,7 @@ export const useSmartLoadingContainerClassNames = (
     sectionAccentNeutral: styles.sectionAccentNeutral,
     sectionAccentSuccess: styles.sectionAccentSuccess,
     sectionAccentWarning: styles.sectionAccentWarning,
+    sectionRounded: styles.sectionRounded,
     sectionMetaRail: styles.sectionMetaRail,
     sectionHeaderAccentBrand: styles.sectionHeaderAccentBrand,
     sectionHeaderAccentDanger: styles.sectionHeaderAccentDanger,
@@ -665,6 +718,7 @@ export const useSmartLoadingContainerClassNames = (
     sectionFlat: styles.sectionFlat,
     sectionSquare: styles.sectionSquare,
     sectionHeader: styles.sectionHeader,
+    sectionHeaderRounded: styles.sectionHeaderRounded,
     sectionHeaderSquare: styles.sectionHeaderSquare,
     sectionHeaderMain: styles.sectionHeaderMain,
     sectionHeading: styles.sectionHeading,

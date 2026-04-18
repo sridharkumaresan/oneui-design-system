@@ -8,24 +8,22 @@ All cache engine methods are asynchronous, including memory and Web Storage back
 
 ## Scope Model
 
-Every entry is addressed by a hierarchy:
-
-```ts
-tenantId -> siteId -> namespace -> key
-```
-
-`tenantId`, `namespace`, and `key` are required. `siteId` is optional.
+Every entry is addressed by a generic structured scope:
 
 ```ts
 const scope = {
-  tenantId: "barclays",
-  siteId: "dcw-home",
   namespace: "weather",
-  key: "london"
+  key: "london",
+  segments: {
+    tenant: "barclays",
+    site: "dcw-home"
+  }
 };
 ```
 
-The engine normalizes this hierarchy into an internal storage key. Consumers should keep using the structured scope object so invalidation remains clear and collision-safe.
+`namespace` and `key` are required. `segments` is optional and can describe whatever hierarchy a consumer needs: tenant/site, workspace/dashboard, app/environment, region/market, user/feature, or something else.
+
+The engine normalizes the structured scope into a deterministic internal storage key. Segment names are sorted before key generation, so equivalent segment objects produce the same key. Consumers should keep using structured scopes so invalidation remains clear and collision-safe.
 
 ## Basic Usage
 
@@ -41,10 +39,12 @@ const cache = createCacheEngine({
 
 const data = await cache.getOrFetch(
   {
-    tenantId: "barclays",
-    siteId: "dcw-home",
     namespace: "tasks",
-    key: "inbox-summary"
+    key: "inbox-summary",
+    segments: {
+      workspace: "colleague-direct",
+      dashboard: "home"
+    }
   },
   () => fetch("/api/tasks/summary").then((response) => response.json()),
   {
@@ -100,6 +100,8 @@ Use `createSessionStorageCacheAdapter()` for small browser data that should be c
 ### IndexedDB
 
 Use `createIndexedDbCacheAdapter()` for durable structured browser data. This is the recommended persistent adapter for larger app/resource data because it avoids the size and sync limitations of Web Storage. The adapter safely behaves as unavailable when IndexedDB cannot be opened or is not present.
+
+If the active IndexedDB handle becomes invalid at runtime, for example because DevTools deleted the database while the app is still open, the adapter closes the stale handle, reopens the database, recreates the object store when needed, and retries the operation once. If IndexedDB is still unavailable, the cache engine treats the persistence failure as non-fatal and keeps network data usable through its in-memory fallback shadow for the current session.
 
 For adapter portability, cache data should be JSON-compatible. Memory and IndexedDB can preserve more structured values than Web Storage, but portable consumers should avoid functions, class instances, and prototype-dependent data.
 
@@ -182,17 +184,51 @@ This returns the stale cached data and refreshes the cache through the existing 
 Use structured partial scopes:
 
 ```ts
-await cache.invalidate({ tenantId: "barclays" });
-await cache.invalidate({ tenantId: "barclays", siteId: "dcw-home" });
-await cache.invalidate({ tenantId: "barclays", siteId: "dcw-home", namespace: "weather" });
-await cache.remove({ tenantId: "barclays", siteId: "dcw-home", namespace: "weather", key: "london" });
+await cache.invalidate({ segments: { tenant: "barclays" } });
+await cache.invalidate({ segments: { tenant: "barclays", site: "dcw-home" } });
+await cache.invalidate({ namespace: "weather", segments: { tenant: "barclays", site: "dcw-home" } });
+await cache.remove({
+  namespace: "weather",
+  key: "london",
+  segments: { tenant: "barclays", site: "dcw-home" }
+});
 ```
 
 If a policy supplies `version` and `bustOnVersionChange` is true, a cached record with a different version is removed and treated as `missing`.
 
+Version busting is intended for resource contract changes. For example, if a widget changes from a v1 data shape to a v2 data shape, use a new policy version so older persisted records are not reused accidentally:
+
+```ts
+await cache.getOrFetchSnapshot(scope, fetchWeather, {
+  staleTimeMs: 60_000,
+  expireTimeMs: 10 * 60_000,
+  version: "weather-contract-v2",
+  bustOnVersionChange: true
+});
+```
+
 Partial-scope invalidation in Web Storage and IndexedDB is scan-based in Phase 1.5. This is acceptable for small and moderate cache sets. If future consumers store large datasets, IndexedDB indexes can be added without changing the engine API.
 
 Persisted records are structurally validated before use. Malformed or partially corrupted records are ignored safely.
+
+### Manual Validation
+
+Use Storybook `Foundation / Cache Utility` for a live memory-backed validation flow:
+
+1. Click `Seed v1 cache`.
+2. Click `Read selected version` and confirm the source is cache.
+3. Click `Switch policy to v2`.
+4. Click `Read selected version` again and confirm a `busted` event appears and the resource updates to v2.
+5. Click `Invalidate weather` and confirm matching scoped entries are removed.
+6. Click `Clear demo cache` and confirm the snapshot returns to `missing`.
+
+For browser persistence validation, use DevTools Application storage with a consumer that uses IndexedDB, such as the SPFx banner resource cache. A policy version change should prevent old incompatible records from being reused. Explicit invalidation should remove records matching the provided namespace/key/segments.
+
+## Storage Failure Recovery
+
+Persistence failure is not treated as fetch failure. When a fetch succeeds but durable storage cannot be written, the engine still returns the fresh network data and emits a `storage-error` event with the storage operation in `reason`. Reads, writes, removals, and clears are mirrored through an in-memory fallback so the current session can continue even if browser persistence is deleted, blocked, or temporarily invalid.
+
+The fallback is intentionally session-only. After a page reload, if IndexedDB is still missing or unavailable, consumers should expect a normal first-load fetch path. Expired data is not silently purged globally; expiration is resolved by lifecycle state and consumers can explicitly remove, invalidate, or clear cache entries.
 
 ## Events
 
@@ -215,6 +251,7 @@ Events include:
 - `refresh-start`
 - `refresh-success`
 - `refresh-error`
+- `storage-error`
 - `invalidated`
 - `busted`
 - `expired`

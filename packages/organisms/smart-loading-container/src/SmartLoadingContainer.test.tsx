@@ -183,6 +183,18 @@ describe("SmartLoadingContainer", () => {
     );
   });
 
+  it("applies section className to the section root", () => {
+    renderWithOneUIProvider(
+      <SmartLoadingContainer title="Enterprise search">
+        <SmartLoadingSection className="custom-section" status="empty" title="People" />
+      </SmartLoadingContainer>
+    );
+
+    expect(screen.getByRole("region", { name: "People" }).classList.contains("custom-section")).toBe(
+      true
+    );
+  });
+
   it("hides children when the section is not settled successfully", () => {
     renderWithOneUIProvider(
       <SmartLoadingContainer title="Enterprise search">

@@ -10,46 +10,74 @@ import {
 describe("CacheKeyBuilder", () => {
   it("normalizes scoped keys without collisions from separator characters", () => {
     const first = buildCacheStorageKey({
-      tenantId: "barclays",
-      siteId: "dcw:home",
       namespace: "weather",
-      key: "london"
+      key: "london",
+      segments: {
+        organization: "barclays",
+        site: "dcw:home"
+      }
     });
     const second = buildCacheStorageKey({
-      tenantId: "barclays:dcw",
       namespace: "home:weather",
-      key: "london"
+      key: "london",
+      segments: {
+        organization: "barclays:dcw"
+      }
     });
 
     expect(first).not.toBe(second);
     expect(parseCacheStorageKey(first)).toEqual({
-      tenantId: "barclays",
-      siteId: "dcw:home",
       namespace: "weather",
-      key: "london"
+      key: "london",
+      segments: {
+        organization: "barclays",
+        site: "dcw:home"
+      }
     });
   });
 
-  it("supports partial scope matching by tenant, site, namespace, or key", () => {
+  it("supports partial scope matching by arbitrary segments, namespace, or key", () => {
     const scope = normalizeCacheScope({
-      tenantId: "barclays",
-      siteId: "dcw-home",
       namespace: "tasks",
-      key: "inbox-summary"
+      key: "inbox-summary",
+      segments: {
+        organization: "barclays",
+        site: "dcw-home"
+      }
     });
 
-    expect(doesScopeMatch(scope, { tenantId: "barclays" })).toBe(true);
-    expect(doesScopeMatch(scope, { tenantId: "barclays", namespace: "tasks" })).toBe(true);
-    expect(doesScopeMatch(scope, { siteId: "other-site" })).toBe(false);
+    expect(doesScopeMatch(scope, { segments: { organization: "barclays" } })).toBe(true);
+    expect(doesScopeMatch(scope, { namespace: "tasks", segments: { organization: "barclays" } })).toBe(true);
+    expect(doesScopeMatch(scope, { segments: { site: "other-site" } })).toBe(false);
   });
 
   it("rejects empty required segments", () => {
     expect(() =>
       buildCacheStorageKey({
-        tenantId: " ",
         namespace: "weather",
-        key: "london"
+        key: " "
       })
-    ).toThrow("tenantId");
+    ).toThrow("key");
+  });
+
+  it("sorts arbitrary segments so key generation is deterministic", () => {
+    const first = buildCacheStorageKey({
+      namespace: "weather",
+      key: "london",
+      segments: {
+        site: "enterprise-search",
+        tenant: "barclays"
+      }
+    });
+    const second = buildCacheStorageKey({
+      namespace: "weather",
+      key: "london",
+      segments: {
+        tenant: "barclays",
+        site: "enterprise-search"
+      }
+    });
+
+    expect(first).toBe(second);
   });
 });

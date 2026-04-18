@@ -12,6 +12,7 @@
   "dependencies": {
     "@fluentui/react-components": "9.73.0",
     "@functions-oneui/atoms": "workspace:*",
+    "@functions-oneui/cache": "workspace:*",
     "@functions-oneui/fonts": "workspace:*",
     "@functions-oneui/onboarding-react": "workspace:*",
     "@functions-oneui/onboarding-styles": "workspace:*",

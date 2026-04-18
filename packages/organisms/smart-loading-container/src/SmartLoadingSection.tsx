@@ -702,8 +702,10 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
       className: mergeClasses(
         classNames.section,
         accentClassNames.section,
+        resolvedShape === "rounded" ? classNames.sectionRounded : undefined,
         resolvedShape === "square" ? classNames.sectionSquare : undefined,
-        resolvedSurfaceAppearance === "flat" ? classNames.sectionFlat : undefined
+        resolvedSurfaceAppearance === "flat" ? classNames.sectionFlat : undefined,
+        className
       ),
       "data-oneui-surface-appearance": resolvedSurfaceAppearance,
       "data-oneui-shape": resolvedShape,
@@ -714,6 +716,7 @@ export const SmartLoadingSection = (props: SmartLoadingSectionProps): React.JSX.
         className={mergeClasses(
           classNames.sectionHeader,
           accentClassNames.header,
+          resolvedShape === "rounded" ? classNames.sectionHeaderRounded : undefined,
           resolvedShape === "square" ? classNames.sectionHeaderSquare : undefined
         )}
       >

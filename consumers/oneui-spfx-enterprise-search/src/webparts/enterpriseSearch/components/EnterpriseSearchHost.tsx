@@ -16,6 +16,13 @@ export type EnterpriseSearchHostProps = {
   userDisplayName: string;
 };
 
+const fluentCompatibilityThemeOverrides = {
+  fluentTheme: {
+    strokeWidthThin: "1px",
+    strokeWidthThick: "2px"
+  }
+};
+
 export const EnterpriseSearchHost = (
   props: EnterpriseSearchHostProps
 ): React.ReactElement => {
@@ -69,6 +76,7 @@ export const EnterpriseSearchHost = (
       <OneUISpfxProvider
         fluidTypography={fluidTypography}
         spfxTheme={spfxTheme}
+        themeOverrides={fluentCompatibilityThemeOverrides}
         typographyMode="fluid"
       >
         <SearchPage
@@ -77,7 +85,12 @@ export const EnterpriseSearchHost = (
         />
       </OneUISpfxProvider>
     ) : (
-      <OneUIProvider fluidTypography={fluidTypography} mode="light" typographyMode="fluid">
+      <OneUIProvider
+        fluidTypography={fluidTypography}
+        mode="light"
+        themeOverrides={fluentCompatibilityThemeOverrides}
+        typographyMode="fluid"
+      >
         <SearchPage
           orchestrator={compositionRoot.orchestrator}
           userDisplayName={userDisplayName}

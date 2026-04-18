@@ -364,6 +364,14 @@ body {
   font-size: 0.78rem;
 }
 
+.connections-hero-meta-row {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .connections-hero-widget-row {
   display: flex;
   flex-wrap: wrap;
@@ -386,6 +394,7 @@ body {
 .connections-hero-widget-copy {
   display: grid;
   gap: 2px;
+  min-width: 86px;
 }
 
 .connections-hero-widget-copy strong {
@@ -396,6 +405,30 @@ body {
 .connections-hero-widget-copy span {
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.82rem;
+}
+
+.connections-hero-widget-skeleton,
+.connections-hero-action-card-skeleton {
+  display: grid;
+  gap: 8px;
+}
+
+.connections-hero-widget-skeleton span,
+.connections-hero-action-card-skeleton span {
+  animation: cacheSkeletonPulse 1.1s ease-in-out infinite;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  display: block;
+}
+
+.connections-hero-widget-skeleton span:first-child {
+  height: 14px;
+  width: 58px;
+}
+
+.connections-hero-widget-skeleton span:last-child {
+  height: 10px;
+  width: 88px;
 }
 
 .connections-hero-search-shell {
@@ -532,6 +565,32 @@ body {
   font-size: 0.9rem;
   font-weight: 600;
   gap: 10px;
+}
+
+.connections-hero-action-card-skeleton span:first-child {
+  height: 14px;
+  width: 64px;
+}
+
+.connections-hero-action-card-skeleton span:nth-child(2) {
+  height: 18px;
+  width: 92%;
+}
+
+.connections-hero-action-card-skeleton span:last-child {
+  height: 12px;
+  width: 68px;
+}
+
+@keyframes cacheSkeletonPulse {
+  0%,
+  100% {
+    opacity: 0.46;
+  }
+
+  50% {
+    opacity: 0.82;
+  }
 }
 
 .connections-task-banner {
@@ -1640,9 +1699,12 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .playground-settings-trigger,
+  .connections-hero-widget-skeleton span,
+  .connections-hero-action-card-skeleton span,
   .search-chip-button,
   .search-state-pill,
   .search-toggle {
     transition: none;
+    animation: none;
   }
 }

@@ -19,7 +19,7 @@ export const SmartLoadingContainer = (props: SmartLoadingContainerProps): React.
     headingLevel = 2,
     layout = "split",
     progressSlot,
-    shape = "rounded",
+    shape = "square",
     surfaceAppearance = "raised",
     title,
     ...restProps

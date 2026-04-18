@@ -34,6 +34,9 @@ export const createCacheEngine = <TData = unknown>(
   options: CacheEngineOptions<TData> = {}
 ): CacheEngine<TData> => {
   const storage: CacheStorageAdapter<TData> = options.storage ?? createMemoryCacheStorageAdapter<TData>();
+  const fallbackStorage = createMemoryCacheStorageAdapter<TData>({
+    id: `${storage.id}:memory-fallback`
+  });
   const clock = options.clock ?? systemCacheClock;
   const events = new CacheEventEmitter<TData>();
   const inFlight = new InFlightRequestRegistry();
@@ -43,6 +46,78 @@ export const createCacheEngine = <TData = unknown>(
       ...event,
       timestamp: clock.now()
     });
+  };
+
+  const emitStorageError = (operation: string, error: unknown, storageKey?: string): void => {
+    emit({
+      error,
+      name: "storage-error",
+      reason: operation,
+      storageKey
+    });
+  };
+
+  const storageGet = async <TResult>(storageKey: string): Promise<CacheRecord<TResult> | undefined> => {
+    try {
+      const record = await storage.get(storageKey);
+
+      if (record) {
+        await fallbackStorage.set(record).catch((error) => emitStorageError("memory-shadow-set", error, storageKey));
+        return record as unknown as CacheRecord<TResult>;
+      }
+    } catch (error) {
+      emitStorageError("get", error, storageKey);
+    }
+
+    return fallbackStorage.get(storageKey) as Promise<CacheRecord<TResult> | undefined>;
+  };
+
+  const storageSet = async <TResult>(record: CacheRecord<TResult>): Promise<void> => {
+    await fallbackStorage.set(record as unknown as CacheRecord<TData>);
+
+    try {
+      await storage.set(record as unknown as CacheRecord<TData>);
+    } catch (error) {
+      emitStorageError("set", error, record.storageKey);
+    }
+  };
+
+  const storageRemove = async (storageKey: string): Promise<void> => {
+    await fallbackStorage.remove(storageKey);
+
+    try {
+      await storage.remove(storageKey);
+    } catch (error) {
+      emitStorageError("remove", error, storageKey);
+    }
+  };
+
+  const storageClearByScope = async (partialScope: CachePartialScope): Promise<number> => {
+    const fallbackRecords = await fallbackStorage.list(partialScope);
+    await fallbackStorage.clearByScope?.(partialScope);
+
+    try {
+      if (storage.clearByScope) {
+        return await storage.clearByScope(partialScope);
+      }
+
+      const records = await storage.list(partialScope);
+      await Promise.all(records.map((record) => storage.remove(record.storageKey)));
+      return records.length;
+    } catch (error) {
+      emitStorageError("clear-by-scope", error);
+      return fallbackRecords.length;
+    }
+  };
+
+  const storageClear = async (): Promise<void> => {
+    await fallbackStorage.clear();
+
+    try {
+      await storage.clear();
+    } catch (error) {
+      emitStorageError("clear", error);
+    }
   };
 
   const readRecord = async <TResult>(
@@ -57,15 +132,15 @@ export const createCacheEngine = <TData = unknown>(
     const normalizedScope = normalizeCacheScope(scope);
     const storageKey = buildCacheStorageKey(normalizedScope);
     const resolvedPolicy = resolveCachePolicy(policy, options.defaultPolicy);
-    const storedRecord = await storage.get(storageKey);
+    const storedRecord = await storageGet<TResult>(storageKey);
     const record = validateCacheRecord<TResult>(storedRecord);
 
     if (!record && storedRecord) {
-      await storage.remove(storageKey);
+      await storageRemove(storageKey);
     }
 
     if (isVersionBusted(record, resolvedPolicy)) {
-      await storage.remove(storageKey);
+      await storageRemove(storageKey);
       emit({
         name: "busted",
         reason: "version-mismatch",
@@ -133,7 +208,7 @@ export const createCacheEngine = <TData = unknown>(
       version: resolvedPolicy.version
     };
 
-    await storage.set(record as unknown as CacheRecord<TData>);
+    await storageSet(record);
     emit({
       data: data as unknown as TData,
       name: "set",
@@ -314,7 +389,7 @@ export const createCacheEngine = <TData = unknown>(
   const remove = async (scope: CacheScope): Promise<void> => {
     const normalizedScope = normalizeCacheScope(scope);
     const storageKey = buildCacheStorageKey(normalizedScope);
-    await storage.remove(storageKey);
+    await storageRemove(storageKey);
     emit({
       name: "removed",
       scope: normalizedScope,
@@ -323,14 +398,7 @@ export const createCacheEngine = <TData = unknown>(
   };
 
   const removeByScope = async (partialScope: CachePartialScope): Promise<number> => {
-    const records = (await storage.list(partialScope)).flatMap((record) => {
-      const validRecord = validateCacheRecord<TData>(record);
-
-      return validRecord ? [validRecord] : [];
-    });
-    const count = storage.clearByScope
-      ? await storage.clearByScope(partialScope)
-      : await Promise.all(records.map((record) => storage.remove(record.storageKey))).then(() => records.length);
+    const count = await storageClearByScope(partialScope);
 
     return count;
   };
@@ -359,7 +427,7 @@ export const createCacheEngine = <TData = unknown>(
   };
 
   const clear = async (): Promise<void> => {
-    await storage.clear();
+    await storageClear();
     emit({
       name: "cleared",
       reason: "all"

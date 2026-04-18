@@ -4,15 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "pnpm --filter @functions-oneui/fonts run build && pnpm --filter @functions-oneui/onboarding-core run build && pnpm --filter @functions-oneui/onboarding-react run build && pnpm --filter @functions-oneui/onboarding-styles run build && pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-illustrated-state run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && tsc -p tsconfig.json --noEmit && vite build",
+    "build": "pnpm --filter @functions-oneui/cache run build && pnpm --filter @functions-oneui/cache-react run build && pnpm --filter @functions-oneui/fonts run build && pnpm --filter @functions-oneui/onboarding-core run build && pnpm --filter @functions-oneui/onboarding-react run build && pnpm --filter @functions-oneui/onboarding-styles run build && pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-illustrated-state run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && tsc -p tsconfig.json --noEmit && vite build",
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
-    "typecheck": "pnpm --filter @functions-oneui/fonts run build && pnpm --filter @functions-oneui/onboarding-core run build && pnpm --filter @functions-oneui/onboarding-react run build && pnpm --filter @functions-oneui/onboarding-styles run build && pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-illustrated-state run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && tsc -p tsconfig.json --noEmit",
+    "typecheck": "pnpm --filter @functions-oneui/cache run build && pnpm --filter @functions-oneui/cache-react run build && pnpm --filter @functions-oneui/fonts run build && pnpm --filter @functions-oneui/onboarding-core run build && pnpm --filter @functions-oneui/onboarding-react run build && pnpm --filter @functions-oneui/onboarding-styles run build && pnpm --filter @functions-oneui/organism-action-card run build && pnpm --filter @functions-oneui/organism-hero-banner run build && pnpm --filter @functions-oneui/organism-illustrated-state run build && pnpm --filter @functions-oneui/organism-smart-progress-bar run build && pnpm --filter @functions-oneui/organism-smart-loading-container run build && pnpm --filter @functions-oneui/react-utils run build && tsc -p tsconfig.json --noEmit",
     "test": "echo \"No tests in playground yet\"",
     "preview": "vite preview"
   },
   "dependencies": {
     "@fluentui/react-components": "9.73.0",
     "@functions-oneui/atoms": "workspace:*",
+    "@functions-oneui/cache": "workspace:*",
+    "@functions-oneui/cache-react": "workspace:*",
     "@functions-oneui/fonts": "workspace:*",
     "@functions-oneui/organism-action-card": "workspace:*",
     "@functions-oneui/organism-hero-banner": "workspace:*",

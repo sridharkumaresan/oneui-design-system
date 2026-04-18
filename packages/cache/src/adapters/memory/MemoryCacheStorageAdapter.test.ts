@@ -6,10 +6,12 @@ import type { CacheRecord } from "../../contracts/CacheRecord.js";
 
 const createRecord = (namespace: string, key: string): CacheRecord<string> => {
   const scope = {
-    tenantId: "tenant",
-    siteId: "site",
     namespace,
-    key
+    key,
+    segments: {
+      site: "site",
+      tenant: "tenant"
+    }
   };
 
   return {

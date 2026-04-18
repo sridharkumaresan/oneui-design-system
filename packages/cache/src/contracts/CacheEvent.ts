@@ -11,6 +11,7 @@ export type CacheEventName =
   | "refresh-start"
   | "refresh-success"
   | "refresh-error"
+  | "storage-error"
   | "invalidated"
   | "busted"
   | "expired";

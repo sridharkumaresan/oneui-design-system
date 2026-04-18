@@ -17,10 +17,12 @@ const createClock = (initialNow = 0): CacheClock & { advance: (ms: number) => vo
 };
 
 const scope = {
-  tenantId: "barclays",
-  siteId: "dcw-home",
   namespace: "weather",
-  key: "london"
+  key: "london",
+  segments: {
+    site: "dcw-home",
+    tenant: "barclays"
+  }
 };
 
 describe("CacheEngine", () => {
@@ -219,6 +221,32 @@ describe("CacheEngine", () => {
     expect(remove).toHaveBeenCalledTimes(1);
   });
 
+  it("renders network data when durable storage write fails", async () => {
+    const storageError = new Error("IndexedDB write failed");
+    const storage: CacheStorageAdapter<string> = {
+      clear: vi.fn(async () => undefined),
+      get: vi.fn(async () => undefined),
+      id: "failing-storage",
+      isAvailable: () => true,
+      kind: "test",
+      list: vi.fn(async () => []),
+      remove: vi.fn(async () => undefined),
+      set: vi.fn(async () => {
+        throw storageError;
+      })
+    };
+    const engine = createCacheEngine<string>({ storage });
+    const events: Array<CacheEvent<string>> = [];
+
+    engine.subscribe((event) => {
+      events.push(event);
+    });
+
+    await expect(engine.getOrFetch(scope, async () => "fresh-network")).resolves.toBe("fresh-network");
+    await expect(engine.get(scope)).resolves.toBe("fresh-network");
+    expect(events.some((event) => event.name === "storage-error" && event.reason === "set")).toBe(true);
+  });
+
   it("emits lifecycle events", async () => {
     const engine = createCacheEngine<string>();
     const events: Array<CacheEvent<string>["name"]> = [];
@@ -230,7 +258,7 @@ describe("CacheEngine", () => {
     await engine.get(scope);
     await engine.getOrFetch(scope, async () => "network");
     await engine.get(scope);
-    await engine.invalidate({ tenantId: "barclays" });
+    await engine.invalidate({ segments: { tenant: "barclays" } });
 
     expect(events).toEqual([
       "miss",

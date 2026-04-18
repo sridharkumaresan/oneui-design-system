@@ -9,4 +9,4 @@ export const SmartLoadingSurfaceAppearanceContext = React.createContext<SmartLoa
   "raised"
 );
 
-export const SmartLoadingShapeContext = React.createContext<SmartLoadingShape>("rounded");
+export const SmartLoadingShapeContext = React.createContext<SmartLoadingShape>("square");

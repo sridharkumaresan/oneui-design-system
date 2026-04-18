@@ -34,8 +34,6 @@ const createStorage = (): TestWebStorage => {
 
 const createRecord = (namespace: string): CacheRecord<{ value: string }> => {
   const scope = {
-    tenantId: "tenant",
-    siteId: "site",
     namespace,
     key: "key"
   };
@@ -92,9 +90,9 @@ describe("WebStorageCacheAdapter", () => {
       JSON.stringify({
         data: "broken",
         scope: {
-          tenantId: "tenant",
           namespace: "weather",
-          key: "key"
+          key: "key",
+          segments: { tenant: "tenant" }
         },
         storageKey: "wrong-key"
       })

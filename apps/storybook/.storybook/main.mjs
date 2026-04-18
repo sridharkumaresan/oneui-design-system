@@ -12,6 +12,34 @@ const config = {
   },
   docs: {
     autodocs: true
+  },
+  viteFinal: async (viteConfig) => {
+    const existingBuild = viteConfig.build ?? {};
+    const existingRollupOptions = existingBuild.rollupOptions ?? {};
+    const existingOnWarn = existingRollupOptions.onwarn;
+
+    return {
+      ...viteConfig,
+      build: {
+        ...existingBuild,
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+          ...existingRollupOptions,
+          onwarn(warning, warn) {
+            if (warning.code === "MODULE_LEVEL_DIRECTIVE" || warning.code === "EVAL") {
+              return;
+            }
+
+            if (typeof existingOnWarn === "function") {
+              existingOnWarn(warning, warn);
+              return;
+            }
+
+            warn(warning);
+          }
+        }
+      }
+    };
   }
 };
 

@@ -20,8 +20,7 @@ export const validateCacheRecord = <TData = unknown>(value: unknown): CacheRecor
     scope = normalizeCacheScope({
       key: value.scope.key as string,
       namespace: value.scope.namespace as string,
-      siteId: value.scope.siteId as string | undefined,
-      tenantId: value.scope.tenantId as string
+      segments: value.scope.segments as Record<string, string | number | boolean | undefined> | undefined
     });
   } catch {
     return undefined;
