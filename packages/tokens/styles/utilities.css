@@ -1,0 +1,59 @@
+@import "./layers.css";
+@import "./variables.css";
+
+@layer oneui.utilities {
+  .oneui-cq {
+    container-type: inline-size;
+  }
+
+  .oneui-cq-inline {
+    container-type: inline-size;
+  }
+
+  .oneui-cq-size {
+    container-type: size;
+  }
+
+  .oneui-min-block-screen {
+    min-block-size: 100vh;
+    min-block-size: 100dvh;
+  }
+
+  .oneui-min-block-small-screen {
+    min-block-size: 100vh;
+    min-block-size: 100svh;
+  }
+
+  .oneui-fluid-display {
+    font-size: var(--oneui-fluid-display);
+    line-height: 1.08;
+  }
+
+  .oneui-fluid-title {
+    font-size: var(--oneui-fluid-title);
+    line-height: 1.16;
+  }
+
+  .oneui-fluid-section-gap {
+    gap: var(--oneui-fluid-section-gap);
+  }
+
+  .oneui-layer-surface {
+    background: var(--oneui-color-background-surface);
+    border: 1px solid var(--oneui-color-border-default);
+    color: var(--oneui-color-text-primary);
+  }
+
+  .oneui-layer-elevated {
+    background: var(--oneui-color-background-elevated);
+    box-shadow: var(--oneui-shadow-md);
+    color: var(--oneui-color-text-primary);
+  }
+
+  @supports selector(:has(*)) {
+    .oneui-state-parent:has([aria-invalid="true"]) {
+      border-color: var(--oneui-color-border-danger);
+    }
+  }
+}
+

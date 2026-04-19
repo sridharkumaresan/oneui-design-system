@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 
 const isCi = process.env.CI === "true";
+const collectCoverage = isCi || process.env.VITEST_COVERAGE === "true";
 
 export default defineConfig({
   test: {
@@ -11,6 +12,12 @@ export default defineConfig({
       ? {
           junit: "./test-results/vitest.junit.xml"
         }
-      : undefined
+      : undefined,
+    coverage: {
+      enabled: collectCoverage,
+      provider: "v8",
+      reportsDirectory: "./coverage",
+      reporter: ["text-summary", "html", "lcov"]
+    }
   }
 });

@@ -153,6 +153,21 @@ export const semanticTokenContract = {
     xl: "",
     focusRing: ""
   },
+  motion: {
+    durationNormal: "",
+    durationGentle: "",
+    curveEasyEase: "",
+    curveAccelerateMid: ""
+  },
+  zIndex: {
+    base: 0,
+    dropdown: 0,
+    sticky: 0,
+    overlay: 0,
+    modal: 0,
+    toast: 0,
+    tooltip: 0
+  },
   components: {
     button: {
       typography: {
@@ -278,6 +293,8 @@ export const requiredSemanticTokenPaths = {
   spacing: ["xxs", "xs", "sm", "md", "lg", "xl", "xxl"],
   radius: ["none", "sm", "md", "lg", "full"],
   shadows: ["sm", "md", "lg", "xl", "focusRing"],
+  motion: ["durationNormal", "durationGentle", "curveEasyEase", "curveAccelerateMid"],
+  zIndex: ["base", "dropdown", "sticky", "overlay", "modal", "toast", "tooltip"],
   components: ["button.typography.fontWeight"],
   breakpoints: ["xs", "mobile", "sm", "md", "tablet", "lg", "xl", "desktop", "xxl"]
 };

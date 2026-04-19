@@ -7,7 +7,8 @@ export const oneuiFluentTokenCategories = [
   "shadows",
   "borders",
   "motion",
-  "sizes"
+  "sizes",
+  "zIndex"
 ] as const;
 
 export type OneUIFluentTokenCategory = (typeof oneuiFluentTokenCategories)[number];
@@ -78,6 +79,16 @@ export const oneuiMotionScale = {
   durationGentle: "300ms",
   curveEasyEase: "cubic-bezier(0.33, 0, 0.67, 1)",
   curveAccelerateMid: "cubic-bezier(0.7, 0, 1, 0.5)"
+} as const;
+
+export const oneuiZIndexScale = {
+  base: 0,
+  dropdown: 1000,
+  sticky: 1100,
+  overlay: 1200,
+  modal: 1300,
+  toast: 1400,
+  tooltip: 1500
 } as const;
 
 export const oneuiSizeScale = {

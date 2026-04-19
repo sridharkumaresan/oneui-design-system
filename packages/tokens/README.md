@@ -24,6 +24,7 @@ Fluent-aligned foundation categories are exported via `oneuiFluentTokenCategorie
 - `borders`
 - `motion`
 - `sizes`
+- `zIndex`
 
 The semantic contract includes these required categories:
 
@@ -32,6 +33,8 @@ The semantic contract includes these required categories:
 - `spacing`
 - `radius`
 - `shadows`
+- `motion`
+- `zIndex`
 - `breakpoints`
 
 The package also exports raw gradients separately from the semantic contract:
@@ -115,6 +118,7 @@ Each raw solid includes:
 - `rawSolidTokens`: structured branded solid primitives for shared surfaces
 - `rawSolidTokenNames`: exported solid primitive names for stable referencing
 - `createOneuiCssVariables()` / `createOneuiCssVariablesStylesheet()`: generated CSS variables from the same token source for future non-React consumers
+- `@functions-oneui/tokens/styles.css`: static CSS variable and utility contract for CSS-only consumers
 
 If UX updates the three shared solid blue background options later, change them in:
 
@@ -125,11 +129,53 @@ If UX updates the three shared solid blue background options later, change them 
 
 ## Consumption Guidance
 
+- CSS-only usage: import `@functions-oneui/tokens/styles.css` and apply `data-oneui-theme="light"` or `data-oneui-theme="dark"` to a root element or subtree
 - Theme package usage: map semantic tokens into Fluent UI v9 theme slots and expose raw gradients through canonical gradient names
 - Font asset usage: import `@functions-oneui/fonts/styles.css` once so the exported brand font family resolves correctly at runtime
 - Component package usage: consume semantic names from theme output, not raw token internals
 - Cross-platform usage: Angular, Vue, Swift, or CSS adapters should derive from the same token source or generated CSS variables instead of inventing a second design system
 - Avoid importing private internals (raw palette or helper files); only use exports from the package root
+
+## CSS Runtime Contract
+
+Use the static CSS assets when a consumer cannot or should not depend on React or Fluent:
+
+```css
+@import "@functions-oneui/tokens/styles.css";
+```
+
+```html
+<main data-oneui-theme="dark">
+  <section class="oneui-layer-surface">
+    CSS-only consumers can use OneUI variables.
+  </section>
+</main>
+```
+
+The static CSS assets provide:
+
+- `styles/layers.css`: cascade layer order for `oneui.reset`, `oneui.tokens`, `oneui.base`, `oneui.components`, `oneui.utilities`, and `oneui.overrides`
+- `styles/variables.css`: root, light, and dark CSS custom properties
+- `styles/utilities.css`: opt-in container query, dynamic viewport, fluid sizing, and surface utility classes
+- `styles/index.css`: bundled import for all of the above
+
+CSS variables use kebab-case names such as:
+
+- `--oneui-color-background-surface`
+- `--oneui-color-text-primary`
+- `--oneui-motion-duration-normal`
+- `--oneui-z-index-modal`
+
+The JavaScript helper `createOneuiCssVariables()` keeps backward-compatible camelCase variable names and also emits kebab-case aliases.
+
+## Modern CSS Guidance
+
+- Use container queries for reusable components that must adapt to their parent width.
+- Keep viewport media queries for app shells, page chrome, and broad layout changes.
+- Use fluid sizing utilities only where a surface benefits from responsive rhythm; dense enterprise screens can remain static.
+- Use `100dvh` utilities for full-height layouts that should behave better on mobile browser chrome, with `100vh` fallback.
+- Treat `:has()` as progressive enhancement. The utility layer includes only a small optional parent-state helper.
+- Keep `@scope`, anchor positioning, scroll-driven animation, and subgrid as future progressive enhancements until a concrete component need exists.
 
 ## Validation
 
@@ -138,3 +184,4 @@ Contract checks run via:
 - `pnpm --filter @functions-oneui/tokens test`
 
 The tests verify required semantic keys exist for both `light` and `dark` token sets and verify all branded gradients expose the required structured fields.
+They also verify the CSS-only assets include theme scopes, cascade layer declarations, and the modern utility hooks.

@@ -171,7 +171,7 @@ function ensureUserConfig() {
 
 function runCommand(executable, args, options = {}) {
   const result = spawnSync(executable, args, {
-    cwd: workspaceRoot,
+    cwd: options.cwd ?? workspaceRoot,
     stdio: options.stdio ?? "inherit",
     env: options.env ?? process.env,
     input: options.input,
@@ -558,6 +558,7 @@ function publishPackagesWithNpm(packageNames, distTag, environment) {
         userConfigPath
       ],
       {
+        cwd: localRegistryRoot,
         env: environment
       }
     );
@@ -624,7 +625,7 @@ function ensureLoggedIn() {
     npmCommand,
     ["whoami", "--registry", registryUrl, "--userconfig", userConfigPath],
     {
-      cwd: workspaceRoot,
+      cwd: localRegistryRoot,
       encoding: "utf8",
       env: getLocalRegistryEnvironment(),
       shell: shouldUseShell(npmCommand),
@@ -791,7 +792,7 @@ async function loginToRegistry() {
     npmCommand,
     ["adduser", "--auth-type=legacy", "--registry", registryUrl, "--userconfig", userConfigPath],
     {
-      cwd: workspaceRoot,
+      cwd: localRegistryRoot,
       stdio: "inherit",
       env: getLocalRegistryEnvironment(),
       shell: shouldUseShell(npmCommand),
@@ -814,7 +815,7 @@ async function printWhoAmI() {
     npmCommand,
     ["whoami", "--registry", registryUrl, "--userconfig", userConfigPath],
     {
-      cwd: workspaceRoot,
+      cwd: localRegistryRoot,
       encoding: "utf8",
       env: getLocalRegistryEnvironment(),
       shell: shouldUseShell(npmCommand),

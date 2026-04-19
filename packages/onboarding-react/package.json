@@ -20,7 +20,8 @@
     "lint": "eslint . --max-warnings=0 --no-error-on-unmatched-pattern",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config vitest.config.ts",
-    "test:ui": "vitest --config vitest.config.ts --ui"
+    "test:ui": "vitest --config vitest.config.ts --ui",
+    "test:coverage": "vitest run --config vitest.config.ts --coverage"
   },
   "dependencies": {
     "@functions-oneui/onboarding-core": "workspace:*",

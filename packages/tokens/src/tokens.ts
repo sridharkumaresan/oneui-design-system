@@ -1,8 +1,10 @@
 import { rawPalette } from "./internal/palette.js";
 import {
+  oneuiMotionScale,
   oneuiRadiusScale,
   oneuiSpacingScale,
-  oneuiTypographyScale
+  oneuiTypographyScale,
+  oneuiZIndexScale
 } from "./foundations.js";
 
 export const tokenCategories = [
@@ -11,6 +13,8 @@ export const tokenCategories = [
   "spacing",
   "radius",
   "shadows",
+  "motion",
+  "zIndex",
   "components",
   "breakpoints"
 ];
@@ -160,6 +164,8 @@ export const lightThemeTokens = {
     xl: "0 16px 28px -4px rgba(0, 0, 0, 0.22)",
     focusRing: `0 0 0 2px ${rawPalette.brand.interactive}`
   },
+  motion: oneuiMotionScale,
+  zIndex: oneuiZIndexScale,
   components: {
     button: {
       typography: {
@@ -302,6 +308,8 @@ export const darkThemeTokens = {
     xl: "0 16px 28px -4px rgba(0, 0, 0, 0.42)",
     focusRing: `0 0 0 2px ${rawPalette.brand.primary}`
   },
+  motion: oneuiMotionScale,
+  zIndex: oneuiZIndexScale,
   components: {
     button: {
       typography: {
@@ -318,3 +326,5 @@ export const semanticTokens = {
 };
 
 export type OneUIBreakpointName = keyof typeof oneuiBreakpoints;
+export type OneUIMotionTokenName = keyof typeof oneuiMotionScale;
+export type OneUIZIndexName = keyof typeof oneuiZIndexScale;

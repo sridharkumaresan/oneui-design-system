@@ -123,6 +123,21 @@ export const semanticPathToThemeKeyMap = {
     xl: "shadow64",
     focusRing: "shadowFocusRing"
   },
+  motion: {
+    durationNormal: "durationNormal",
+    durationGentle: "durationGentle",
+    curveEasyEase: "curveEasyEase",
+    curveAccelerateMid: "curveAccelerateMid"
+  },
+  zIndex: {
+    base: "oneuiZIndexBase",
+    dropdown: "oneuiZIndexDropdown",
+    sticky: "oneuiZIndexSticky",
+    overlay: "oneuiZIndexOverlay",
+    modal: "oneuiZIndexModal",
+    toast: "oneuiZIndexToast",
+    tooltip: "oneuiZIndexTooltip"
+  },
   components: {
     "button.typography.fontWeight": "oneuiButtonFontWeight"
   },

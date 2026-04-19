@@ -30,7 +30,7 @@ export default defineConfig({
       enabled: collectCoverage,
       provider: "v8",
       reportsDirectory: "./coverage",
-      reporter: ["lcov", "text-summary"]
+      reporter: ["text-summary", "html", "lcov"]
     }
   }
 });

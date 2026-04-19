@@ -11,6 +11,7 @@ export {
   oneuiRadiusScale,
   oneuiSizeScale,
   oneuiSpacingScale,
+  oneuiZIndexScale,
   oneuiTypographyScale
 } from "./foundations.js";
 export type { OneUIFluentTokenCategory } from "./foundations.js";
@@ -40,4 +41,4 @@ export {
   semanticTokens,
   tokenCategories
 } from "./tokens.js";
-export type { OneUIBreakpointName } from "./tokens.js";
+export type { OneUIBreakpointName, OneUIMotionTokenName, OneUIZIndexName } from "./tokens.js";

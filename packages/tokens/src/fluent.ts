@@ -6,7 +6,8 @@ import {
   oneuiRadiusScale,
   oneuiSizeScale,
   oneuiSpacingScale,
-  oneuiTypographyScale
+  oneuiTypographyScale,
+  oneuiZIndexScale
 } from "./foundations.js";
 
 export const oneuiBrandColors = {
@@ -154,5 +155,6 @@ export const oneuiFluentFoundations = {
   },
   borders: oneuiBorderScale,
   motion: oneuiMotionScale,
+  zIndex: oneuiZIndexScale,
   sizes: oneuiSizeScale
 } as const;

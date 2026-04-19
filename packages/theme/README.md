@@ -4,6 +4,8 @@ Fluent UI v9 compatible OneUI theme composition built from semantic tokens in `@
 
 The theme architecture is Fluent-first: start from Fluent UI React v9 theme tokens, apply OneUI brand foundations and semantic aliases, and only add OneUI-specific extension keys where Fluent does not already provide the right slot.
 
+For CSS-only or non-React consumers, use `@functions-oneui/tokens/styles.css` directly. This package remains the React/Fluent adapter layer and does not force CSS asset imports.
+
 ## Purpose
 
 - Map semantic token names to Fluent UI theme keys
@@ -12,6 +14,7 @@ The theme architecture is Fluent-first: start from Fluent UI React v9 theme toke
 - Expose canonical gradient families and semantic reusable surface recipes
 - Provide shared registry, policy, and resolver helpers for banners and branded surfaces
 - Enable safe theme customization without deep imports
+- Preserve a clear boundary between the framework-agnostic token/CSS contract and React provider usage
 
 ## Public API
 
@@ -47,6 +50,7 @@ The theme architecture is Fluent-first: start from Fluent UI React v9 theme toke
 - `semanticPathToThemeKeyMap`
 
 For token-source exports such as brand primitives, Fluent baseline overrides, typography aliases, and CSS variable generation, consume `@functions-oneui/tokens`.
+For static CSS variables, cascade layers, container-query utility hooks, fluid sizing utilities, and CSS-only theme scopes, consume `@functions-oneui/tokens/styles.css`.
 For brand font asset delivery, consume `@functions-oneui/fonts`.
 
 ## Basic Usage
@@ -84,6 +88,32 @@ Use `themeOverrides` to customize safely:
   {/* app */}
 </OneUIProvider>;
 ```
+
+## CSS-Only Consumers
+
+Use the token package, not this React adapter package:
+
+```css
+@import "@functions-oneui/tokens/styles.css";
+```
+
+```html
+<section data-oneui-theme="light" class="oneui-layer-surface">
+  CSS-only theme scope
+</section>
+```
+
+This gives non-React consumers the same semantic tokens through CSS variables such as `--oneui-color-background-surface`, `--oneui-color-text-primary`, `--oneui-motion-duration-normal`, and `--oneui-z-index-modal`.
+
+React components should continue to prefer Fluent/Griffel tokens from the active OneUI theme. Use CSS variables in React only when a component intentionally needs CSS-only interoperability or app-shell level styling.
+
+## Modern CSS Guidance
+
+- Container queries are available through `createOneUIContainerQueryUp()` / `createOneUIContainerQueryDown()` and the CSS utility classes from `@functions-oneui/tokens/styles.css`.
+- Fluid typography remains opt-in through `createOneuiTheme({ typographyMode: "fluid" })`, `OneUIProvider typographyMode="fluid"`, or CSS utility variables.
+- Dynamic viewport utilities live in the token CSS assets so app shells can opt into `100dvh`/`100svh` behavior without changing React providers.
+- Cascade layer ordering is supplied by the token CSS assets. Component packages should avoid high-specificity overrides and let application overrides live in the final `oneui.overrides` layer when using CSS assets.
+- `@scope`, anchor positioning, scroll-driven animation, and subgrid should remain progressive enhancements until a component has a concrete need.
 
 ## Gradient Usage
 

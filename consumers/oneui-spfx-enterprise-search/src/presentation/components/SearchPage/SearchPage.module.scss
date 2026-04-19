@@ -300,27 +300,23 @@
   justify-content: flex-start;
   min-height: 28px;
   min-width: 0;
-  padding: 0;
+  padding: 0 22px 0 0;
   position: relative;
   width: max-content;
 }
 
 .bannerUtilityWidget .bannerResourceSpinner {
-  flex: 0 0 auto;
-  margin-left: 2px;
-  order: 3;
-  position: static;
-  right: auto;
-  top: auto;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  position: absolute;
+  transform: translateY(-50%);
 }
 
 .bannerUtilityWidget .bannerResourceWarning {
-  flex: 0 0 auto;
-  margin-left: 2px;
-  order: 3;
-  position: static;
-  right: auto;
-  top: auto;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  position: absolute;
+  transform: translateY(-50%);
 }
 
 .bannerUtilityWidget > svg {

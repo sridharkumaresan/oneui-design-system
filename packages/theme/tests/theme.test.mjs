@@ -163,6 +163,9 @@ test("exports light and dark OneUI themes", () => {
   assert.notEqual(oneuiDarkTheme.colorNeutralBackground1, undefined);
   assert.match(String(oneuiLightTheme.fontFamilyBase), /Barclays Effra/);
   assert.equal(oneuiLightTheme.oneuiButtonFontWeight, 400);
+  assert.equal(oneuiLightTheme.durationNormal, "200ms");
+  assert.equal(oneuiLightTheme.oneuiZIndexModal, 1300);
+  assert.equal(oneuiLightTheme.oneuiZIndexTooltip, 1500);
 });
 
 test("maps Fluent stroke widths to CSS length border tokens", () => {

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -36,6 +37,8 @@ test("exports the required semantic token categories", () => {
     "spacing",
     "radius",
     "shadows",
+    "motion",
+    "zIndex",
     "components",
     "breakpoints"
   ]);
@@ -65,7 +68,8 @@ test("exports Fluent-aligned foundation categories and brand values", () => {
     "shadows",
     "borders",
     "motion",
-    "sizes"
+    "sizes",
+    "zIndex"
   ]);
 
   assert.equal(oneuiBrandColors.primary, "#00AEEF");
@@ -169,8 +173,32 @@ test("exports CSS variable generation from the same token source of truth", () =
   const stylesheet = createOneuiCssVariablesStylesheet({ mode: "dark" });
 
   assert.equal(variables["--oneui-fluent-colorBrandBackground"], "#006DE3");
+  assert.equal(variables["--oneui-fluent-color-brand-background"], "#006DE3");
+  assert.equal(variables["--oneui-motion-duration-normal"], "200ms");
+  assert.equal(variables["--oneui-z-index-modal"], "1300");
   assert.equal(variables["--oneui-gradient-gradientCyanGreen-fallback"], "#00AEEF");
+  assert.equal(variables["--oneui-gradient-gradient-cyan-green-fallback"], "#00AEEF");
   assert.equal(variables["--oneui-solid-cyan"], "#00AEEF");
   assert.match(stylesheet, /^:root \{/);
   assert.match(stylesheet, /--oneui-fluent-colorNeutralBackground1:/);
+});
+
+test("ships CSS-only token assets with theme scopes and modern utility layers", async () => {
+  const [layers, variables, utilities, index] = await Promise.all([
+    readFile(new URL("../styles/layers.css", import.meta.url), "utf8"),
+    readFile(new URL("../styles/variables.css", import.meta.url), "utf8"),
+    readFile(new URL("../styles/utilities.css", import.meta.url), "utf8"),
+    readFile(new URL("../styles/index.css", import.meta.url), "utf8")
+  ]);
+
+  assert.match(layers, /@layer oneui\.reset, oneui\.tokens, oneui\.base, oneui\.components, oneui\.utilities, oneui\.overrides;/);
+  assert.match(variables, /\[data-oneui-theme="light"\]/);
+  assert.match(variables, /\[data-oneui-theme="dark"\]/);
+  assert.match(variables, /--oneui-motion-duration-normal: 200ms;/);
+  assert.match(variables, /--oneui-z-index-modal: 1300;/);
+  assert.match(utilities, /\.oneui-cq\s*\{/);
+  assert.match(utilities, /min-block-size: 100dvh;/);
+  assert.match(utilities, /font-size: var\(--oneui-fluid-display\);/);
+  assert.match(index, /@import "\.\/variables\.css";/);
+  assert.match(index, /@import "\.\/utilities\.css";/);
 });

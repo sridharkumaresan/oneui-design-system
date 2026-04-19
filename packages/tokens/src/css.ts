@@ -23,8 +23,15 @@ const flatten = (
       continue;
     }
 
-    target[nextPrefix] = String(value);
+    const stringValue = String(value);
+
+    target[nextPrefix] = stringValue;
+    target[toKebabCssVariableName(nextPrefix)] = stringValue;
   }
+};
+
+const toKebabCssVariableName = (name: string): string => {
+  return name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();
 };
 
 const normalizeMode = (mode: CreateOneuiCssVariablesOptions["mode"]): "light" | "dark" => {
@@ -50,12 +57,20 @@ export const createOneuiCssVariables = (
   );
 
   for (const [name, gradient] of Object.entries(rawGradientTokens)) {
-    cssVariables[`--${prefix}-gradient-${name}`] = gradient.css;
-    cssVariables[`--${prefix}-gradient-${name}-fallback`] = gradient.fallbackSolidColor;
+    const gradientName = `--${prefix}-gradient-${name}`;
+    const gradientFallbackName = `--${prefix}-gradient-${name}-fallback`;
+
+    cssVariables[gradientName] = gradient.css;
+    cssVariables[toKebabCssVariableName(gradientName)] = gradient.css;
+    cssVariables[gradientFallbackName] = gradient.fallbackSolidColor;
+    cssVariables[toKebabCssVariableName(gradientFallbackName)] = gradient.fallbackSolidColor;
   }
 
   for (const [name, solid] of Object.entries(rawSolidTokens)) {
-    cssVariables[`--${prefix}-solid-${name}`] = solid.value;
+    const solidName = `--${prefix}-solid-${name}`;
+
+    cssVariables[solidName] = solid.value;
+    cssVariables[toKebabCssVariableName(solidName)] = solid.value;
   }
 
   return cssVariables;

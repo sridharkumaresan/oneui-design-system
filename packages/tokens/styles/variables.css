@@ -1,0 +1,155 @@
+@import "./layers.css";
+
+@layer oneui.tokens {
+  :root,
+  [data-oneui-theme="light"] {
+    color-scheme: light;
+
+    --oneui-color-background-canvas: #f4f6f8;
+    --oneui-color-background-surface: #ffffff;
+    --oneui-color-background-elevated: #ffffff;
+    --oneui-color-background-brand: #00aeef;
+    --oneui-color-background-brand-strong: #006de3;
+    --oneui-color-background-danger-subtle: #ffe5e8;
+    --oneui-color-background-danger-subtle-light: #fff5f6;
+    --oneui-color-background-success-subtle: #e4f6e8;
+    --oneui-color-background-success-subtle-light: #f3fbf5;
+    --oneui-color-background-warning-subtle: #fff3cc;
+    --oneui-color-background-warning-subtle-light: #fff9e8;
+    --oneui-color-background-info-subtle: #e5f6fd;
+    --oneui-color-background-info-subtle-light: #f2fbfe;
+    --oneui-color-background-neutral-subtle: #eef1f4;
+    --oneui-color-background-neutral-subtle-light: #f4f6f8;
+
+    --oneui-color-text-primary: #1a1a1a;
+    --oneui-color-text-secondary: #555555;
+    --oneui-color-text-inverse: #ffffff;
+    --oneui-color-text-brand: #006de3;
+    --oneui-color-text-link: #006de3;
+    --oneui-color-text-link-hover: #0057b8;
+    --oneui-color-text-link-pressed: #00469b;
+    --oneui-color-text-danger: #d0021b;
+    --oneui-color-text-success: #107c10;
+    --oneui-color-text-warning: #7a5a00;
+    --oneui-color-text-info: #0067b6;
+
+    --oneui-color-border-subtle: #eef1f4;
+    --oneui-color-border-default: #d8d8d8;
+    --oneui-color-border-strong: #bdbdbd;
+    --oneui-color-border-focus: #006de3;
+    --oneui-color-border-brand: #006de3;
+    --oneui-color-border-danger: #b20110;
+    --oneui-color-border-success: #107c10;
+    --oneui-color-border-warning: #d79a00;
+    --oneui-color-border-info: #0067b6;
+
+    --oneui-font-family-base: "Barclays Effra", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --oneui-font-family-monospace: "Cascadia Mono", "SFMono-Regular", Menlo, monospace;
+    --oneui-font-size-caption: 0.75rem;
+    --oneui-font-size-body: 0.875rem;
+    --oneui-font-size-body-large: 1rem;
+    --oneui-font-size-title: 1.25rem;
+    --oneui-font-size-headline: 1.75rem;
+    --oneui-line-height-compact: 1.2;
+    --oneui-line-height-normal: 1.4;
+    --oneui-line-height-relaxed: 1.6;
+    --oneui-font-weight-regular: 400;
+    --oneui-font-weight-medium: 500;
+    --oneui-font-weight-semibold: 600;
+    --oneui-font-weight-bold: 700;
+
+    --oneui-spacing-xxs: 0.125rem;
+    --oneui-spacing-xs: 0.25rem;
+    --oneui-spacing-sm: 0.5rem;
+    --oneui-spacing-md: 0.75rem;
+    --oneui-spacing-lg: 1rem;
+    --oneui-spacing-xl: 1.5rem;
+    --oneui-spacing-xxl: 2rem;
+
+    --oneui-radius-none: 0;
+    --oneui-radius-sm: 0.125rem;
+    --oneui-radius-md: 0.25rem;
+    --oneui-radius-lg: 0.5rem;
+    --oneui-radius-full: 9999px;
+
+    --oneui-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.12);
+    --oneui-shadow-md: 0 4px 10px 0 rgba(0, 0, 0, 0.16);
+    --oneui-shadow-lg: 0 8px 18px -2px rgba(0, 0, 0, 0.18);
+    --oneui-shadow-xl: 0 16px 28px -4px rgba(0, 0, 0, 0.22);
+    --oneui-shadow-focus-ring: 0 0 0 2px #006de3;
+
+    --oneui-motion-duration-normal: 200ms;
+    --oneui-motion-duration-gentle: 300ms;
+    --oneui-motion-curve-easy-ease: cubic-bezier(0.33, 0, 0.67, 1);
+    --oneui-motion-curve-accelerate-mid: cubic-bezier(0.7, 0, 1, 0.5);
+
+    --oneui-z-index-base: 0;
+    --oneui-z-index-dropdown: 1000;
+    --oneui-z-index-sticky: 1100;
+    --oneui-z-index-overlay: 1200;
+    --oneui-z-index-modal: 1300;
+    --oneui-z-index-toast: 1400;
+    --oneui-z-index-tooltip: 1500;
+
+    --oneui-breakpoint-mobile: 360px;
+    --oneui-breakpoint-sm: 480px;
+    --oneui-breakpoint-tablet: 768px;
+    --oneui-breakpoint-lg: 1024px;
+    --oneui-breakpoint-xl: 1280px;
+    --oneui-breakpoint-desktop: 1440px;
+    --oneui-breakpoint-xxl: 1536px;
+
+    --oneui-fluid-display: clamp(2rem, calc(1.45rem + 1.6vw), 3.25rem);
+    --oneui-fluid-title: clamp(1.5rem, calc(1.25rem + 0.8vw), 2.25rem);
+    --oneui-fluid-section-gap: clamp(1rem, calc(0.75rem + 1vw), 2rem);
+  }
+
+  [data-oneui-theme="dark"] {
+    color-scheme: dark;
+
+    --oneui-color-background-canvas: #101010;
+    --oneui-color-background-surface: #1a1a1a;
+    --oneui-color-background-elevated: #272727;
+    --oneui-color-background-brand: #00aeef;
+    --oneui-color-background-brand-strong: #006de3;
+    --oneui-color-background-danger-subtle: #4a0710;
+    --oneui-color-background-danger-subtle-light: #67111a;
+    --oneui-color-background-success-subtle: #073b16;
+    --oneui-color-background-success-subtle-light: #0b5521;
+    --oneui-color-background-warning-subtle: #4d3900;
+    --oneui-color-background-warning-subtle-light: #6d5100;
+    --oneui-color-background-info-subtle: #003f63;
+    --oneui-color-background-info-subtle-light: #005a8f;
+    --oneui-color-background-neutral-subtle: #272727;
+    --oneui-color-background-neutral-subtle-light: #333333;
+
+    --oneui-color-text-primary: #ffffff;
+    --oneui-color-text-secondary: #bdbdbd;
+    --oneui-color-text-inverse: #101010;
+    --oneui-color-text-brand: #00aeef;
+    --oneui-color-text-link: #00aeef;
+    --oneui-color-text-link-hover: #4bc9ff;
+    --oneui-color-text-link-pressed: #7ad8ff;
+    --oneui-color-text-danger: #ff8a94;
+    --oneui-color-text-success: #7ee092;
+    --oneui-color-text-warning: #ffd866;
+    --oneui-color-text-info: #73d6ff;
+
+    --oneui-color-border-subtle: #272727;
+    --oneui-color-border-default: #404040;
+    --oneui-color-border-strong: #888888;
+    --oneui-color-border-focus: #00aeef;
+    --oneui-color-border-brand: #00aeef;
+    --oneui-color-border-danger: #ff8a94;
+    --oneui-color-border-success: #7ee092;
+    --oneui-color-border-warning: #ffd866;
+    --oneui-color-border-info: #73d6ff;
+
+    --oneui-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --oneui-shadow-md: 0 4px 10px 0 rgba(0, 0, 0, 0.34);
+    --oneui-shadow-lg: 0 8px 18px -2px rgba(0, 0, 0, 0.38);
+    --oneui-shadow-xl: 0 16px 28px -4px rgba(0, 0, 0, 0.42);
+    --oneui-shadow-focus-ring: 0 0 0 2px #00aeef;
+  }
+}
+
