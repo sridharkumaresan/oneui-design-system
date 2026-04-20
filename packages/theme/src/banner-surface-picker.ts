@@ -2,7 +2,6 @@ import {
   createOneUISurfacePropertyPaneOptions,
   defineOneUISurfacePolicy,
   resolveOneUISurfaceStyle,
-  resolveOneUISurfaceVariant,
   type OneUISurfaceKind,
   type OneUISurfacePolicy,
   type OneUISurfacePolicyInput,
@@ -63,7 +62,7 @@ const getVisibleOptions = (
   const options = createOneUISurfacePropertyPaneOptions(config.policy, config);
 
   return options.filter((option) => {
-    return !option.hiddenFromSelections && canUseSurfaceType(option.type, availability);
+    return canUseSurfaceType(option.type, availability);
   });
 };
 
@@ -77,39 +76,6 @@ const toPickerOption = (
   };
 };
 
-const getSelectedOption = (
-  config: OneUIBannerSurfacePickerConfig
-): OneUISurfacePropertyPaneOption | undefined => {
-  const { selectedKey } = config;
-  if (!selectedKey) {
-    return undefined;
-  }
-
-  const options = createOneUISurfacePropertyPaneOptions(config.policy, config);
-  const existingSelection = options.find((option) => option.key === selectedKey);
-  if (existingSelection) {
-    return existingSelection;
-  }
-
-  const resolved = resolveOneUISurfaceVariant(selectedKey, config);
-  if (!resolved.isDeprecatedSelection) {
-    return undefined;
-  }
-
-  return {
-    key: selectedKey,
-    text: `${resolved.resolvedEntry.label} (Legacy)`,
-    surfaceRole: resolved.recipe.key,
-    type: resolved.recipe.type,
-    group: resolved.recipe.group,
-    description: resolved.resolvedEntry.description,
-    preview: resolved.resolvedEntry.preview,
-    hiddenFromSelections: true,
-    deprecated: true,
-    replacementKey: resolved.resolvedKey
-  };
-};
-
 export const buildOneUIBannerSurfacePickerOptions = (
   config: OneUIBannerSurfacePickerConfig
 ): OneUIBannerSurfacePickerResolution => {
@@ -118,27 +84,13 @@ export const buildOneUIBannerSurfacePickerOptions = (
   const requestedDefaultKey = policy.defaultVariantKey;
   const defaultOption =
     visibleOptions.find((option) => option.key === requestedDefaultKey) ??
-    visibleOptions[0] ??
-    getSelectedOption(config);
+    visibleOptions[0];
   const defaultKey = defaultOption?.key ?? requestedDefaultKey;
-  const selectedOption = getSelectedOption(config);
-  const effectiveKey = config.selectedKey ?? defaultKey;
+  const effectiveKey =
+    config.selectedKey && visibleOptions.some((option) => option.key === config.selectedKey)
+      ? config.selectedKey
+      : defaultKey;
   const options = visibleOptions.map((option) => toPickerOption(option, defaultKey));
-
-  if (
-    selectedOption &&
-    !options.some((option) => option.key === selectedOption.key)
-  ) {
-    options.push(
-      toPickerOption(
-        {
-          ...selectedOption,
-          hiddenFromSelections: true
-        },
-        defaultKey
-      )
-    );
-  }
 
   return {
     defaultKey,

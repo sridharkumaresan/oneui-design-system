@@ -27,17 +27,17 @@ const footerGridStyle = {
 const heroBannerStoryPolicy = defineOneUISurfacePolicy({
   label: "HeroBanner story policy",
   allowedVariantKeys: [
-    "gradientCyanGreen",
-    "gradientNavyCyan",
-    "gradientCyanLightBlue",
-    "gradientCyanYellow",
-    "gradientCyanPink",
-    "navy",
-    "cyan",
-    "lightBlue"
+    "heroPrimary",
+    "heroSecondary",
+    "heroSoft",
+    "heroFresh",
+    "heroPastel",
+    "heroDeep",
+    "heroBlue",
+    "heroLight"
   ],
   allowedTypes: ["gradient", "solid"],
-  defaultVariantKey: "gradientCyanGreen"
+  defaultVariantKey: "heroPrimary"
 });
 
 const heroBannerComposedCode = `
@@ -76,7 +76,7 @@ export function PortalHero(): JSX.Element {
           </OneUICard>
         </div>
       }
-      surfaceKey="gradientCyanGreen"
+      surfaceKey="heroPrimary"
       supportingContent={
         <SearchAutocomplete
           scopeOptions={[
@@ -101,7 +101,7 @@ export function LandingHero(): JSX.Element {
     <HeroBanner
       description="Welcome to Connections, how can we help you today?"
       height="immersive"
-      surfaceKey="gradientCyanGreen"
+      surfaceKey="heroPrimary"
       title="Good morning, Sridhar"
     />
   );
@@ -115,7 +115,7 @@ export function BrandHero(): JSX.Element {
   return (
     <HeroBanner
       description="Use the solid variant when a page needs a simpler branded surface without the extra visual weight of a gradient."
-      surfaceKey="navy"
+      surfaceKey="heroDeep"
       title="Solid primary brand surfaces still handle the default banner use case"
     />
   );
@@ -131,7 +131,7 @@ export function HeroWithAside(): JSX.Element {
     <HeroBanner
       description="Composed hero surfaces can place supporting media or panels in the aside slot."
       eyebrow={<OneUIText size="bodySmall">Composed hero surface</OneUIText>}
-      surfaceKey="gradientCyanGreen"
+      surfaceKey="heroPrimary"
       title="Keep the banner generic and place supporting content alongside it"
       aside={
         <OneUICard elevation="raised" padding="lg">
@@ -182,7 +182,7 @@ const meta = {
   args: {
     title: "Good morning, Sridhar",
     description: "Welcome to Connections, how can we help you today?",
-    surfaceKey: "gradientCyanGreen",
+    surfaceKey: "heroPrimary",
     height: "immersive"
   },
   argTypes: {
@@ -222,7 +222,7 @@ export const GradientPrimary: Story = {
 
 export const SolidBrand: Story = {
   args: {
-    surfaceKey: "navy",
+    surfaceKey: "heroDeep",
     title: "Solid primary brand surfaces still handle the default banner use case",
     description:
       "Use a semantic solid hero surface when a page needs a simpler branded treatment without the extra visual weight of a gradient."
@@ -352,8 +352,8 @@ export const WithAsideContent: Story = {
 
 export const FeatureSurface: Story = {
   args: {
-    surfaceKey: "gradientCyanYellow",
-    title: "Approved semantic gradients can support feature spotlights",
+    surfaceKey: "heroFresh",
+    title: "Approved semantic surfaces can support feature spotlights",
     description:
       "This variant demonstrates a lighter gradient role for low-density promotional surfaces and campaign headers."
   }

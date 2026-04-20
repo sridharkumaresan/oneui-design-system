@@ -22,7 +22,7 @@ export const HeroBanner = (props: HeroBannerProps): React.JSX.Element => {
     footer,
     headingLevel = 2,
     height = "immersive",
-    surfaceKey = "gradientCyanGreen",
+    surfaceKey = "heroPrimary",
     style,
     supportingContent,
     title,

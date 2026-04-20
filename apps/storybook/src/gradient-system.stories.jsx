@@ -211,25 +211,24 @@ const GradientShowcase = () => {
         <div>
           <h2 style={{ margin: 0 }}>Hero variants</h2>
           <p style={{ color: theme?.colorNeutralForeground2, lineHeight: 1.5, margin: 0 }}>
-            The hero gradients are available here directly, not only inside the HeroBanner organism story pages.
+            HeroBanner consumes semantic surface keys. The raw gradient names below remain the
+            paint layer behind those surfaces.
           </p>
         </div>
         <div style={{ display: "grid", gap: theme?.spacingVerticalL ?? "1rem" }}>
           <OneUIHeroBanner
             contentTone="inverse"
             description="Primary branded hero treatment for prominent landing experiences."
-            gradientName="gradientCyanGreen"
             height="comfortable"
-            surfaceVariant="gradient"
-            title="gradientCyanGreen"
+            surfaceKey="heroPrimary"
+            title="heroPrimary"
           />
           <OneUIHeroBanner
             contentTone="inverse"
             description="Darker alternative for secondary hero and compact branded panel moments."
-            gradientName="gradientNavyCyan"
             height="comfortable"
-            surfaceVariant="gradient"
-            title="gradientNavyCyan"
+            surfaceKey="heroSecondary"
+            title="heroSecondary"
           />
         </div>
       </section>

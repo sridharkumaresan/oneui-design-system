@@ -6,7 +6,7 @@ Full-width hero banner organism package for landing surfaces, portal headers, an
 
 This package exposes a generic hero organism for high-visibility page messaging with:
 
-- canonical brand surface keys backed by the shared OneUI surface system
+- semantic hero surface keys backed by the shared OneUI surface system
 - title and optional description
 - named composition slots for breadcrumb, widgets, search, aside content, and footer content
 - a layout that spans the host width without relying on embedded hero artwork
@@ -43,7 +43,7 @@ import { SmartBreadcrumb } from "@functions-oneui/organism-smart-breadcrumb";
       </OneUICard>
     </div>
   }
-  surfaceKey="gradientCyanGreen"
+  surfaceKey="heroPrimary"
   supportingContent={<SearchAutocomplete scopeOptions={[{ label: "All", value: "all" }]} />}
   title="Good morning, Sridhar"
   topStart={
@@ -72,7 +72,7 @@ Use the named slots to compose content without coupling features into the banner
 For phase-1 SPFx migration:
 
 - keep the property pane simple
-- persist one canonical `bannerSurfaceKey` value such as `gradientCyanGreen` or `navy`
+- persist one semantic `bannerSurfaceKey` value such as `heroPrimary` or `heroDeep`
 - map boolean toggles like `showSearch` or `showBreadcrumb` to slot content in the web-part React layer
 - keep existing feature logic outside the design-system package and pass that content into slots
 
@@ -98,7 +98,7 @@ If the consuming team is not ready to adopt `HeroBanner`, they should still use 
 
 - Keep the component `width: 100%` and place it inside a true full-width host region instead of forcing `100vw` from the component.
 - In SPFx, expose structured property-pane fields and let the web part map those fields into slot content.
-- Prefer canonical brand surface keys such as `gradientCyanGreen`, `gradientNavyCyan`, `navy`, `cyan`, and `lightBlue`.
+- Prefer semantic hero surface keys such as `heroPrimary`, `heroSecondary`, `heroDeep`, `heroBlue`, and `heroLight`.
 - Keep titles short and descriptions to one or two lines for responsive stability.
 - Prefer `contentTone="inverse"` for dark or saturated surfaces.
 - Do not add feature-specific banner props for search, widgets, or cards. Those belong in slot content.

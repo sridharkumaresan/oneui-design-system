@@ -6,7 +6,7 @@ import type { BrandedHeroBannerProps } from "./HeroBanner.types.js";
 export const BrandedHeroBanner = (
   props: BrandedHeroBannerProps
 ): React.JSX.Element => {
-  const { surfaceKey = "gradientCyanGreen", ...restProps } = props;
+  const { surfaceKey = "heroPrimary", ...restProps } = props;
 
   return (
     <HeroBanner

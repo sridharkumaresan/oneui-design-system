@@ -477,7 +477,7 @@ export const IntranetTopShell = ({
           <BrandedHeroBanner
             className="connections-task-banner"
             height="tiny"
-            surfaceKey="gradientCyanLightBlue"
+            surfaceKey="heroSoft"
             title={isOnboardingRoute ? "Onboarding Demo" : "Task Inbox"}
           />
         ) : (
@@ -533,7 +533,7 @@ export const IntranetTopShell = ({
                 </div>
               </div>
             }
-            surfaceKey="gradientNavyCyan"
+            surfaceKey="heroSecondary"
             title="Good afternoon, Sabina"
             topStart={
               <div className="connections-hero-widget-row">

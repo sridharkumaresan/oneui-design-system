@@ -8,7 +8,7 @@ That rule gives us:
 
 - stable saved webpart data even when brand colors change later
 - one central place to remap raw gradient families or solid values
-- consistent banner and component behavior across HeroBanner, legacy SPFx webparts, and future reusable surfaces
+- consistent banner and component behavior across HeroBanner, existing SPFx webparts, and future reusable surfaces
 - a safe path to deprecate old variants without breaking existing page instances
 
 Saved data should contain only the selected semantic key.
@@ -110,9 +110,9 @@ Preferred usage:
 />
 ```
 
-Legacy compatibility still exists for older callers using `gradientName` or `surfaceVariant`, but new integrations should use `surfaceKey`.
+Use semantic `surfaceKey` values such as `heroPrimary` or `heroDeep`. Raw gradient names and raw solid names are not part of the HeroBanner public API.
 
-`BrandedHeroBanner` remains the constrained adoption wrapper and maps its `primary | secondary` enum into the shared semantic roles rather than maintaining a second source of truth.
+`BrandedHeroBanner` remains the constrained adoption wrapper and defaults to `heroPrimary` rather than maintaining a second source of truth.
 
 ## Reuse Beyond Banners
 
@@ -141,22 +141,6 @@ When adding a new branded surface:
 6. add or update tests
 7. add a changeset for the publishable packages affected
 
-## Deprecating Or Remapping Variants
-
-Safe deprecation flow:
-
-1. keep the old saved key resolvable through a deprecated registry entry
-2. point that deprecated key to a semantic replacement key
-3. hide it from new property-pane selections
-4. leave old page instances functional
-5. optionally migrate saved instances later in consuming apps or webparts
-
-This repository already uses that pattern for legacy keys such as:
-
-- `primary`
-- `secondary`
-- raw gradient names like `deepSpectrum` and `midnightBlue`
-
 ## Property Pane Integration Notes
 
 The theme package intentionally returns generic option metadata rather than taking a hard dependency on SPFx property-pane packages.
@@ -167,13 +151,12 @@ That metadata includes:
 - label text
 - preview swatch data
 - grouping metadata
-- legacy visibility state
 
 Webpart teams can map that data into:
 
 - a custom property-pane field with preview swatches
 - a built-in dropdown when only text labels are needed
-- future richer selection controls without rebuilding filtering or legacy resolution logic
+- future richer selection controls without rebuilding filtering logic
 
 ## SPFx Banner Picker Pattern
 
@@ -271,14 +254,13 @@ The adapter returns:
 
 - `defaultKey`
 - `effectiveKey`
-- `options[]` with `isDefault`, `preview`, `deprecated`, and `hiddenFromSelections`
+- `options[]` with `isDefault` and `preview`
 
 That lets a custom property pane renderer:
 
 - show only gradients, only solids, or both
 - render square swatches from `option.preview.backgroundColor` and `option.preview.backgroundImage`
 - mark the design-system or webpart default
-- keep a legacy current selection resolvable without exposing it as a new choice
 
 Example custom field row:
 

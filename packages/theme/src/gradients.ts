@@ -6,28 +6,12 @@ import {
 } from "@functions-oneui/tokens";
 
 export const oneuiGradientNames = rawGradientTokenNames;
-export const oneuiLegacyGradientNames = [
-  "navyCyan",
-  "cyanGreen",
-  "cyanYellow",
-  "cyanLightBlue",
-  "cyanPink",
-  "deepSpectrum",
-  "limeSky",
-  "softAqua",
-  "tealShift",
-  "midnightBlue",
-  "pastelHorizon"
-] as const;
 
 export type OneUIGradientName = (typeof oneuiGradientNames)[number];
-export type OneUILegacyGradientName = (typeof oneuiLegacyGradientNames)[number];
-export type OneUIResolvableGradientName =
-  | OneUIGradientName
-  | OneUILegacyGradientName;
+export type OneUIResolvableGradientName = OneUIGradientName;
 
 export type OneUIGradient = {
-  name: OneUIResolvableGradientName;
+  name: OneUIGradientName;
   label: string;
   type: RawGradientToken["type"];
   direction: RawGradientToken["direction"];
@@ -38,31 +22,14 @@ export type OneUIGradient = {
   fallbackSolidColor: string;
 };
 
-export type OneUIGradients = Record<OneUIResolvableGradientName, OneUIGradient>;
-
-const oneuiLegacyGradientAliasMap: Record<
-  OneUILegacyGradientName,
-  OneUIGradientName
-> = {
-  navyCyan: "gradientNavyCyan",
-  cyanGreen: "gradientCyanGreen",
-  cyanYellow: "gradientCyanYellow",
-  cyanLightBlue: "gradientCyanLightBlue",
-  cyanPink: "gradientCyanPink",
-  deepSpectrum: "gradientCyanGreen",
-  limeSky: "gradientCyanYellow",
-  softAqua: "gradientCyanLightBlue",
-  tealShift: "gradientCyanGreen",
-  midnightBlue: "gradientNavyCyan",
-  pastelHorizon: "gradientCyanPink"
-};
+export type OneUIGradients = Record<OneUIGradientName, OneUIGradient>;
 
 const cloneStops = (stops: readonly RawGradientStop[]): RawGradientStop[] => {
   return stops.map((stop) => ({ ...stop }));
 };
 
 const createResolvedGradient = (
-  name: OneUIResolvableGradientName,
+  name: OneUIGradientName,
   gradientToken: RawGradientToken
 ): OneUIGradient => {
   return {
@@ -79,27 +46,11 @@ const createResolvedGradient = (
 };
 
 const resolveGradients = (): OneUIGradients => {
-  const canonicalEntries = Object.fromEntries(
+  return Object.fromEntries(
     oneuiGradientNames.map((name) => {
       return [name, createResolvedGradient(name, rawGradientTokens[name])];
     })
   ) as Record<OneUIGradientName, OneUIGradient>;
-
-  const legacyEntries = Object.fromEntries(
-    oneuiLegacyGradientNames.map((legacyName) => {
-      const replacementName = oneuiLegacyGradientAliasMap[legacyName];
-
-      return [
-        legacyName,
-        createResolvedGradient(legacyName, rawGradientTokens[replacementName])
-      ];
-    })
-  ) as Record<OneUILegacyGradientName, OneUIGradient>;
-
-  return {
-    ...canonicalEntries,
-    ...legacyEntries
-  };
 };
 
 const normalizeMode = (mode: string | undefined): "light" | "dark" => {
@@ -113,7 +64,6 @@ export const createOneuiGradients = (mode?: string): OneUIGradients => {
   return normalizeMode(mode) === "dark" ? oneuiDarkGradients : oneuiLightGradients;
 };
 
-// Backward-compatible aliases while the workspace migrates to canonical gradient names.
 export const oneuiGradientRoleNames = oneuiGradientNames;
 export type OneUIGradientRoleName = OneUIGradientName;
 export type OneUIGradientRole = OneUIGradient;

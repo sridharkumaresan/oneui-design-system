@@ -47,14 +47,14 @@ describe("HeroBanner", () => {
 
   it("applies the configured semantic surface key", () => {
     renderWithOneUIProvider(
-      <HeroBanner surfaceKey="gradientNavyCyan" title="Gradient" />
+      <HeroBanner surfaceKey="heroSecondary" title="Gradient" />
     );
 
     const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
-    const surface = oneuiLightSurfaceRecipes.gradientNavyCyan;
+    const surface = oneuiLightSurfaceRecipes.heroSecondary;
 
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
-    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("gradientNavyCyan");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
     expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientNavyCyan");
     const colorProbe = document.createElement("div");
     colorProbe.style.backgroundColor = surface.background.backgroundColor;
@@ -63,20 +63,25 @@ describe("HeroBanner", () => {
     expect(banner.style.backgroundImage).toContain("linear-gradient");
   });
 
-  it("keeps resolving legacy surface selections through the shared surface system", () => {
-    renderWithOneUIProvider(<HeroBanner surfaceKey="midnightBlue" title="Legacy gradient" />);
+  it("falls back to the default surface for unknown selections", () => {
+    renderWithOneUIProvider(
+      <HeroBanner
+        surfaceKey={"unknown-surface" as React.ComponentProps<typeof HeroBanner>["surfaceKey"]}
+        title="Fallback hero"
+      />
+    );
 
     const banner = document.querySelector("[data-oneui-hero-banner]") as HTMLElement;
 
-    expect(banner.dataset.oneuiHeroBannerSelectedSurfaceKey).toBe("midnightBlue");
-    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("gradientNavyCyan");
+    expect(banner.dataset.oneuiHeroBannerSelectedSurfaceKey).toBe("unknown-surface");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroPrimary");
   });
 
   it("has no obvious axe violations", async () => {
     const { container } = renderWithOneUIProvider(
       <HeroBanner
         description="Welcome to Connections, how can we help you today?"
-        surfaceKey="deepSpectrum"
+        surfaceKey="heroPrimary"
         title="Good morning, Sridhar"
       />
     );

@@ -17,30 +17,30 @@ describe("BrandedHeroBanner", () => {
     const banner = document.querySelector(
       "[data-oneui-branded-hero-banner]"
     ) as HTMLElement;
-    const primarySurface = oneuiLightSurfaceRecipes.gradientCyanGreen;
+    const primarySurface = oneuiLightSurfaceRecipes.heroPrimary;
     const colorProbe = document.createElement("div");
     colorProbe.style.backgroundColor = primarySurface.background.backgroundColor;
 
     expect(screen.getByRole("region", { name: "Phase 1 banner" })).toBeTruthy();
-    expect(banner.dataset.oneuiBrandedHeroBannerSurfaceKey).toBe("gradientCyanGreen");
+    expect(banner.dataset.oneuiBrandedHeroBannerSurfaceKey).toBe("heroPrimary");
     expect(banner.dataset.oneuiHeroBannerSurfaceVariant).toBe("gradient");
-    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("gradientCyanGreen");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroPrimary");
     expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientCyanGreen");
     expect(banner.style.backgroundColor).toBe(colorProbe.style.backgroundColor);
     expect(banner.style.backgroundImage).toContain("linear-gradient");
   });
 
-  it("passes an explicit canonical surface key through to the base banner", () => {
+  it("passes an explicit semantic surface key through to the base banner", () => {
     renderWithOneUIProvider(
-      <BrandedHeroBanner title="Secondary phase 1 banner" surfaceKey="gradientNavyCyan" />
+      <BrandedHeroBanner title="Secondary phase 1 banner" surfaceKey="heroSecondary" />
     );
 
     const banner = document.querySelector(
       "[data-oneui-branded-hero-banner]"
     ) as HTMLElement;
 
-    expect(banner.dataset.oneuiBrandedHeroBannerSurfaceKey).toBe("gradientNavyCyan");
-    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("gradientNavyCyan");
+    expect(banner.dataset.oneuiBrandedHeroBannerSurfaceKey).toBe("heroSecondary");
+    expect(banner.dataset.oneuiHeroBannerSurfaceKey).toBe("heroSecondary");
     expect(banner.dataset.oneuiHeroBannerGradientName).toBe("gradientNavyCyan");
   });
 

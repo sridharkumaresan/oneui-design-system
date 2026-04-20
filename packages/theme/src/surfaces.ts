@@ -16,14 +16,14 @@ import {
 } from "./theme.js";
 
 export const oneuiSurfaceRoleNames = [
-  "gradientCyanGreen",
-  "gradientNavyCyan",
-  "gradientCyanLightBlue",
-  "gradientCyanYellow",
-  "gradientCyanPink",
-  "navy",
-  "cyan",
-  "lightBlue",
+  "heroPrimary",
+  "heroSecondary",
+  "heroSoft",
+  "heroFresh",
+  "heroPastel",
+  "heroDeep",
+  "heroBlue",
+  "heroLight",
   "iconPrimary",
   "iconSecondary",
   "accentStrong",
@@ -38,31 +38,7 @@ export type OneUISurfaceRoleName = (typeof oneuiSurfaceRoleNames)[number];
 export type OneUISurfaceVariantKey = OneUISurfaceRoleName;
 export const oneuiSurfaceVariantKeys = oneuiSurfaceRoleNames;
 
-export const oneuiLegacySurfaceVariantKeys = [
-  "navyCyan",
-  "cyanGreen",
-  "cyanYellow",
-  "cyanLightBlue",
-  "cyanPink",
-  "heroPrimary",
-  "heroSecondary",
-  "heroSoft",
-  "heroFresh",
-  "heroDeep",
-  "heroBlue",
-  "heroLight",
-  "heroPastel",
-  "primary",
-  "secondary",
-  "deepSpectrum",
-  "midnightBlue"
-] as const;
-
-export type OneUILegacySurfaceVariantKey =
-  (typeof oneuiLegacySurfaceVariantKeys)[number];
-export type OneUIResolvableSurfaceVariantKey =
-  | OneUISurfaceVariantKey
-  | OneUILegacySurfaceVariantKey;
+export type OneUIResolvableSurfaceVariantKey = OneUISurfaceVariantKey;
 export const oneuiSurfaceKinds = ["gradient", "solid"] as const;
 export type OneUISurfaceKind = (typeof oneuiSurfaceKinds)[number];
 export type OneUISurfaceTextTone = "default" | "inverse" | "brand";
@@ -110,7 +86,7 @@ export type OneUISurfacePreview = {
 };
 
 export type OneUISurfaceVariantRegistryEntry = {
-  key: OneUIResolvableSurfaceVariantKey;
+  key: OneUISurfaceVariantKey;
   label: string;
   type: OneUISurfaceKind;
   category: OneUISurfaceCategory;
@@ -120,17 +96,12 @@ export type OneUISurfaceVariantRegistryEntry = {
   description: string;
   fallbackColor: string;
   preview: OneUISurfacePreview;
-  hiddenFromSelections: boolean;
-  deprecated?: {
-    replacementKey: OneUISurfaceVariantKey;
-    reason: string;
-  };
   textToneGuidance?: string;
   overlayGuidance?: string;
 };
 
 export type OneUISurfaceVariantRegistry = Record<
-  OneUIResolvableSurfaceVariantKey,
+  OneUISurfaceVariantKey,
   OneUISurfaceVariantRegistryEntry
 >;
 
@@ -165,7 +136,6 @@ export type OneUISurfaceResolution = {
   resolvedKey: OneUISurfaceVariantKey;
   resolvedEntry: OneUISurfaceVariantRegistryEntry;
   recipe: OneUISurfaceRecipe;
-  isDeprecatedSelection: boolean;
   policy?: OneUISurfacePolicy;
 };
 
@@ -177,9 +147,6 @@ export type OneUISurfacePropertyPaneOption = {
   group: string;
   description: string;
   preview: OneUISurfacePreview;
-  hiddenFromSelections: boolean;
-  deprecated: boolean;
-  replacementKey?: OneUISurfaceVariantKey;
 };
 
 const normalizeMode = (mode: string | undefined): "light" | "dark" => {
@@ -284,12 +251,12 @@ const createSurfaceRecipes = (
   gradients: OneUIGradients
 ): OneUISurfaceRecipes => {
   return {
-    gradientCyanGreen: {
-      key: "gradientCyanGreen",
-      label: "Cyan-Green",
+    heroPrimary: {
+      key: "heroPrimary",
+      label: "Hero Primary",
       type: "gradient",
       category: "banner",
-      group: "Brand gradients",
+      group: "Hero surfaces",
       description: "Primary branded cyan-green gradient for banners, headers, and featured surfaces.",
       rawGradientName: "gradientCyanGreen",
       background: createGradientBackground(gradients, "gradientCyanGreen"),
@@ -298,12 +265,12 @@ const createSurfaceRecipes = (
       textToneGuidance: "Use inverse text and controls for maximum contrast.",
       overlayGuidance: "Optional neutral or alpha overlays can be used behind dense widgets."
     },
-    gradientNavyCyan: {
-      key: "gradientNavyCyan",
-      label: "Navy-Cyan",
+    heroSecondary: {
+      key: "heroSecondary",
+      label: "Hero Secondary",
       type: "gradient",
       category: "banner",
-      group: "Brand gradients",
+      group: "Hero surfaces",
       description: "Dark navy-to-cyan gradient for deeper branded headers and spotlight panels.",
       rawGradientName: "gradientNavyCyan",
       background: createGradientBackground(gradients, "gradientNavyCyan"),
@@ -311,12 +278,12 @@ const createSurfaceRecipes = (
       recommendedForeground: "inverse",
       textToneGuidance: "Pair with inverse content and low-noise overlays only."
     },
-    gradientCyanLightBlue: {
-      key: "gradientCyanLightBlue",
-      label: "Cyan-LightBlue",
+    heroSoft: {
+      key: "heroSoft",
+      label: "Hero Soft",
       type: "gradient",
       category: "banner",
-      group: "Brand gradients",
+      group: "Hero surfaces",
       description: "Light cyan-to-blue gradient for softer banners and supporting branded surfaces.",
       rawGradientName: "gradientCyanLightBlue",
       background: createGradientBackground(gradients, "gradientCyanLightBlue"),
@@ -325,12 +292,12 @@ const createSurfaceRecipes = (
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Prefer default foregrounds and avoid stacked dark overlays."
     },
-    gradientCyanYellow: {
-      key: "gradientCyanYellow",
-      label: "Cyan-Yellow",
+    heroFresh: {
+      key: "heroFresh",
+      label: "Hero Fresh",
       type: "gradient",
       category: "banner",
-      group: "Brand gradients",
+      group: "Hero surfaces",
       description: "Bright cyan-to-yellow gradient for search, discovery, and optimistic feature areas.",
       rawGradientName: "gradientCyanYellow",
       background: createGradientBackground(gradients, "gradientCyanYellow"),
@@ -339,52 +306,12 @@ const createSurfaceRecipes = (
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Use default or branded text rather than inverse UI."
     },
-    navy: {
-      key: "navy",
-      label: "Navy",
-      type: "solid",
-      category: "banner",
-      group: "Brand solids",
-      description: "Solid navy branded surface for banners, headers, and low-motion alternatives.",
-      rawSolidName: "navy",
-      background: createSolidBackground("navy"),
-      fallbackBackground: rawSolidTokens.navy.value,
-      recommendedForeground: "inverse",
-      textToneGuidance: "Use inverse text and preserve strong focus contrast."
-    },
-    cyan: {
-      key: "cyan",
-      label: "Cyan",
-      type: "solid",
-      category: "banner",
-      group: "Brand solids",
-      description: "Solid cyan branded surface for straightforward page headers and banner shells.",
-      rawSolidName: "cyan",
-      background: createSolidBackground("cyan"),
-      fallbackBackground: rawSolidTokens.cyan.value,
-      recommendedForeground: "inverse",
-      textToneGuidance: "Use inverse text or controls to preserve contrast on the core brand blue."
-    },
-    lightBlue: {
-      key: "lightBlue",
-      label: "Light Blue",
-      type: "solid",
-      category: "banner",
-      group: "Brand solids",
-      description: "Light blue branded surface for gentle page headers and lighter UI treatments.",
-      rawSolidName: "lightBlue",
-      background: createSolidBackground("lightBlue"),
-      fallbackBackground: rawSolidTokens.lightBlue.value,
-      recommendedForeground: "default",
-      borderColor: getThemeValue(theme, "colorNeutralStroke1"),
-      textToneGuidance: "Prefer default foreground tones and quiet supporting chrome."
-    },
-    gradientCyanPink: {
-      key: "gradientCyanPink",
-      label: "Cyan-Pink",
+    heroPastel: {
+      key: "heroPastel",
+      label: "Hero Pastel",
       type: "gradient",
       category: "banner",
-      group: "Brand gradients",
+      group: "Hero surfaces",
       description: "Pastel cyan-to-pink gradient for softer editorial and people-focused moments.",
       rawGradientName: "gradientCyanPink",
       background: createGradientBackground(gradients, "gradientCyanPink"),
@@ -392,6 +319,46 @@ const createSurfaceRecipes = (
       recommendedForeground: "default",
       borderColor: getThemeValue(theme, "colorNeutralStroke1"),
       textToneGuidance: "Keep copy dark and reduce decorative overlays."
+    },
+    heroDeep: {
+      key: "heroDeep",
+      label: "Hero Deep",
+      type: "solid",
+      category: "banner",
+      group: "Hero surfaces",
+      description: "Solid navy branded surface for banners, headers, and low-motion alternatives.",
+      rawSolidName: "navy",
+      background: createSolidBackground("navy"),
+      fallbackBackground: rawSolidTokens.navy.value,
+      recommendedForeground: "inverse",
+      textToneGuidance: "Use inverse text and preserve strong focus contrast."
+    },
+    heroBlue: {
+      key: "heroBlue",
+      label: "Hero Blue",
+      type: "solid",
+      category: "banner",
+      group: "Hero surfaces",
+      description: "Solid cyan branded surface for straightforward page headers and banner shells.",
+      rawSolidName: "cyan",
+      background: createSolidBackground("cyan"),
+      fallbackBackground: rawSolidTokens.cyan.value,
+      recommendedForeground: "inverse",
+      textToneGuidance: "Use inverse text or controls to preserve contrast on the core brand blue."
+    },
+    heroLight: {
+      key: "heroLight",
+      label: "Hero Light",
+      type: "solid",
+      category: "banner",
+      group: "Hero surfaces",
+      description: "Light blue branded surface for gentle page headers and lighter UI treatments.",
+      rawSolidName: "lightBlue",
+      background: createSolidBackground("lightBlue"),
+      fallbackBackground: rawSolidTokens.lightBlue.value,
+      recommendedForeground: "default",
+      borderColor: getThemeValue(theme, "colorNeutralStroke1"),
+      textToneGuidance: "Prefer default foreground tones and quiet supporting chrome."
     },
     iconPrimary: {
       key: "iconPrimary",
@@ -539,87 +506,10 @@ const createSurfaceRecipes = (
   };
 };
 
-const oneuiSurfaceLegacyAliasMap: Record<
-  OneUILegacySurfaceVariantKey,
-  {
-    replacementKey: OneUISurfaceVariantKey;
-    reason: string;
-  }
-> = {
-  navyCyan: {
-    replacementKey: "gradientNavyCyan",
-    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
-  },
-  cyanGreen: {
-    replacementKey: "gradientCyanGreen",
-    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
-  },
-  cyanYellow: {
-    replacementKey: "gradientCyanYellow",
-    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
-  },
-  cyanLightBlue: {
-    replacementKey: "gradientCyanLightBlue",
-    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
-  },
-  cyanPink: {
-    replacementKey: "gradientCyanPink",
-    reason: "Legacy shorthand is deprecated in favor of the canonical brand key."
-  },
-  heroPrimary: {
-    replacementKey: "gradientCyanGreen",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
-  },
-  heroSecondary: {
-    replacementKey: "gradientNavyCyan",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
-  },
-  heroSoft: {
-    replacementKey: "gradientCyanLightBlue",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
-  },
-  heroFresh: {
-    replacementKey: "gradientCyanYellow",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
-  },
-  heroDeep: {
-    replacementKey: "navy",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand solid keys."
-  },
-  heroBlue: {
-    replacementKey: "cyan",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand solid keys."
-  },
-  heroLight: {
-    replacementKey: "lightBlue",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand solid keys."
-  },
-  heroPastel: {
-    replacementKey: "gradientCyanPink",
-    reason: "Hero-prefixed keys are deprecated in favor of the canonical brand gradient keys."
-  },
-  primary: {
-    replacementKey: "gradientCyanGreen",
-    reason: "Legacy phase-1 banner enum preserved for existing web-part instances."
-  },
-  secondary: {
-    replacementKey: "gradientNavyCyan",
-    reason: "Legacy phase-1 banner enum preserved for existing web-part instances."
-  },
-  deepSpectrum: {
-    replacementKey: "gradientCyanGreen",
-    reason: "Raw gradient names are deprecated in favor of semantic surface keys."
-  },
-  midnightBlue: {
-    replacementKey: "gradientNavyCyan",
-    reason: "Raw gradient names are deprecated in favor of semantic surface keys."
-  }
-};
-
 export const defineOneUISurfacePolicy = (
   policy: OneUISurfacePolicyInput = {}
 ): OneUISurfacePolicy => {
-  const defaultVariantKey = policy.defaultVariantKey ?? "gradientCyanGreen";
+  const defaultVariantKey = policy.defaultVariantKey ?? "heroPrimary";
   const allowedVariantKeys =
     policy.allowedVariantKeys && policy.allowedVariantKeys.length > 0
       ? cloneSurfaceVariantKeys(policy.allowedVariantKeys)
@@ -659,7 +549,7 @@ export const oneuiDefaultSurfacePolicy = defineOneUISurfacePolicy({
   label: "All OneUI surfaces",
   allowedVariantKeys: cloneSurfaceVariantKeys(oneuiSurfaceVariantKeys),
   allowedTypes: cloneSurfaceKinds(oneuiSurfaceKinds),
-  defaultVariantKey: "gradientCyanGreen"
+  defaultVariantKey: "heroPrimary"
 });
 
 const createSurfaceRegistry = (
@@ -680,7 +570,6 @@ const createSurfaceRegistry = (
         description: recipe.description,
         fallbackColor: recipe.fallbackBackground,
         preview: createPreview(theme, recipe),
-        hiddenFromSelections: false,
         textToneGuidance: recipe.textToneGuidance,
         overlayGuidance: recipe.overlayGuidance
       };
@@ -689,38 +578,7 @@ const createSurfaceRegistry = (
     })
   ) as Record<OneUISurfaceVariantKey, OneUISurfaceVariantRegistryEntry>;
 
-  const legacyEntries = Object.fromEntries(
-    oneuiLegacySurfaceVariantKeys.map((legacyKey, index) => {
-      const alias = oneuiSurfaceLegacyAliasMap[legacyKey];
-      const recipe = recipes[alias.replacementKey];
-      const entry: OneUISurfaceVariantRegistryEntry = {
-        key: legacyKey,
-        label: currentEntries[alias.replacementKey].label,
-        type: recipe.type,
-        category: recipe.category,
-        group: recipe.group,
-        sortOrder: 1000 + index,
-        surfaceRole: alias.replacementKey,
-        description: recipe.description,
-        fallbackColor: recipe.fallbackBackground,
-        preview: createPreview(theme, recipe),
-        hiddenFromSelections: true,
-        deprecated: {
-          replacementKey: alias.replacementKey,
-          reason: alias.reason
-        },
-        textToneGuidance: recipe.textToneGuidance,
-        overlayGuidance: recipe.overlayGuidance
-      };
-
-      return [legacyKey, entry];
-    })
-  ) as Record<OneUILegacySurfaceVariantKey, OneUISurfaceVariantRegistryEntry>;
-
-  return {
-    ...currentEntries,
-    ...legacyEntries
-  };
+  return currentEntries;
 };
 
 const createResolvedSurfaceSystem = (options: ResolveOneUISurfaceVariantOptions = {}) => {
@@ -748,14 +606,6 @@ const isCurrentVariantKey = (
   return Boolean(key && oneuiSurfaceVariantKeys.includes(key as OneUISurfaceVariantKey));
 };
 
-const isLegacyVariantKey = (
-  key: string | undefined
-): key is OneUILegacySurfaceVariantKey => {
-  return Boolean(
-    key && oneuiLegacySurfaceVariantKeys.includes(key as OneUILegacySurfaceVariantKey)
-  );
-};
-
 const resolveOneUISurfacePolicy = (
   policy?: OneUISurfacePolicyInput | OneUISurfacePolicy
 ): OneUISurfacePolicy => {
@@ -768,10 +618,6 @@ export const resolveOneUISurfaceVariantKey = (
 ): OneUISurfaceVariantKey => {
   if (isCurrentVariantKey(requestedKey)) {
     return requestedKey;
-  }
-
-  if (isLegacyVariantKey(requestedKey)) {
-    return oneuiSurfaceLegacyAliasMap[requestedKey].replacementKey;
   }
 
   return resolveOneUISurfacePolicy(policy).defaultVariantKey;
@@ -830,14 +676,11 @@ export const getOneUIDefaultSurfaceVariantKey = (
 };
 
 export const getAllOneUISurfaceVariants = (
-  options: ResolveOneUISurfaceVariantOptions & {
-    includeDeprecated?: boolean;
-  } = {}
+  options: ResolveOneUISurfaceVariantOptions = {}
 ): OneUISurfaceVariantRegistryEntry[] => {
   const registry = createOneUISurfaceVariantRegistry(options);
 
   return Object.values(registry)
-    .filter((entry) => options.includeDeprecated || !entry.deprecated)
     .sort((left, right) => left.sortOrder - right.sortOrder);
 };
 
@@ -864,7 +707,7 @@ export const resolveOneUISurfaceVariant = (
   const resolvedKey = resolveOneUISurfaceVariantKey(requestedKey, options.policy);
   const registry = createOneUISurfaceVariantRegistry(options);
   const recipes = createOneUISurfaceRecipes(options);
-  const resolvedEntry = registry[requestedKey as OneUIResolvableSurfaceVariantKey] ?? registry[resolvedKey];
+  const resolvedEntry = registry[resolvedKey];
 
   return {
     requestedKey,
@@ -872,7 +715,6 @@ export const resolveOneUISurfaceVariant = (
     resolvedKey,
     resolvedEntry,
     recipe: recipes[resolvedKey],
-    isDeprecatedSelection: Boolean(resolvedEntry.deprecated),
     policy
   };
 };
@@ -900,47 +742,13 @@ export const createOneUISurfacePropertyPaneOptions = (
     selectedKey?: string;
   } = {}
 ): OneUISurfacePropertyPaneOption[] => {
-  const entries = getAllowedOneUISurfaceVariants(policy, options).map((entry) => ({
+  return getAllowedOneUISurfaceVariants(policy, options).map((entry) => ({
     key: entry.key,
     text: entry.label,
     surfaceRole: entry.surfaceRole,
     type: entry.type,
     group: entry.group,
     description: entry.description,
-    preview: entry.preview,
-    hiddenFromSelections: entry.hiddenFromSelections,
-    deprecated: Boolean(entry.deprecated),
-    replacementKey: entry.deprecated?.replacementKey
+    preview: entry.preview
   }));
-
-  const selectedKey = options.selectedKey;
-  if (!selectedKey || entries.some((entry) => entry.key === selectedKey)) {
-    return entries;
-  }
-
-  const resolved = resolveOneUISurfaceVariant(selectedKey, {
-    mode: options.mode,
-    policy,
-    theme: options.theme
-  });
-
-  if (!resolved.isDeprecatedSelection) {
-    return entries;
-  }
-
-  return [
-    ...entries,
-    {
-      key: selectedKey,
-      text: `${resolved.resolvedEntry.label} (Legacy)`,
-      surfaceRole: resolved.recipe.key,
-      type: resolved.recipe.type,
-      group: resolved.recipe.group,
-      description: resolved.resolvedEntry.deprecated?.reason ?? resolved.recipe.description,
-      preview: resolved.resolvedEntry.preview,
-      hiddenFromSelections: true,
-      deprecated: true,
-      replacementKey: resolved.resolvedKey
-    }
-  ];
 };

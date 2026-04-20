@@ -48,14 +48,12 @@ export {
   oneuiDarkGradients,
   oneuiDarkGradientRoles,
   oneuiGradientNames,
-  oneuiLegacyGradientNames,
   oneuiGradientRoleNames,
   oneuiLightGradients,
   oneuiLightGradientRoles
 } from "./gradients.js";
 export type {
   OneUIGradient,
-  OneUILegacyGradientName,
   OneUIGradientName,
   OneUIGradients,
   OneUIGradientRole,
@@ -75,7 +73,6 @@ export {
   oneuiDarkSurfaceRecipes,
   oneuiDarkSurfaceVariantRegistry,
   oneuiDefaultSurfacePolicy,
-  oneuiLegacySurfaceVariantKeys,
   oneuiLightSurfaceRecipes,
   oneuiLightSurfaceVariantRegistry,
   oneuiSurfaceKinds,
@@ -86,7 +83,6 @@ export {
   resolveOneUISurfaceVariantKey
 } from "./surfaces.js";
 export type {
-  OneUILegacySurfaceVariantKey,
   OneUIResolvableSurfaceVariantKey,
   OneUISurfaceBackgroundStyle,
   OneUISurfaceCategory,

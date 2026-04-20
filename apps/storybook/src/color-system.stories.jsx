@@ -22,7 +22,7 @@ const colorUsageRules = [
   "Background, text, border, interaction, and feedback roles are separate on purpose. Do not repurpose status fills for layout surfaces or button states.",
   "Inverse text roles belong on dark or saturated surfaces only.",
   "Interactive controls should consume the semantic interaction roles so hover and pressed states stay consistent across atoms and organisms.",
-  "Gradient usage is documented separately under Foundation/Gradient System and should not replace the solid semantic contract by default."
+  "Raw gradients are documented separately under Foundation/Gradient System. Component APIs should prefer semantic surface keys instead of raw gradient names."
 ];
 
 const backgroundRoles = [

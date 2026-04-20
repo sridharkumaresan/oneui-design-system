@@ -201,7 +201,7 @@ const InboxPage = () => {
       <HeroBanner
         description="View approvals and tasks that require your attention"
         height="tiny"
-        surfaceKey="gradientCyanLightBlue"
+        surfaceKey="heroSoft"
         title="Task Inbox"
       />
 

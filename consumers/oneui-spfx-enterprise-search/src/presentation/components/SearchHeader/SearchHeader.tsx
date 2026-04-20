@@ -148,7 +148,7 @@ export const SearchHeader = (props: SearchHeaderProps): React.ReactElement => {
           <BannerTaskCards />
         </div>
       }
-      surfaceKey="gradientNavyCyan"
+      surfaceKey="heroSecondary"
       title={
         <WelcomeTitle
           period={bannerTime.period}

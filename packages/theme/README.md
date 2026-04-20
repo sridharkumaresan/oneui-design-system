@@ -42,7 +42,6 @@ For CSS-only or non-React consumers, use `@functions-oneui/tokens/styles.css` di
 - `OneUIProvider`
 - `oneuiThemeModes`
 - `oneuiGradientNames`
-- `oneuiLegacyGradientNames`
 - `oneuiSurfaceRoleNames`
 - `oneuiBreakpoints`
 - `createOneUIMediaQueryUp()` / `createOneUIMediaQueryDown()`
@@ -135,7 +134,7 @@ function HeroSurface(): JSX.Element {
 }
 ```
 
-Use the five canonical branded gradients for decorative hero surfaces, icon backplates, and section accents. Each token now carries a semantic direction such as `toTopRight` and generates the matching CSS direction internally. Do not introduce raw gradient strings directly in atoms or organisms as the default styling pattern. The old `deepSpectrum` name is kept as a legacy alias and resolves to `gradientCyanGreen`.
+Use the five canonical branded gradients for foundation-level documentation and internal surface recipes. Each token now carries a semantic direction such as `toTopRight` and generates the matching CSS direction internally. Component APIs should use semantic surface keys rather than raw gradient names.
 
 Clarity note:
 
@@ -187,7 +186,7 @@ Recommended rule:
 
 - persist only semantic surface keys such as `heroPrimary`
 - do not persist raw gradient CSS or raw solid values
-- let the shared theme registry own labels, previews, defaults, legacy aliases, and remapping
+- let the shared theme registry own labels, previews, defaults, and semantic-to-token mapping
 - use `heroDeep`, `heroBlue`, and `heroLight` as the simple solid blue banner options
 
 If UX changes the three solid blue banner colors later, update them in:
@@ -246,7 +245,7 @@ Recommended rule:
 
 - keep `availability` as a webpart-level config, not saved page data, unless authors must control it
 - persist only the selected semantic key
-- render the current selection even if it is hidden from new choices because it is legacy or filtered
+- fall back to the policy default when the saved selection is no longer available
 
 ## SPFx Host Bridge
 
