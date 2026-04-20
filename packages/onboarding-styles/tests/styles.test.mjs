@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 
 import {
   createOneUIOnboardingCssVariables,
@@ -20,4 +21,13 @@ test("createOneUIOnboardingVariableStylesheet scopes variables to the active bod
   });
 
   assert.match(stylesheet, /body\[data-oneui-onboarding-scope="demo-tour"\]/);
+});
+
+test("static onboarding stylesheet neutralizes third-party button chrome", async () => {
+  const stylesheet = await readFile(new URL("../dist/styles.css", import.meta.url), "utf8");
+
+  assert.match(stylesheet, /\.oneui-onboarding-button \{/);
+  assert.match(stylesheet, /text-shadow: none;/);
+  assert.match(stylesheet, /appearance: none;/);
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\)/);
 });

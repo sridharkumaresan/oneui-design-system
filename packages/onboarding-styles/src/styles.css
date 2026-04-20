@@ -11,9 +11,11 @@ body[data-oneui-onboarding-scope] .driver-popover.oneui-onboarding-popover {
   border-radius: var(--oneui-onboarding-radius, 1rem);
   box-shadow: var(--oneui-onboarding-surface-shadow, 0 12px 32px rgba(0, 0, 0, 0.24));
   color: var(--oneui-onboarding-surface-foreground, #242424);
+  font-family: var(--oneui-onboarding-font-family, inherit);
   max-width: min(28rem, calc(100vw - 2rem));
   min-width: 18rem;
   padding: 1rem;
+  text-shadow: none;
 }
 
 body[data-oneui-onboarding-scope]
@@ -58,7 +60,9 @@ body[data-oneui-onboarding-scope]
 
 body[data-oneui-onboarding-scope] .driver-popover *,
 body[data-oneui-onboarding-scope] .driver-popover.oneui-onboarding-popover * {
+  box-sizing: border-box;
   font-family: var(--oneui-onboarding-font-family, inherit);
+  text-shadow: none;
 }
 
 body[data-oneui-onboarding-scope] .oneui-onboarding-popover-title {
@@ -151,19 +155,39 @@ body[data-oneui-onboarding-scope] .oneui-onboarding-navigation {
 }
 
 body[data-oneui-onboarding-scope] .oneui-onboarding-button {
+  -webkit-appearance: none;
   align-items: center;
+  appearance: none;
   border: 1px solid var(--oneui-onboarding-button-border, rgba(0, 0, 0, 0.12));
   border-radius: var(--oneui-onboarding-button-radius, 0.375rem);
+  box-shadow: none;
   cursor: pointer;
   display: inline-flex;
   font-size: var(--oneui-onboarding-button-font-size, 0.875rem);
   font-weight: var(--oneui-onboarding-button-font-weight, 400);
   justify-content: center;
+  line-height: 1.4;
+  margin: 0;
   min-inline-size: 4.75rem;
   padding: var(--oneui-onboarding-button-padding-block, 0.375rem)
     var(--oneui-onboarding-button-padding-inline, 0.75rem);
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
   transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+  user-select: none;
   white-space: nowrap;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-button-close {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  text-decoration: none;
+  text-shadow: none;
 }
 
 body[data-oneui-onboarding-scope] .oneui-onboarding-button-previous {
@@ -235,4 +259,15 @@ body[data-oneui-onboarding-scope] .oneui-onboarding-button:focus-visible,
 body[data-oneui-onboarding-scope] .oneui-onboarding-button-close:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-oneui-onboarding-scope] .driver-overlay,
+  body[data-oneui-onboarding-scope] .driver-popover,
+  body[data-oneui-onboarding-scope] .oneui-onboarding-button {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
 }
