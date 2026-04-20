@@ -102,11 +102,35 @@ export type OnboardingVisualConfig = {
   progressDisplay?: OnboardingProgressDisplay;
 };
 
-export type OnboardingStepDefinition = {
+export type OnboardingStepKind = "focus-element" | "full-page";
+
+export type OnboardingFullPageLayout = "centered-card" | "split-media" | "hero";
+export type OnboardingFullPageSize = "sm" | "md" | "lg";
+export type OnboardingFullPageMediaPosition = "top" | "left" | "right";
+export type OnboardingActionBehavior = "next" | "previous" | "skip" | "complete" | "custom";
+
+export type OnboardingFullPageMedia = {
+  type: "image";
+  src: string;
+  alt: string;
+  position?: OnboardingFullPageMediaPosition;
+};
+
+export type OnboardingStepAction = {
+  label: string;
+  actionId?: string;
+  behavior?: OnboardingActionBehavior;
+};
+
+type OnboardingStepBase = {
   id: string;
   title?: string;
   description?: string;
   visual?: OnboardingVisualConfig;
+};
+
+export type OnboardingFocusElementStepDefinition = OnboardingStepBase & {
+  kind?: "focus-element";
   target?: OnboardingStepTarget;
   side?: Side;
   align?: Alignment;
@@ -126,6 +150,23 @@ export type OnboardingStepDefinition = {
   >;
 };
 
+export type OnboardingFullPageStepDefinition = OnboardingStepBase & {
+  kind: "full-page";
+  title: string;
+  eyebrow?: string;
+  body?: string;
+  media?: OnboardingFullPageMedia;
+  primaryAction?: OnboardingStepAction;
+  secondaryAction?: OnboardingStepAction;
+  layout?: OnboardingFullPageLayout;
+  size?: OnboardingFullPageSize;
+  allowClose?: boolean;
+};
+
+export type OnboardingStepDefinition =
+  | OnboardingFocusElementStepDefinition
+  | OnboardingFullPageStepDefinition;
+
 export type OnboardingTourDefinition = {
   id: string;
   version: string;
@@ -139,8 +180,23 @@ export type OnboardingTourDefinition = {
   driverConfig?: Omit<Config, "steps">;
 };
 
+export type OnboardingActionContext = {
+  action: OnboardingStepAction;
+  actionId: string;
+  behavior: OnboardingActionBehavior;
+  step: OnboardingStepDefinition;
+  stepIndex: number;
+  tour: OnboardingTourDefinition;
+};
+
+export type OnboardingActionHandler = (
+  context: OnboardingActionContext
+) => Promise<void> | void;
+
 export type OnboardingControllerOptions = {
   tours: OnboardingTourDefinition[];
+  actionHandlers?: Record<string, OnboardingActionHandler | undefined>;
+  onAction?: OnboardingActionHandler;
   analytics?: OnboardingAnalyticsAdapter;
   persistence?: OnboardingPersistenceAdapter;
   registry?: OnboardingTargetRegistry;
@@ -198,5 +254,17 @@ export const oneuiOnboardingClassNames = {
   pagination: "oneui-onboarding-pagination",
   paginationDot: "oneui-onboarding-pagination-dot",
   paginationDotActive: "oneui-onboarding-pagination-dot-active",
-  progressCount: "oneui-onboarding-progress-count"
+  progressCount: "oneui-onboarding-progress-count",
+  fullPage: "oneui-onboarding-full-page",
+  fullPagePanel: "oneui-onboarding-full-page-panel",
+  fullPageContent: "oneui-onboarding-full-page-content",
+  fullPageEyebrow: "oneui-onboarding-full-page-eyebrow",
+  fullPageTitle: "oneui-onboarding-full-page-title",
+  fullPageDescription: "oneui-onboarding-full-page-description",
+  fullPageBody: "oneui-onboarding-full-page-body",
+  fullPageMedia: "oneui-onboarding-full-page-media",
+  fullPageActions: "oneui-onboarding-full-page-actions",
+  fullPagePrimaryAction: "oneui-onboarding-full-page-primary-action",
+  fullPageSecondaryAction: "oneui-onboarding-full-page-secondary-action",
+  visuallyHidden: "oneui-onboarding-visually-hidden"
 } as const;

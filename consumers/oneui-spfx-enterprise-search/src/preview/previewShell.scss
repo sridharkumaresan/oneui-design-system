@@ -17,6 +17,7 @@ body {
   display: grid;
   gap: 16px;
   padding: 20px;
+  position: relative;
 }
 
 .previewShell__toolbar {
@@ -30,8 +31,18 @@ body {
 }
 
 .previewShell__actions {
+  align-items: center;
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.previewShell__divider {
+  align-self: stretch;
+  background: rgba(15, 108, 189, 0.16);
+  inline-size: 1px;
+  min-block-size: 24px;
 }
 
 .previewShell__canvas {
@@ -40,4 +51,106 @@ body {
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
   overflow: hidden;
+}
+
+.previewShell__viewStatus {
+  background: rgba(15, 108, 189, 0.08);
+  border-bottom: 1px solid rgba(15, 108, 189, 0.12);
+  color: #24364b;
+  font-size: 13px;
+  padding: 10px 18px;
+}
+
+.previewShell__preferences {
+  background: rgba(255, 255, 255, 0.98);
+  border-left: 1px solid rgba(15, 108, 189, 0.16);
+  border-radius: 0;
+  box-shadow: -18px 0 48px rgba(15, 23, 42, 0.16);
+  color: #1f1f1f;
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 14px;
+  inline-size: min(440px, calc(100vw - 32px));
+  inset-block: 0;
+  inset-inline-end: 0;
+  padding: 24px;
+  position: fixed;
+  z-index: 10001;
+  animation: previewShellSlideIn 180ms ease-out;
+}
+
+.previewShell__preferencesHeader {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.previewShell__preferencesHeader h2,
+.previewShell__preferences p,
+.previewShell__eyebrow {
+  margin: 0;
+}
+
+.previewShell__preferences p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.previewShell__eyebrow {
+  color: #0f6cbd;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.previewShell__preferenceActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .previewShell {
+    padding: 12px;
+  }
+
+  .previewShell__toolbar {
+    justify-content: stretch;
+  }
+
+  .previewShell__actions {
+    justify-content: stretch;
+  }
+
+  .previewShell__actions button {
+    flex: 1 1 12rem;
+  }
+
+  .previewShell__divider {
+    block-size: 1px;
+    flex-basis: 100%;
+    inline-size: auto;
+  }
+
+  .previewShell__preferences {
+    inset-block: 0;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inline-size: auto;
+    max-inline-size: calc(100vw - 24px);
+  }
+}
+
+@keyframes previewShellSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

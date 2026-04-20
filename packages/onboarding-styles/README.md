@@ -5,6 +5,7 @@ Token-driven CSS and visual helpers for OneUI onboarding experiences.
 ## Purpose
 
 - Provide a reusable stylesheet for Driver.js-based walkthroughs
+- Style both targeted popovers and full-page onboarding announcement panels
 - Keep styling aligned with Fluent-first OneUI tokens
 - Support non-React consumers through CSS and variable helpers
 

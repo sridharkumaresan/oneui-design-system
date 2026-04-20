@@ -89,6 +89,10 @@ export const createOneUIOnboardingCssVariables = (
       theme.shadow64,
       "0 12px 32px rgba(0, 0, 0, 0.24)"
     ),
+    "--oneui-onboarding-full-page-shadow": resolveThemeValue(
+      theme.shadow64,
+      "0 24px 64px rgba(0, 0, 0, 0.28)"
+    ),
     "--oneui-onboarding-radius": resolveThemeValue(
       theme.borderRadiusXLarge,
       "var(--oneui-shape-radius-xlarge)"

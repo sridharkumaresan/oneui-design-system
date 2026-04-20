@@ -261,6 +261,201 @@ body[data-oneui-onboarding-scope] .oneui-onboarding-button-close:focus-visible {
   outline-offset: 2px;
 }
 
+body[data-oneui-onboarding-scope] .oneui-onboarding-visually-hidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  inline-size: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+body[data-oneui-onboarding-scope] .driver-popover.oneui-onboarding-full-page {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  inline-size: min(100vw - 2rem, 64rem);
+  max-inline-size: calc(100vw - 2rem);
+  max-width: calc(100vw - 2rem);
+  min-width: 0;
+  padding: 0;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page:focus {
+  outline: none;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-panel {
+  background: var(--oneui-onboarding-surface-background, #ffffff);
+  border: 1px solid var(--oneui-onboarding-surface-border, rgba(0, 0, 0, 0.12));
+  border-radius: var(--oneui-onboarding-radius, 1rem);
+  box-shadow: var(--oneui-onboarding-full-page-shadow, 0 24px 64px rgba(0, 0, 0, 0.28));
+  color: var(--oneui-onboarding-surface-foreground, #242424);
+  display: grid;
+  gap: 0;
+  max-block-size: min(42rem, calc(100vh - 2rem));
+  overflow: auto;
+  position: relative;
+}
+
+body[data-oneui-onboarding-scope]
+  .oneui-onboarding-full-page[data-oneui-onboarding-size="sm"] {
+  inline-size: min(100vw - 2rem, 34rem);
+}
+
+body[data-oneui-onboarding-scope]
+  .oneui-onboarding-full-page[data-oneui-onboarding-size="md"] {
+  inline-size: min(100vw - 2rem, 48rem);
+}
+
+body[data-oneui-onboarding-scope]
+  .oneui-onboarding-full-page[data-oneui-onboarding-size="lg"] {
+  inline-size: min(100vw - 2rem, 64rem);
+}
+
+body[data-oneui-onboarding-scope]
+  .oneui-onboarding-full-page[data-oneui-onboarding-layout="split-media"]
+  .oneui-onboarding-full-page-panel,
+body[data-oneui-onboarding-scope]
+  .oneui-onboarding-full-page[data-oneui-onboarding-layout="hero"]
+  .oneui-onboarding-full-page-panel {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+}
+
+body[data-oneui-onboarding-scope]
+  .oneui-onboarding-full-page[data-oneui-onboarding-media-position="right"]
+  .oneui-onboarding-full-page-panel {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-content {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-eyebrow {
+  color: var(--oneui-onboarding-surface-muted, #605e5c);
+  font-size: var(--oneui-onboarding-progress-size, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-title {
+  color: var(--oneui-onboarding-surface-foreground, #242424);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: var(--oneui-onboarding-title-weight, 600);
+  line-height: 1.15;
+  margin: 0;
+  max-inline-size: 42rem;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-description,
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-body {
+  color: var(--oneui-onboarding-surface-foreground, #242424);
+  font-size: var(--oneui-onboarding-body-size, 0.875rem);
+  line-height: var(--oneui-onboarding-body-line-height, 1.5);
+  margin: 0;
+  max-inline-size: 44rem;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-body {
+  color: var(--oneui-onboarding-surface-muted, #605e5c);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-media {
+  align-self: stretch;
+  background:
+    linear-gradient(135deg, rgba(15, 108, 189, 0.12), rgba(16, 124, 16, 0.08)),
+    var(--oneui-onboarding-button-secondary-background-hover, #f5f5f5);
+  display: grid;
+  margin: 0;
+  min-block-size: 14rem;
+  overflow: hidden;
+  place-items: center;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-media img {
+  block-size: 100%;
+  display: block;
+  inline-size: 100%;
+  object-fit: cover;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page[data-oneui-onboarding-media-position="top"]
+  .oneui-onboarding-full-page-media {
+  max-block-size: 18rem;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page .oneui-onboarding-popover-footer {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-top: 0.75rem;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-primary-action {
+  background: var(--oneui-onboarding-button-primary-background, #0f6cbd);
+  border-color: var(--oneui-onboarding-button-primary-background, #0f6cbd);
+  color: var(--oneui-onboarding-button-primary-foreground, #ffffff);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-primary-action:hover,
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-primary-action:focus-visible {
+  background: var(--oneui-onboarding-button-primary-background-hover, #115ea3);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-secondary-action {
+  background: var(--oneui-onboarding-button-secondary-background, #ffffff);
+  color: var(--oneui-onboarding-button-secondary-foreground, #242424);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-secondary-action:hover,
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-secondary-action:focus-visible {
+  background: var(--oneui-onboarding-button-secondary-background-hover, #f5f5f5);
+}
+
+body[data-oneui-onboarding-scope] .oneui-onboarding-full-page .oneui-onboarding-button-close {
+  color: var(--oneui-onboarding-surface-muted, #605e5c);
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  position: absolute;
+}
+
+@media (max-width: 48rem) {
+  body[data-oneui-onboarding-scope]
+    .oneui-onboarding-full-page[data-oneui-onboarding-layout="split-media"]
+    .oneui-onboarding-full-page-panel,
+  body[data-oneui-onboarding-scope]
+    .oneui-onboarding-full-page[data-oneui-onboarding-layout="hero"]
+    .oneui-onboarding-full-page-panel,
+  body[data-oneui-onboarding-scope]
+    .oneui-onboarding-full-page[data-oneui-onboarding-media-position="right"]
+    .oneui-onboarding-full-page-panel {
+    grid-template-columns: 1fr;
+  }
+
+  body[data-oneui-onboarding-scope] .oneui-onboarding-full-page .oneui-onboarding-popover-footer {
+    grid-template-columns: 1fr;
+  }
+
+  body[data-oneui-onboarding-scope] .oneui-onboarding-full-page .oneui-onboarding-footer-center,
+  body[data-oneui-onboarding-scope] .oneui-onboarding-full-page-actions {
+    justify-self: start;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body[data-oneui-onboarding-scope] .driver-overlay,
   body[data-oneui-onboarding-scope] .driver-popover,

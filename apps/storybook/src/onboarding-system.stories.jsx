@@ -443,6 +443,7 @@ const packageRows = [
 
 const solutionCards = [
   "First-run product tours for feature areas such as search, task inboxes, and admin screens.",
+  "Full-page feature announcements for larger changes that are not tied to one visible control.",
   "Release callouts that point to new UI without each team rebuilding overlay behavior.",
   "SPFx walkthroughs where named React refs are safer than brittle DOM selectors.",
   "Non-React host integration that still uses the same tour schema and OneUI styling."
@@ -489,6 +490,36 @@ const tourCode = `const tours = [{
     target: { kind: "named", name: "search-box" }
   }]
 }];`;
+
+const fullPageCode = `{
+  id: "dashboard-views",
+  kind: "full-page",
+  eyebrow: "Feature announcement",
+  title: "New dashboard views are available",
+  description: "Switch between compact and detailed views.",
+  layout: "split-media",
+  size: "lg",
+  media: {
+    type: "image",
+    src: "/dashboard-preview.png",
+    alt: "Preview of compact and detailed dashboard views",
+    position: "left"
+  },
+  primaryAction: {
+    label: "Choose dashboard view",
+    actionId: "open-dashboard-preferences",
+    behavior: "complete"
+  }
+}`;
+
+const actionHandlerCode = `<OneUIOnboardingProvider
+  actionHandlers={{
+    "open-dashboard-preferences": () => openPreferencesFlyout()
+  }}
+  tours={tours}
+>
+  <FeaturePage />
+</OneUIOnboardingProvider>`;
 
 const GuideCodeBlock = ({ children }) => {
   const fluent = useFluent();
@@ -619,7 +650,35 @@ const OnboardingLibraryGuide = () => {
               <OneUIHeading level={3}>Host-ready lifecycle</OneUIHeading>
               <OneUIText tone="secondary">
                 Persistence and analytics are adapters, so SPFx or product apps can plug in their
-                own storage and telemetry rules.
+                own storage, telemetry, and full-page action handlers.
+              </OneUIText>
+            </GuideCard>
+          </div>
+        </GuideSection>
+
+        <GuideSection
+          title="Step Types"
+          description="A tour can be all focus-element steps, all full-page steps, or a mix of both."
+        >
+          <div
+            style={{
+              display: "grid",
+              gap: theme.spacingHorizontalL,
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 22rem), 1fr))"
+            }}
+          >
+            <GuideCard>
+              <OneUIHeading level={3}>Focus element</OneUIHeading>
+              <OneUIText tone="secondary">
+                Highlights an existing target such as a search box, tab list, filter, result card,
+                or CTA. Existing steps keep working without adding a kind.
+              </OneUIText>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>Full page</OneUIHeading>
+              <OneUIText tone="secondary">
+                Opens a responsive announcement panel with optional media, CTAs, progress, and
+                app-owned action callbacks. It does not need a DOM target.
               </OneUIText>
             </GuideCard>
           </div>
@@ -652,9 +711,10 @@ const OnboardingLibraryGuide = () => {
           <GuideCard>
             <OneUIText>
               Driver.js handles positioning, masking, step navigation, and keyboard behavior. Our
-              wrapper adds named targets, typed tour definitions, OneUI styling, scoped theme
-              variables, missing-target handling, persistence hooks, and analytics hooks. Consumers
-              should depend on the OneUI contract, not Driver.js internals.
+              wrapper adds named targets, typed tour definitions, full-page announcement steps,
+              OneUI styling, scoped theme variables, missing-target handling, persistence hooks,
+              action hooks, and analytics hooks. Consumers should depend on the OneUI contract,
+              not Driver.js internals.
             </OneUIText>
           </GuideCard>
         </GuideSection>
@@ -678,6 +738,14 @@ const OnboardingLibraryGuide = () => {
             <GuideCard>
               <OneUIHeading level={3}>3. Keep tours as data</OneUIHeading>
               <GuideCodeBlock>{tourCode}</GuideCodeBlock>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>4. Add full-page steps</OneUIHeading>
+              <GuideCodeBlock>{fullPageCode}</GuideCodeBlock>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>5. Handle app actions</OneUIHeading>
+              <GuideCodeBlock>{actionHandlerCode}</GuideCodeBlock>
             </GuideCard>
           </div>
         </GuideSection>

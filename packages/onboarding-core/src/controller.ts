@@ -3,6 +3,9 @@ import type { Config, Driver, DriveStep, PopoverDOM } from "driver.js";
 
 import {
   oneuiOnboardingClassNames,
+  type OnboardingActionBehavior,
+  type OnboardingActionContext,
+  type OnboardingFullPageStepDefinition,
   type OnboardingAnalyticsAdapter,
   type OnboardingAnalyticsEvent,
   type OnboardingController,
@@ -115,6 +118,48 @@ const decoratePopoverDom = (
   }
 };
 
+const isFullPageStep = (
+  step: OnboardingStepDefinition
+): step is OnboardingFullPageStepDefinition => step.kind === "full-page";
+
+const appendTextElement = (
+  documentRef: Document,
+  parent: HTMLElement,
+  tagName: keyof HTMLElementTagNameMap,
+  className: string,
+  text: string,
+  id?: string
+): HTMLElement => {
+  const element = documentRef.createElement(tagName);
+  element.className = className;
+  element.textContent = text;
+  if (id) {
+    element.id = id;
+  }
+  parent.append(element);
+  return element;
+};
+
+const createActionButton = (
+  documentRef: Document,
+  className: string,
+  label: string,
+  onClick: () => Promise<void> | void
+): HTMLButtonElement => {
+  const button = documentRef.createElement("button");
+  button.type = "button";
+  button.className = className;
+  button.textContent = label;
+  button.addEventListener("click", () => {
+    void onClick();
+  });
+  return button;
+};
+
+const safeWarn = (message: string): void => {
+  globalThis.console?.warn?.(message);
+};
+
 const resolveElement = (
   target: OnboardingStepTarget | undefined,
   context: OnboardingTargetResolveContext
@@ -178,6 +223,203 @@ const resolveStepVisual = (
     ...(tour.visual ?? {}),
     ...(step.visual ?? {})
   };
+};
+
+const renderFullPagePopover = (
+  popover: PopoverDOM,
+  classNames: typeof oneuiOnboardingClassNames,
+  options: {
+    activeIndex: number;
+    isFirstStep: boolean;
+    isLastStep: boolean;
+    onAction: (
+      action: NonNullable<OnboardingFullPageStepDefinition["primaryAction"]>,
+      fallbackBehavior: OnboardingActionBehavior
+    ) => Promise<void> | void;
+    onClose: () => void;
+    step: OnboardingFullPageStepDefinition;
+    stepCount: number;
+    visual?: OnboardingVisualConfig;
+  }
+): void => {
+  const documentRef = popover.wrapper.ownerDocument;
+  const progressDisplay = options.visual?.progressDisplay ?? "count";
+  const appearance = options.visual?.appearance ?? "neutral";
+  const layout = options.step.layout ?? "centered-card";
+  const size = options.step.size ?? "md";
+  const titleId = `${options.step.id}-full-page-title`;
+  const descriptionId = `${options.step.id}-full-page-description`;
+  const progressText = `Step ${options.activeIndex + 1} of ${options.stepCount}`;
+  const mediaPosition = options.step.media?.position ?? (layout === "split-media" ? "left" : "top");
+
+  popover.wrapper.classList.add(classNames.popover, classNames.fullPage);
+  popover.wrapper.setAttribute("data-oneui-onboarding-appearance", appearance);
+  popover.wrapper.setAttribute("data-oneui-onboarding-kind", "full-page");
+  popover.wrapper.setAttribute("data-oneui-onboarding-layout", layout);
+  popover.wrapper.setAttribute("data-oneui-onboarding-size", size);
+  popover.wrapper.setAttribute("data-oneui-onboarding-media-position", mediaPosition);
+  popover.wrapper.setAttribute("role", "dialog");
+  popover.wrapper.setAttribute("aria-modal", "true");
+  popover.wrapper.setAttribute("aria-labelledby", titleId);
+  popover.wrapper.setAttribute("aria-describedby", descriptionId);
+  popover.wrapper.tabIndex = -1;
+  popover.arrow.hidden = true;
+
+  const panel = documentRef.createElement("div");
+  panel.className = classNames.fullPagePanel;
+
+  const content = documentRef.createElement("div");
+  content.className = classNames.fullPageContent;
+
+  if (options.step.eyebrow) {
+    appendTextElement(
+      documentRef,
+      content,
+      "p",
+      classNames.fullPageEyebrow,
+      options.step.eyebrow
+    );
+  }
+
+  appendTextElement(
+    documentRef,
+    content,
+    "h2",
+    classNames.fullPageTitle,
+    options.step.title,
+    titleId
+  );
+
+  appendTextElement(
+    documentRef,
+    content,
+    "p",
+    classNames.fullPageDescription,
+    options.step.description ?? "",
+    descriptionId
+  );
+
+  if (options.step.body) {
+    appendTextElement(
+      documentRef,
+      content,
+      "p",
+      classNames.fullPageBody,
+      options.step.body
+    );
+  }
+
+  const footer = documentRef.createElement("div");
+  footer.className = classNames.footer;
+
+  const footerCenter = documentRef.createElement("div");
+  footerCenter.className = classNames.footerCenter;
+
+  if (progressDisplay === "dots" || progressDisplay === "dots-and-count") {
+    const pagination = documentRef.createElement("div");
+    pagination.className = classNames.pagination;
+    pagination.setAttribute("aria-hidden", "true");
+
+    for (let index = 0; index < options.stepCount; index += 1) {
+      const dot = documentRef.createElement("span");
+      dot.className =
+        index === options.activeIndex
+          ? `${classNames.paginationDot} ${classNames.paginationDotActive}`
+          : classNames.paginationDot;
+      pagination.append(dot);
+    }
+
+    footerCenter.append(pagination);
+  }
+
+  const progress = documentRef.createElement("span");
+  progress.className = classNames.progress;
+  progress.textContent = progressText;
+  progress.setAttribute("aria-label", progressText);
+  if (progressDisplay === "dots") {
+    progress.classList.add(classNames.visuallyHidden);
+  }
+  footerCenter.append(progress);
+
+  const actions = documentRef.createElement("div");
+  actions.className = classNames.fullPageActions;
+
+  const secondaryAction =
+    options.step.secondaryAction ??
+    (!options.isFirstStep
+      ? {
+          label: "Previous",
+          behavior: "previous" as const
+        }
+      : undefined);
+  const primaryAction =
+    options.step.primaryAction ??
+    ({
+      label: options.isLastStep ? "Done" : "Next",
+      behavior: options.isLastStep ? "complete" : "next"
+    } as const);
+
+  if (secondaryAction) {
+    actions.append(
+      createActionButton(
+        documentRef,
+        `${classNames.button} ${classNames.fullPageSecondaryAction}`,
+        secondaryAction.label,
+        async () => {
+          await options.onAction(secondaryAction, secondaryAction.behavior ?? "skip");
+        }
+      )
+    );
+  }
+
+  actions.append(
+    createActionButton(
+      documentRef,
+      `${classNames.button} ${classNames.fullPagePrimaryAction}`,
+      primaryAction.label,
+      async () => {
+        await options.onAction(primaryAction, primaryAction.behavior ?? "next");
+      }
+    )
+  );
+
+  footer.append(footerCenter, actions);
+  content.append(footer);
+
+  if (options.step.media?.type === "image") {
+    const media = documentRef.createElement("figure");
+    media.className = classNames.fullPageMedia;
+
+    const image = documentRef.createElement("img");
+    image.alt = options.step.media.alt;
+    image.src = options.step.media.src;
+    media.append(image);
+
+    if (mediaPosition === "top") {
+      panel.append(media, content);
+    } else {
+      panel.append(mediaPosition === "left" ? media : content, mediaPosition === "left" ? content : media);
+    }
+  } else {
+    panel.append(content);
+  }
+
+  popover.wrapper.replaceChildren(panel);
+
+  if (options.step.allowClose !== false) {
+    const closeButton = createActionButton(
+      documentRef,
+      classNames.closeButton,
+      "Close",
+      options.onClose
+    );
+    closeButton.setAttribute("aria-label", "Close onboarding");
+    panel.append(closeButton);
+  }
+
+  setTimeout(() => {
+    popover.wrapper.focus();
+  }, 0);
 };
 
 export const createOnboardingController = (
@@ -275,15 +517,18 @@ export const createOnboardingController = (
     const resolvedSteps: ResolvedStep[] = [];
     for (const step of tour.steps) {
       const driverInstance = runtime.activeDriver;
-      const resolvedElement = resolveElement(step.target, {
-        document: documentRef,
-        driver: driverInstance,
-        registry: options.registry,
-        step,
-        tour
-      });
+      const fullPageStep = isFullPageStep(step);
+      const resolvedElement = fullPageStep
+        ? undefined
+        : resolveElement(step.target, {
+            document: documentRef,
+            driver: driverInstance,
+            registry: options.registry,
+            step,
+            tour
+          });
 
-      if (!resolvedElement) {
+      if (!fullPageStep && !resolvedElement) {
         analytics.track(
           buildAnalyticsEvent(
             {
@@ -310,24 +555,34 @@ export const createOnboardingController = (
 
       resolvedSteps.push({
         source: step,
-        driveStep: {
-          ...(step.driverStep ?? {}),
-          element: resolvedElement,
-          disableActiveInteraction: step.allowInteraction === true ? false : true,
-          popover: {
-            ...(step.popover ?? {}),
-            title: step.title,
-            description: step.description,
-            side: step.side ?? step.popover?.side,
-            align: step.align ?? step.popover?.align,
-            showButtons: step.showButtons,
-            disableButtons: step.disableButtons,
-            showProgress: step.showProgress,
-            nextBtnText: step.nextButtonLabel,
-            prevBtnText: step.previousButtonLabel,
-            doneBtnText: step.doneButtonLabel
-          }
-        }
+        driveStep: fullPageStep
+          ? {
+              disableActiveInteraction: true,
+              popover: {
+                title: step.title,
+                description: step.description,
+                showButtons: step.allowClose === false ? [] : ["close"],
+                showProgress: true
+              }
+            }
+          : {
+              ...(step.driverStep ?? {}),
+              element: resolvedElement,
+              disableActiveInteraction: step.allowInteraction === true ? false : true,
+              popover: {
+                ...(step.popover ?? {}),
+                title: step.title,
+                description: step.description,
+                side: step.side ?? step.popover?.side,
+                align: step.align ?? step.popover?.align,
+                showButtons: step.showButtons,
+                disableButtons: step.disableButtons,
+                showProgress: step.showProgress,
+                nextBtnText: step.nextButtonLabel,
+                prevBtnText: step.previousButtonLabel,
+                doneBtnText: step.doneButtonLabel
+              }
+            }
       });
     }
 
@@ -361,8 +616,123 @@ export const createOnboardingController = (
       stagePadding: 8,
       stageRadius: 16
     };
+    let driverInstance: Driver;
 
-    const driverInstance = driverFactory({
+    const completeActiveStep = (stepIndex: number): void => {
+      completionReason = "completed";
+      saveRecord({
+        ...currentRecord,
+        activeStepId: resolvedSteps[stepIndex]?.source.id,
+        completedAt: nowIso(),
+        status: "completed",
+        version: tour.version
+      });
+      analytics.track(
+        buildAnalyticsEvent(
+          {
+            eventName: "tour_completed",
+            reason: "manual",
+            stepId: resolvedSteps[stepIndex]?.source.id,
+            stepIndex,
+            tourId: tour.id
+          },
+          tour
+        )
+      );
+      driverInstance.destroy();
+    };
+
+    const dismissActiveStep = (stepIndex: number): void => {
+      completionReason = "dismissed";
+      saveRecord({
+        ...currentRecord,
+        activeStepId: resolvedSteps[stepIndex]?.source.id,
+        dismissedAt: nowIso(),
+        status: "dismissed",
+        version: tour.version
+      });
+      analytics.track(
+        buildAnalyticsEvent(
+          {
+            eventName: "tour_dismissed",
+            reason: "close",
+            stepId: resolvedSteps[stepIndex]?.source.id,
+            stepIndex,
+            tourId: tour.id
+          },
+          tour
+        )
+      );
+      driverInstance.destroy();
+    };
+
+    const moveFromAction = (behavior: OnboardingActionBehavior, stepIndex: number): void => {
+      switch (behavior) {
+        case "next":
+          if (driverInstance.isLastStep()) {
+            completeActiveStep(stepIndex);
+            return;
+          }
+          driverInstance.moveNext();
+          return;
+        case "previous":
+          driverInstance.movePrevious();
+          return;
+        case "complete":
+          completeActiveStep(stepIndex);
+          return;
+        case "skip":
+          dismissActiveStep(stepIndex);
+          return;
+        case "custom":
+          return;
+        default:
+          return;
+      }
+    };
+
+    const invokeStepAction = async (
+      step: OnboardingStepDefinition,
+      stepIndex: number,
+      action: NonNullable<OnboardingFullPageStepDefinition["primaryAction"]>,
+      fallbackBehavior: OnboardingActionBehavior
+    ): Promise<void> => {
+      const behavior = action.behavior ?? fallbackBehavior;
+      const runAction = action.actionId
+        ? (options.actionHandlers?.[action.actionId] ?? options.onAction)
+        : undefined;
+
+      if (action.actionId && !runAction) {
+        safeWarn(
+          `OneUI onboarding action '${action.actionId}' has no registered handler.`
+        );
+      }
+
+      const context: OnboardingActionContext | undefined = action.actionId
+        ? {
+            action,
+            actionId: action.actionId,
+            behavior,
+            step,
+            stepIndex,
+            tour
+          }
+        : undefined;
+
+      if (runAction && context) {
+        await Promise.resolve(runAction(context)).catch((error: unknown) => {
+          safeWarn(
+            `OneUI onboarding action '${context.actionId}' failed: ${
+              error instanceof Error ? error.message : String(error)
+            }`
+          );
+        });
+      }
+
+      moveFromAction(behavior, stepIndex);
+    };
+
+    driverInstance = driverFactory({
       ...defaultConfig,
       ...(tour.driverConfig ?? {}),
       steps: resolvedSteps.map((resolvedStep) => resolvedStep.driveStep),
@@ -370,11 +740,28 @@ export const createOnboardingController = (
         const stepIndex = opts.state.activeIndex ?? 0;
         const sourceStep = resolvedSteps[stepIndex]?.source;
 
-        decoratePopoverDom(popover, classNames, {
-          activeIndex: stepIndex,
-          stepCount: resolvedSteps.length,
-          visual: sourceStep ? resolveStepVisual(tour, sourceStep) : tour.visual
-        });
+        if (sourceStep && isFullPageStep(sourceStep)) {
+          renderFullPagePopover(popover, classNames, {
+            activeIndex: stepIndex,
+            isFirstStep: driverInstance.isFirstStep(),
+            isLastStep: driverInstance.isLastStep(),
+            onAction: (action, fallbackBehavior) => {
+              return invokeStepAction(sourceStep, stepIndex, action, fallbackBehavior);
+            },
+            onClose: () => {
+              dismissActiveStep(stepIndex);
+            },
+            step: sourceStep,
+            stepCount: resolvedSteps.length,
+            visual: resolveStepVisual(tour, sourceStep)
+          });
+        } else {
+          decoratePopoverDom(popover, classNames, {
+            activeIndex: stepIndex,
+            stepCount: resolvedSteps.length,
+            visual: sourceStep ? resolveStepVisual(tour, sourceStep) : tour.visual
+          });
+        }
         tour.driverConfig?.onPopoverRender?.(popover, opts);
       },
       onHighlighted: (element, currentStep, opts) => {
@@ -409,27 +796,7 @@ export const createOnboardingController = (
       },
       onNextClick: (element, currentStep, opts) => {
         if (driverInstance.isLastStep()) {
-          completionReason = "completed";
-          saveRecord({
-            ...currentRecord,
-            activeStepId: resolvedSteps[opts.state.activeIndex ?? 0]?.source.id,
-            completedAt: nowIso(),
-            status: "completed",
-            version: tour.version
-          });
-          analytics.track(
-            buildAnalyticsEvent(
-              {
-                eventName: "tour_completed",
-                reason: "manual",
-                stepId: resolvedSteps[opts.state.activeIndex ?? 0]?.source.id,
-                stepIndex: opts.state.activeIndex ?? 0,
-                tourId: tour.id
-              },
-              tour
-            )
-          );
-          driverInstance.destroy();
+          completeActiveStep(opts.state.activeIndex ?? 0);
           return;
         }
 
@@ -441,27 +808,7 @@ export const createOnboardingController = (
         tour.driverConfig?.onPrevClick?.(element, currentStep, opts);
       },
       onCloseClick: (element, currentStep, opts) => {
-        completionReason = "dismissed";
-        saveRecord({
-          ...currentRecord,
-          activeStepId: resolvedSteps[opts.state.activeIndex ?? 0]?.source.id,
-          dismissedAt: nowIso(),
-          status: "dismissed",
-          version: tour.version
-        });
-        analytics.track(
-          buildAnalyticsEvent(
-            {
-              eventName: "tour_dismissed",
-              reason: "close",
-              stepId: resolvedSteps[opts.state.activeIndex ?? 0]?.source.id,
-              stepIndex: opts.state.activeIndex ?? 0,
-              tourId: tour.id
-            },
-            tour
-          )
-        );
-        driverInstance.destroy();
+        dismissActiveStep(opts.state.activeIndex ?? 0);
         tour.driverConfig?.onCloseClick?.(element, currentStep, opts);
       },
       onDestroyed: (element, currentStep, opts) => {

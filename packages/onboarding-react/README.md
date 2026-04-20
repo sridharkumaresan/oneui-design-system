@@ -7,6 +7,7 @@ React and SPFx-friendly onboarding integration for OneUI.
 - Connect OneUI theme and Fluent runtime to onboarding tours
 - Register DOM targets with React refs
 - Provide hooks for starting, stopping, and querying tours
+- Pass app-defined full-page action handlers to the framework-agnostic controller
 
 ## Public API
 
@@ -21,6 +22,17 @@ React and SPFx-friendly onboarding integration for OneUI.
 import "@functions-oneui/onboarding-styles/styles.css";
 import { OneUIProvider } from "@functions-oneui/theme";
 import { OneUIOnboardingProvider, useOnboardingTarget } from "@functions-oneui/onboarding-react";
+```
+
+```tsx
+<OneUIOnboardingProvider
+  actionHandlers={{
+    "open-dashboard-preferences": () => openPreferencesFlyout()
+  }}
+  tours={tours}
+>
+  <FeaturePage />
+</OneUIOnboardingProvider>
 ```
 
 For a working demo, see:

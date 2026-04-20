@@ -1,6 +1,7 @@
 import React from "react";
 import { createOnboardingController } from "@functions-oneui/onboarding-core";
 import type {
+  OnboardingActionHandler,
   OnboardingAnalyticsAdapter,
   OnboardingController,
   OnboardingControllerOptions,
@@ -25,6 +26,8 @@ const createRegistry = (targetsRef: React.MutableRefObject<Map<string, Element>>
 
 export type OneUIOnboardingProviderProps = {
   tours: OnboardingTourDefinition[];
+  actionHandlers?: Record<string, OnboardingActionHandler | undefined>;
+  onAction?: OnboardingActionHandler;
   analytics?: OnboardingAnalyticsAdapter;
   persistence?: OnboardingPersistenceAdapter;
   scopeId?: string;
@@ -77,10 +80,12 @@ export const OneUIOnboardingProvider = (
 ): React.JSX.Element => {
   const {
     analytics,
+    actionHandlers,
     autoInjectThemeVariables = true,
     children,
     controllerOverrides,
     mode: modeProp,
+    onAction,
     persistence,
     scopeId: scopeIdProp,
     tours
@@ -96,11 +101,13 @@ export const OneUIOnboardingProvider = (
   const controllerRef = React.useRef<OnboardingController | null>(null);
   if (!controllerRef.current) {
     controllerRef.current = createOnboardingController({
+      actionHandlers,
       analytics,
       document:
         controllerOverrides?.document ?? (typeof document === "undefined" ? undefined : document),
       driverFactory: controllerOverrides?.driverFactory,
       classNames: controllerOverrides?.classNames,
+      onAction,
       persistence,
       registry: createRegistry(targetsRef),
       scopeId,
