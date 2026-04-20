@@ -420,8 +420,313 @@ const OnboardingInboxDemoStory = () => {
   );
 };
 
+const packageRows = [
+  {
+    name: "@functions-oneui/onboarding-core",
+    purpose: "Framework-agnostic tour engine contract.",
+    owns: "Tour schema, target resolution, lifecycle, persistence and analytics adapters, and the Driver.js adapter.",
+    useWhen: "Use directly for non-React hosts or when building another framework adapter."
+  },
+  {
+    name: "@functions-oneui/onboarding-react",
+    purpose: "React and SPFx-friendly integration.",
+    owns: "Provider, hooks, named target refs, controller wiring, and theme variable injection from OneUI theme mode.",
+    useWhen: "Use in React apps, SPFx web parts, and Storybook examples."
+  },
+  {
+    name: "@functions-oneui/onboarding-styles",
+    purpose: "Shared visual layer for the walkthrough.",
+    owns: "Driver.js base styling, OneUI token-driven overrides, focus styles, buttons, progress, and scoped CSS variables.",
+    useWhen: "Import once in every host that renders OneUI onboarding."
+  }
+];
+
+const solutionCards = [
+  "First-run product tours for feature areas such as search, task inboxes, and admin screens.",
+  "Release callouts that point to new UI without each team rebuilding overlay behavior.",
+  "SPFx walkthroughs where named React refs are safer than brittle DOM selectors.",
+  "Non-React host integration that still uses the same tour schema and OneUI styling."
+];
+
+const chooseRows = [
+  {
+    scenario: "React or SPFx feature",
+    packages: "onboarding-react + onboarding-styles",
+    reason: "Fastest path: provider, hooks, refs, and theme-aware CSS are handled."
+  },
+  {
+    scenario: "Non-React host",
+    packages: "onboarding-core + onboarding-styles",
+    reason: "Reuse the contract and visuals while wiring targets through the host framework."
+  },
+  {
+    scenario: "Custom adapter",
+    packages: "onboarding-core",
+    reason: "Build on the same controller, analytics, persistence, and target model."
+  }
+];
+
+const reactSetupCode = `import "@functions-oneui/onboarding-styles/styles.css";
+import { OneUIOnboardingProvider } from "@functions-oneui/onboarding-react";
+
+<OneUIOnboardingProvider tours={tours}>
+  <FeaturePage />
+</OneUIOnboardingProvider>`;
+
+const targetCode = `const searchTarget = useOnboardingTarget("search-box");
+const tour = useOnboardingTour("home-tour");
+
+<button onClick={() => tour.start()}>Start tour</button>
+<div ref={searchTarget.ref}>Search UI</div>`;
+
+const tourCode = `const tours = [{
+  id: "home-tour",
+  version: "1",
+  steps: [{
+    id: "search",
+    title: "Search",
+    description: "Find content and people from one place.",
+    target: { kind: "named", name: "search-box" }
+  }]
+}];`;
+
+const GuideCodeBlock = ({ children }) => {
+  const fluent = useFluent();
+  const mode = useOneUIThemeMode();
+  const theme = fluent?.theme ?? (mode === "dark" ? oneuiDarkTheme : oneuiLightTheme);
+
+  return (
+    <pre
+      style={{
+        background: theme.colorNeutralBackground3,
+        border: `1px solid ${theme.colorNeutralStroke2}`,
+        borderRadius: theme.borderRadiusMedium,
+        color: theme.colorNeutralForeground1,
+        fontFamily: "Consolas, Monaco, 'Courier New', monospace",
+        fontSize: theme.fontSizeBase200,
+        lineHeight: theme.lineHeightBase300,
+        margin: 0,
+        overflowX: "auto",
+        padding: theme.spacingHorizontalL,
+        whiteSpace: "pre"
+      }}
+    >
+      <code>{children}</code>
+    </pre>
+  );
+};
+
+const GuideCard = ({ children }) => {
+  const fluent = useFluent();
+  const mode = useOneUIThemeMode();
+  const theme = fluent?.theme ?? (mode === "dark" ? oneuiDarkTheme : oneuiLightTheme);
+
+  return (
+    <div
+      style={{
+        background: theme.colorNeutralBackground1,
+        border: `1px solid ${theme.colorNeutralStroke2}`,
+        borderRadius: theme.borderRadiusMedium,
+        boxShadow: theme.shadow4,
+        display: "grid",
+        gap: theme.spacingVerticalS,
+        padding: theme.spacingHorizontalL
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+const GuideSection = ({ children, description, title }) => {
+  const fluent = useFluent();
+  const mode = useOneUIThemeMode();
+  const theme = fluent?.theme ?? (mode === "dark" ? oneuiDarkTheme : oneuiLightTheme);
+
+  return (
+    <section style={{ display: "grid", gap: theme.spacingVerticalL }}>
+      <div style={{ display: "grid", gap: theme.spacingVerticalXS }}>
+        <OneUIHeading level={2}>{title}</OneUIHeading>
+        {description ? (
+          <OneUIText block tone="secondary">
+            {description}
+          </OneUIText>
+        ) : null}
+      </div>
+      {children}
+    </section>
+  );
+};
+
+const OnboardingLibraryGuide = () => {
+  const fluent = useFluent();
+  const mode = useOneUIThemeMode();
+  const theme = fluent?.theme ?? (mode === "dark" ? oneuiDarkTheme : oneuiLightTheme);
+
+  return (
+    <main
+      style={{
+        background: theme.colorNeutralBackground2,
+        color: theme.colorNeutralForeground1,
+        minHeight: "100vh",
+        paddingBlock: theme.spacingVerticalXXL,
+        paddingInline: theme.spacingHorizontalXL
+      }}
+    >
+      <div
+        style={{
+          display: "grid",
+          gap: theme.spacingVerticalXXL,
+          marginInline: "auto",
+          maxWidth: "78rem"
+        }}
+      >
+        <header style={{ display: "grid", gap: theme.spacingVerticalM, maxWidth: "56rem" }}>
+          <OneUIBadge appearance="filled" tone="brand">
+            ONBOARDING
+          </OneUIBadge>
+          <OneUIHeading level={1}>OneUI onboarding library</OneUIHeading>
+          <OneUIText block size="large" tone="secondary">
+            A reusable guided-tour system for OneUI experiences. Teams define tours as data,
+            attach steps to stable targets, and get a themed Driver.js walkthrough without owning
+            overlay mechanics in each feature.
+          </OneUIText>
+        </header>
+
+        <GuideSection title="What We Offer">
+          <div
+            style={{
+              display: "grid",
+              gap: theme.spacingHorizontalL,
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 16rem), 1fr))"
+            }}
+          >
+            <GuideCard>
+              <OneUIHeading level={3}>Data-first tours</OneUIHeading>
+              <OneUIText tone="secondary">
+                Steps describe target, copy, placement, progress, and behavior. Feature code does
+                not need to script the overlay.
+              </OneUIText>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>OneUI visual contract</OneUIHeading>
+              <OneUIText tone="secondary">
+                The popover, buttons, focus ring, shadow, and light/dark colors come from OneUI
+                theme variables and shared CSS.
+              </OneUIText>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>Host-ready lifecycle</OneUIHeading>
+              <OneUIText tone="secondary">
+                Persistence and analytics are adapters, so SPFx or product apps can plug in their
+                own storage and telemetry rules.
+              </OneUIText>
+            </GuideCard>
+          </div>
+        </GuideSection>
+
+        <GuideSection
+          title="Why Three Packages"
+          description="The split keeps the contract clear: core orchestration, React ergonomics, and styling are separate responsibilities."
+        >
+          <div style={{ display: "grid", gap: theme.spacingVerticalM }}>
+            {packageRows.map((pkg) => (
+              <GuideCard key={pkg.name}>
+                <OneUIHeading level={3}>{pkg.name}</OneUIHeading>
+                <OneUIText>{pkg.purpose}</OneUIText>
+                <OneUIText block tone="secondary">
+                  Owns: {pkg.owns}
+                </OneUIText>
+                <OneUIText block tone="secondary">
+                  Use when: {pkg.useWhen}
+                </OneUIText>
+              </GuideCard>
+            ))}
+          </div>
+        </GuideSection>
+
+        <GuideSection
+          title="Why Wrap Driver.js"
+          description="Driver.js is good at overlay mechanics. OneUI should own the product contract around it."
+        >
+          <GuideCard>
+            <OneUIText>
+              Driver.js handles positioning, masking, step navigation, and keyboard behavior. Our
+              wrapper adds named targets, typed tour definitions, OneUI styling, scoped theme
+              variables, missing-target handling, persistence hooks, and analytics hooks. Consumers
+              should depend on the OneUI contract, not Driver.js internals.
+            </OneUIText>
+          </GuideCard>
+        </GuideSection>
+
+        <GuideSection title="How To Use It">
+          <div
+            style={{
+              display: "grid",
+              gap: theme.spacingHorizontalL,
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 20rem), 1fr))"
+            }}
+          >
+            <GuideCard>
+              <OneUIHeading level={3}>1. Wrap the feature</OneUIHeading>
+              <GuideCodeBlock>{reactSetupCode}</GuideCodeBlock>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>2. Define stable targets</OneUIHeading>
+              <GuideCodeBlock>{targetCode}</GuideCodeBlock>
+            </GuideCard>
+            <GuideCard>
+              <OneUIHeading level={3}>3. Keep tours as data</OneUIHeading>
+              <GuideCodeBlock>{tourCode}</GuideCodeBlock>
+            </GuideCard>
+          </div>
+        </GuideSection>
+
+        <GuideSection
+          title="Where It Solves Problems"
+          description="Use onboarding when the user needs guided context through an existing workflow. Do not use it as a replacement for normal help text, validation, banners, or simple tooltips."
+        >
+          <div
+            style={{
+              display: "grid",
+              gap: theme.spacingHorizontalM,
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 18rem), 1fr))"
+            }}
+          >
+            {solutionCards.map((item) => (
+              <GuideCard key={item}>
+                <OneUIText>{item}</OneUIText>
+              </GuideCard>
+            ))}
+          </div>
+        </GuideSection>
+
+        <GuideSection title="Which Package Do I Pick">
+          <div style={{ display: "grid", gap: theme.spacingVerticalM }}>
+            {chooseRows.map((row) => (
+              <GuideCard key={row.scenario}>
+                <div
+                  style={{
+                    display: "grid",
+                    gap: theme.spacingHorizontalL,
+                    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 14rem), 1fr))"
+                  }}
+                >
+                  <OneUIText weight="semibold">{row.scenario}</OneUIText>
+                  <OneUIText>{row.packages}</OneUIText>
+                  <OneUIText tone="secondary">{row.reason}</OneUIText>
+                </div>
+              </GuideCard>
+            ))}
+          </div>
+        </GuideSection>
+      </div>
+    </main>
+  );
+};
+
 export default {
-  title: "Foundation/Onboarding Inbox Demo",
+  title: "Foundation/Onboarding",
   component: OnboardingInboxDemoStory,
   parameters: {
     layout: "fullscreen",
@@ -434,6 +739,23 @@ export default {
   }
 };
 
+export const LibraryGuide = {
+  name: "Library guide",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A compact explanation of the OneUI onboarding packages, the Driver.js wrapper, and the recommended consumption paths."
+      },
+      source: {
+        code: null
+      }
+    }
+  },
+  render: () => <OnboardingLibraryGuide />
+};
+
 export const WalkthroughInbox = {
+  name: "Walkthrough inbox",
   render: () => <OnboardingInboxDemoStory />
 };
