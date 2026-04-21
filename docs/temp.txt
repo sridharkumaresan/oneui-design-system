@@ -1,0 +1,564 @@
+You are working inside my organization’s remote RDX/Coder workspace connected to a GitLab repository.
+
+We are building a new enterprise React application named:
+
+hue-ui
+
+HUE stands for:
+
+Hierarchical User Entitlement
+
+The first screen to build is the HUE Home Dashboard based on the attached screenshot. However, this should not be treated as a one-off prototype. This is the foundation of a real, extensible enterprise application.
+
+The app must be:
+- React-based first
+- Fluent UI aligned
+- built using our existing @functions-oneui component library wherever possible
+- strongly typed
+- modular
+- config-driven
+- data-driven
+- accessible
+- extensible
+- ready to host later inside SPFx
+- ready to consume HTTP APIs later
+- easy to add future screens and features
+
+Important context:
+I have an existing SPFx/React component library published to our local Nexus registry under:
+
+@functions-oneui
+
+This library contains reusable enterprise UI components, themes, tokens, organisms, utilities, and possibly SPFx-compatible components.
+
+Before coding, read this Codex-generated handoff document carefully:
+
+docs/CLAUDE_ONEUI_SPFX_HANDOFF.md
+
+This handoff document is your primary source of truth for:
+- actual package names
+- actual import paths
+- available component exports
+- theme/provider setup
+- token usage
+- gradient usage
+- typography usage
+- SPFx compatibility notes
+- React version constraints
+- build commands
+- package manager expectations
+- Nexus registry setup
+- repo conventions
+
+If the file does not exist, stop and ask me to generate it first using Codex.
+
+Do not invent imports, props, package names, components, or theme APIs. Use the actual details from the handoff and repository.
+
+Environment constraints:
+- This is a remote RDX/Coder workspace.
+- pnpm/corepack may not be available.
+- Prefer npm unless the repository clearly requires another package manager.
+- Do not blindly run pnpm commands.
+- First inspect package.json, lock files, .npmrc, tsconfig, build config, SPFx config, and existing package usage.
+- Do not make destructive changes.
+- Do not rewrite existing working library code.
+- Build hue-ui as an additive application/consumer.
+
+Critical architecture goal:
+Build the feature once, then make it hostable in multiple environments.
+
+The HUE dashboard should run as:
+1. A normal standalone React app for local development.
+2. A future SPFx-hosted application/web part using the same feature modules.
+3. A future API-backed enterprise app consuming HTTP services.
+
+Do not duplicate UI logic between standalone React and future SPFx hosting.
+
+Application name:
+hue-ui
+
+Recommended top-level structure:
+
+hue-ui/
+  src/
+    app/
+      App.tsx
+      AppProviders.tsx
+      AppRoutes.tsx
+      app.config.ts
+      app.types.ts
+
+    assets/
+
+    config/
+      environment.ts
+      featureFlags.ts
+      navigation.config.ts
+      hueDashboard.config.ts
+
+    core/
+      api/
+        ApiClient.ts
+        HttpClient.ts
+        http.types.ts
+      errors/
+        AppError.ts
+        error.types.ts
+      logging/
+        Logger.ts
+      telemetry/
+        TelemetryService.ts
+      utils/
+        dateUtils.ts
+        formatUtils.ts
+
+    data/
+      mock/
+        hueDashboard.mock.json
+        navigation.mock.json
+      json-server/
+        db.json
+
+    domain/
+      hue/
+        models/
+          hue-dashboard.models.ts
+          hue-search.models.ts
+          hue-navigation.models.ts
+          hue-status.models.ts
+        services/
+          HueDashboardService.ts
+          IHueDashboardService.ts
+          MockHueDashboardService.ts
+          HttpHueDashboardService.ts
+
+    features/
+      hue-dashboard/
+        components/
+          HueHero/
+            HueHero.tsx
+            HueHero.module.scss
+            HueHero.types.ts
+          HueSearch/
+            HueSearch.tsx
+            HueSearch.module.scss
+            HueSearch.types.ts
+          HueQuickActions/
+            HueQuickActions.tsx
+            HueQuickActions.module.scss
+            HueQuickActions.types.ts
+          HueWidgets/
+            HueWidgets.tsx
+            HueWidgets.module.scss
+            HueWidgets.types.ts
+          HueDashboardPanel/
+            HueDashboardPanel.tsx
+            HueDashboardPanel.module.scss
+            HueDashboardPanel.types.ts
+          HueDashboardTabs/
+            HueDashboardTabs.tsx
+            HueDashboardTabs.module.scss
+            HueDashboardTabs.types.ts
+          HueDashboardTable/
+            HueDashboardTable.tsx
+            HueDashboardTable.module.scss
+            HueDashboardTable.types.ts
+        hooks/
+          useHueDashboard.ts
+          useHueSearch.ts
+        state/
+          hueDashboard.reducer.ts
+          hueDashboard.types.ts
+        HueDashboardPage.tsx
+        HueDashboardPage.module.scss
+        index.ts
+
+    layout/
+      AppShell/
+        AppShell.tsx
+        AppShell.module.scss
+        AppShell.types.ts
+
+    platform/
+      standalone/
+        main.tsx
+        StandaloneRoot.tsx
+      spfx/
+        SpfxHueRoot.tsx
+        spfx.types.ts
+
+    shared/
+      components/
+        EmptyState/
+        ErrorState/
+        LoadingState/
+        StatusBadge/
+      hooks/
+        useDebouncedValue.ts
+        useAsyncState.ts
+      types/
+        common.types.ts
+
+    styles/
+      global.scss
+      tokens.scss
+
+Implementation mindset:
+Think like a senior enterprise web architect. Do not create a flat prototype. Create a foundation where future features can be added cleanly.
+
+The first feature is only the home dashboard, but the app should be ready for future features such as:
+- Domains management
+- Entitlements management
+- Roles management
+- User groups management
+- Relationship management
+- Reports
+- Audit history
+- Access request workflows
+- Approval queues
+- User access profile
+- Admin configuration
+- Search results page
+- Detail pages
+
+Architecture principles:
+- Separate app shell from feature modules.
+- Separate domain models from UI models if needed.
+- Keep service contracts independent from mock or HTTP implementation.
+- Use dependency injection/light composition through providers or factory functions.
+- Keep mock data outside UI components.
+- Keep configuration outside UI components.
+- Make quick actions, tabs, widgets, and dashboard table data-driven.
+- Use strongly typed config objects.
+- Use clear barrel exports where appropriate.
+- Avoid circular dependencies.
+- Avoid hardcoded business data inside presentational components.
+- Keep components small and composable.
+- Prefer controlled props and explicit event handlers.
+- Avoid over-engineering but design for growth.
+
+Required service pattern:
+Create a service contract:
+
+interface IHueDashboardService {
+  getDashboard(): Promise<HueDashboardViewModel>;
+  search(query: HueSearchQuery): Promise<HueSearchResult[]>;
+}
+
+Create two implementations:
+
+1. MockHueDashboardService
+- Uses local mock JSON/static TypeScript mock data.
+- Used for standalone local development initially.
+
+2. HttpHueDashboardService
+- Uses a generic ApiClient.
+- Does not need real endpoints now.
+- Should be ready for future HTTP API integration.
+- Endpoint paths should come from config, not be hardcoded inside components.
+
+Create an environment/config switch:
+
+dataSource: "mock" | "http"
+
+The app should use mock mode by default.
+
+Optional local API:
+If the workspace supports it, prepare a json-server-compatible db.json under:
+
+src/data/json-server/db.json
+
+Do not require json-server for the app to run. It should be optional.
+
+Configuration-driven requirements:
+Create config for the dashboard instead of hardcoding inside components.
+
+Config should include:
+- page title
+- subtitle
+- greeting user name
+- search scopes
+- quick action cards
+- widget definitions
+- dashboard tabs
+- table column definitions where reasonable
+- feature flags
+- API endpoint paths
+
+Example conceptual config:
+
+const hueDashboardConfig = {
+  hero: {
+    greeting: "Good afternoon, Sabina",
+    title: "Hierarchical User Entitlement (HUE)",
+    subtitle: "Create, manage, and understand how access domains, entitlements, roles, and user groups in a single hierarchy."
+  },
+  search: {
+    defaultScope: "all",
+    scopes: [
+      { id: "all", label: "All on HUE" },
+      { id: "domains", label: "Domains" },
+      { id: "entitlements", label: "Entitlements" },
+      { id: "roles", label: "Roles" },
+      { id: "userGroups", label: "User Groups" }
+    ]
+  },
+  quickActions: [
+    { id: "domains", label: "Domains", icon: "database", route: "/domains", colorPreset: "blue" },
+    { id: "entitlements", label: "Entitlements", icon: "shield", route: "/entitlements", colorPreset: "purple" },
+    { id: "roles", label: "Roles", icon: "people-team", route: "/roles", colorPreset: "orange" },
+    { id: "userGroups", label: "User Groups", icon: "people", route: "/user-groups", colorPreset: "green" },
+    { id: "relationships", label: "Relationships", icon: "branch", route: "/relationships", colorPreset: "pink" }
+  ],
+  tabs: [
+    { id: "applications", label: "My Applications", count: 8 },
+    { id: "entitlements", label: "My Entitlements", count: 40 },
+    { id: "roles", label: "Roles", count: 2 },
+    { id: "userGroups", label: "User groups", count: 3 },
+    { id: "relationships", label: "Relationships", count: 4 },
+    { id: "reports", label: "Reports", count: 13 }
+  ]
+};
+
+Use the actual icon and token approach available in our library or Fluent UI.
+
+Visual target:
+Use the attached screenshot as the UX reference.
+
+The screen should include:
+
+Hero:
+- large gradient background
+- greeting row
+- subtle sun/weather style visual
+- weather pill: "22°C Cloudy"
+- stock pill: "22.22 +2.5%"
+- title: "Hierarchical User Entitlement (HUE)"
+- subtitle: "Create, manage, and understand how access domains, entitlements, roles, and user groups in a single hierarchy."
+- centered large search bar
+- centered quick action launcher
+
+Search:
+- scope dropdown
+- search input
+- search button
+- strongly typed search state
+- accessible labels
+- search handler stub
+
+Quick actions:
+Cards for:
+- Domains
+- Entitlements
+- Roles
+- User Groups
+- Relationships
+
+Each card should be data-driven and support:
+- label
+- icon
+- route/action id
+- color preset/token
+- click handler
+- keyboard interaction
+- focus state
+- hover state
+
+Dashboard panel:
+- white rounded panel below hero
+- title: "Your dashboard"
+- subtitle: "Quickly access controls from your dashboard"
+- tabs:
+  - My Applications (8)
+  - My Entitlements (40)
+  - Roles (2)
+  - User groups (3)
+  - Relationships (4)
+  - Reports (13)
+- filter button
+- export button
+- table columns:
+  - Name
+  - Created By
+  - Last Modified
+  - Status
+
+Mock table rows:
+- Hierarchical User Entitlements | Anastasiya Haman | Apr 14, 2025 | Active
+- Financial Management System | Sarah Johnson | Mar 15, 2025 | Active
+- Customer Portal | Mary Chen | Mar 12, 2025 | Active
+- Analytics Dashboard | Emily Davis | Sep 16, 2024 | Draft
+
+Design system usage:
+Use @functions-oneui packages wherever available:
+- provider/theme setup
+- tokens
+- typography
+- buttons
+- cards
+- layout primitives
+- hero/banner organism
+- search components
+- status badge
+- table components
+- icons/utilities
+
+If a required OneUi component does not exist:
+- use Fluent UI v9
+- style it using OneUi tokens
+- keep it local to hue-ui
+- do not create new reusable library components unless explicitly asked
+
+Styling rules:
+- Prefer the styling method already used by the repo.
+- Use SCSS modules if compatible with this app setup.
+- Use OneUi tokens for colors, spacing, typography, radius, shadows, gradients where available.
+- Avoid random hardcoded colors.
+- If a token is missing, create a local semantic alias and mark it as candidate for future OneUi tokenization.
+- Support responsive layout.
+- Use modern CSS where safe:
+  - CSS grid
+  - flexbox
+  - clamp for fluid sizing if aligned with our token strategy
+  - container-friendly layout
+- Avoid fragile absolute positioning.
+- Avoid pixel-perfect hacks.
+- Match the screenshot feel but keep implementation maintainable.
+
+Routing:
+Set up a simple routing-ready structure.
+
+Initial route:
+- "/" renders HueDashboardPage
+
+Future placeholder routes can be added as lightweight placeholders:
+- "/domains"
+- "/entitlements"
+- "/roles"
+- "/user-groups"
+- "/relationships"
+- "/reports"
+
+If router is not already installed, check the repo conventions before adding dependencies. If adding React Router is risky due to SPFx React version constraints, implement a route-ready navigation abstraction without introducing the dependency yet.
+
+SPFx readiness:
+Do not implement full SPFx packaging unless the repo already has a clear SPFx consumer pattern and dependencies available.
+
+But create the app so that future SPFx hosting is easy:
+- no direct use of window/document except where guarded
+- no React 18-only APIs if SPFx is React 17
+- no browser-only assumptions inside domain/service layer
+- platform-specific context should enter through props/providers
+- keep the HUE feature independent from SPFx web part code
+- create a platform/spfx root adapter if appropriate
+
+Accessibility requirements:
+- semantic headings
+- real buttons for actions
+- accessible labels for search/dropdown/buttons
+- keyboard focus visible
+- tab behavior should be accessible
+- table should use proper headers
+- status should not rely only on color
+- icon-only controls require aria-label
+- quick action cards should be operable by keyboard
+- maintain good color contrast
+
+TypeScript standards:
+- no `any` unless absolutely necessary and justified
+- use explicit interfaces/types
+- type configs with `satisfies` where supported
+- type service responses
+- type component props
+- keep domain models separate from view models if needed
+- avoid large union chaos unless useful
+- avoid leaking API response shapes directly into UI components
+
+Testing:
+If the repo already has testing setup, add basic tests for:
+- HueDashboardPage renders
+- quick actions render from config
+- tabs render from config
+- table rows render from mock service
+- search handler receives query/scope
+
+If testing setup does not exist, do not add heavy new test infrastructure without asking. Instead, document recommended tests.
+
+Implementation phases:
+Do not implement everything blindly in one giant change.
+
+Phase 0:
+Inspect repository and summarize:
+- package manager
+- React version
+- SPFx version if present
+- existing scripts
+- OneUi package usage
+- available component exports
+- available theme/provider setup
+- constraints/blockers
+
+Phase 1:
+Create hue-ui app foundation:
+- app shell
+- providers
+- config
+- domain models
+- service contract
+- mock service
+- dashboard feature folder
+- standalone root
+
+Phase 2:
+Build HUE Home Dashboard:
+- hero
+- search
+- widgets
+- quick actions
+- dashboard panel
+- tabs
+- table
+- responsive styling
+
+Phase 3:
+Prepare HTTP/API readiness:
+- ApiClient
+- HttpHueDashboardService
+- environment switch
+- endpoint config
+- optional json-server db.json
+
+Phase 4:
+Prepare SPFx readiness:
+- platform/spfx root adapter
+- document how the same HueDashboardPage can be rendered in SPFx
+- do not duplicate UI
+
+Phase 5:
+Validation:
+- run typecheck/build if available
+- run lint/tests if available
+- document any blockers
+- provide final file change summary
+- provide commands to run
+
+Expected final output:
+After implementation, provide:
+1. Summary of what was created.
+2. File/folder structure.
+3. Commands to run locally.
+4. How mock vs HTTP mode is configured.
+5. How future SPFx wrapper should consume the same app.
+6. Any assumptions or blockers.
+
+Do not:
+- copy screenshot assets directly
+- hardcode all data inside components
+- create one huge component
+- invent package APIs
+- modify existing library packages
+- make destructive repo changes
+- blindly change lock files
+- force pnpm/corepack if unavailable
+- introduce unnecessary dependencies
+- use React 18 APIs if SPFx React 17 compatibility is required
