@@ -18,6 +18,8 @@
     "test:coverage": "turbo run test:coverage",
     "test:ui": "node ./scripts/run-vitest-ui.mjs",
     "verify": "node ./scripts/run-verify.mjs",
+    "release:prepare": "node ./scripts/release-prepare.mjs",
+    "release:pack": "node ./scripts/release-pack.mjs",
     "release:verify": "node ./scripts/run-release-verify.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write .",

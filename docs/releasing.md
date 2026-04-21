@@ -24,6 +24,47 @@ Run these before any publish attempt:
 
 `release:verify` runs lint, typecheck, tests, and build for the full workspace.
 
+## Preparing a Fixed First Release Version
+
+Use `release:prepare` when the workspace needs to move from local snapshot versions to a specific real semver version before publishing.
+
+```powershell
+pnpm run release:prepare -- 0.0.2
+```
+
+The prepare command:
+
+- sets every publishable package under `packages/` to the requested version
+- keeps internal `workspace:*` dependency references in source so local development still uses workspace packages
+- runs `release:verify`, which includes the build
+
+It does not publish. After reviewing the changed manifests, publish through the root release flow:
+
+```powershell
+pnpm run release
+```
+
+Do not manually replace `workspace:*` dependency ranges in source. The source workspace should keep local linking behavior; the publish workflow is responsible for producing registry-ready packages.
+
+## Manual Nexus Publish Fallback
+
+If root publishing is unreliable in a local environment, do not publish directly from each package folder. Pack registry-ready tarballs first, then publish those tarballs one by one.
+
+```powershell
+pnpm run release:prepare -- 0.0.2
+pnpm run release:pack
+```
+
+`release:pack` verifies the workspace, packs publishable packages into `.release/npm`, and writes `.release/npm/publish-commands.txt`.
+
+The generated commands use this shape:
+
+```powershell
+npm publish ".release/npm/<package>.tgz" --registry <NEXUS_NPM_REGISTRY> --access public
+```
+
+Publishing tarballs is safer than publishing package folders because `pnpm pack` prepares the package artifact from the workspace source. If publishing stops halfway through, rerun only the remaining tarball publish commands. Already-published versions should not be republished.
+
 ## Local Registry Smoke Testing
 
 Use the local Verdaccio workflow to validate tarballs, exports, and installability before publishing to Nexus.
