@@ -4,6 +4,19 @@ This document is project context for an AI coding assistant building a new Share
 
 Use this as implementation guidance. Do not import private source files from this repository. Consumers must import only from package public entrypoints.
 
+## Direction for Claude
+
+Default implementation direction:
+
+- Create a new HUE SPFx consumer alongside the existing consumer in this workspace, for example `consumers/oneui-spfx-hue-dashboard`.
+- Do not modify or duplicate the existing `consumers/oneui-spfx-enterprise-search` app unless the user explicitly changes scope.
+- Use the existing consumer as a reference for SPFx 1.22.2, Heft, Vite preview, React 17 compatibility, OneUI theme provider setup, and package consumption patterns.
+- Consume `@functions-oneui/*` packages from Nexus at `0.0.1`.
+- Keep Nexus URL and auth out of committed files. The user/infrastructure team must provide the actual registry URL and credentials in the Coder/RDX environment.
+- Build from the textual HUE design description unless the user attaches the screenshot. Pixel matching is not required without the image.
+- Ignore `@functions-oneui/standards` for the HUE app. It is published as part of the package set but currently has no runtime exports.
+- Use Heft for SPFx, matching the existing consumer. Do not introduce Gulp-specific assumptions unless the generated SPFx project requires them.
+
 ## 1. Workspace Overview
 
 ### Repository Type
@@ -108,7 +121,7 @@ For a new external SPFx solution consuming Nexus packages, use the package manag
 
 ## 2. Published Package Inventory
 
-Published Nexus version: expected `0.0.1` based on the release conversation. Needs verification in the target Nexus registry:
+Published Nexus version for the first real release: `0.0.1`. Verify from the target RDX/Coder workspace before installing:
 
 ```bash
 npm view @functions-oneui/atoms versions --registry <NEXUS_NPM_REGISTRY> --json
@@ -131,7 +144,7 @@ The local source may still show `0.0.0-local-*`; do not use local source version
 | `@functions-oneui/cache-react` | React adapter for cache engine | `useCachedResource` and cache hook types | `import { useCachedResource } from "@functions-oneui/cache-react";` | React, ReactDOM | Yes | No | No |
 | `@functions-oneui/react-utils` | Shared React utilities | `useOneUIId`, `useImageLoader`; subpaths `progressive-loading`, `logging`, `image-loading` | `import { useLoadingCoordinator } from "@functions-oneui/react-utils/progressive-loading";` | React, ReactDOM | Yes | No | No |
 | `@functions-oneui/utils` | Framework-agnostic helpers | `createDescriptionPreview`, `detectContentFormat` | `import { createDescriptionPreview } from "@functions-oneui/utils";` | None | Yes | No | No |
-| `@functions-oneui/standards` | Standards package | Currently exports nothing | Needs verification before using | None | Yes | No | No |
+| `@functions-oneui/standards` | Standards package | Currently exports nothing | Ignore for the HUE app | None | Yes | No | No |
 | `@functions-oneui/testing` | Shared test helpers | `expectNoAxeViolations` | `import { expectNoAxeViolations } from "@functions-oneui/testing";` | React, ReactDOM | Test-only | No | No |
 | `@functions-oneui/organism-hero-banner` | Full-width hero/page header | `HeroBanner`, `BrandedHeroBanner` | `import { HeroBanner } from "@functions-oneui/organism-hero-banner";` | React, ReactDOM, Fluent v9 | Yes | Yes | No |
 | `@functions-oneui/organism-search-autocomplete` | Search form with scope and suggestions | `SearchAutocomplete` | `import { SearchAutocomplete } from "@functions-oneui/organism-search-autocomplete";` | React, ReactDOM, Fluent v9 | Yes | Yes | No |
@@ -372,11 +385,24 @@ Do not hardcode page colors unless there is no token equivalent. If a value must
 
 ```tsx
 import * as React from "react";
-import { WeatherSunnyRegular, ArrowTrendingRegular } from "@fluentui/react-icons";
 import { makeStyles, tokens } from "@fluentui/react-components";
 import { OneUICard, OneUIStack, OneUIText } from "@functions-oneui/atoms";
 import { HeroBanner } from "@functions-oneui/organism-hero-banner";
 import { SearchAutocomplete } from "@functions-oneui/organism-search-autocomplete";
+
+const WeatherIcon = (): React.ReactElement => (
+  <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 18 18" width="18">
+    <circle cx="9" cy="9" r="3.25" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M14.3 3.7l-1.4 1.4M5.1 12.9l-1.4 1.4" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5" />
+  </svg>
+);
+
+const TrendIcon = (): React.ReactElement => (
+  <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 18 18" width="18">
+    <path d="M3 12.5 7 8.5l3 3L15 5.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" />
+    <path d="M11 5.5h4v4" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" />
+  </svg>
+);
 
 const useStyles = makeStyles({
   widget: {
@@ -407,13 +433,13 @@ export function HueHero(): React.ReactElement {
       description="Search, review, and manage access relationships across applications, roles, groups, and entitlements."
       topStart={
         <OneUIStack direction="row" gap="sm" align="center">
-          <WeatherSunnyRegular aria-hidden="true" />
+          <WeatherIcon />
           <OneUIText tone="inverse">21 C | Mostly cloudy</OneUIText>
         </OneUIStack>
       }
       topEnd={
         <OneUIStack direction="row" gap="sm" align="center">
-          <ArrowTrendingRegular aria-hidden="true" />
+          <TrendIcon />
           <OneUIText tone="inverse">BARC.L 222.22 +1.4%</OneUIText>
         </OneUIStack>
       }
@@ -451,7 +477,7 @@ export function HueHero(): React.ReactElement {
 }
 ```
 
-Needs verification: `@fluentui/react-icons` is not a OneUI package. Install it separately or replace icons with inline SVGs.
+This example uses inline SVGs to avoid adding `@fluentui/react-icons`. If icons are desired later, install `@fluentui/react-icons` explicitly in the consumer.
 
 ### Search Box / Search Input
 
@@ -554,6 +580,51 @@ export function HueMetricCard(): React.ReactElement {
         </OneUIText>
       </OneUIStack>
     </OneUICard>
+  );
+}
+```
+
+### Action Section
+
+Use `ActionSection` when several related `ActionCard` items need one titled section header, count, and optional header action.
+
+```tsx
+import * as React from "react";
+import { OneUIBadge, OneUIButton, OneUILink, OneUIText } from "@functions-oneui/atoms";
+import { ActionCard } from "@functions-oneui/organism-action-card";
+import { ActionSection } from "@functions-oneui/organism-action-section";
+
+export function HueReviewSection(): React.ReactElement {
+  return (
+    <ActionSection
+      title="Access reviews"
+      count="3"
+      headerAction={
+        <OneUILink href="/hue/reviews" underline="always">
+          View all
+        </OneUILink>
+      }
+    >
+      <ActionCard
+        eyebrow="ROLE REVIEW | HUE-1042"
+        title="Privileged access review"
+        status={<OneUIBadge tone="warning">Due 24 Apr</OneUIBadge>}
+        meta={<OneUIText tone="secondary">Owner: Security Operations</OneUIText>}
+        actions={
+          <>
+            <OneUIButton size="small">Review</OneUIButton>
+            <OneUIButton appearance="secondary" size="small">Delegate</OneUIButton>
+          </>
+        }
+      />
+      <ActionCard
+        eyebrow="GROUP REVIEW | HUE-1077"
+        title="Finance user group membership"
+        status={<OneUIBadge tone="danger" appearance="filled">Overdue</OneUIBadge>}
+        meta={<OneUIText tone="secondary">Owner: Finance Technology</OneUIText>}
+        actions={<OneUIButton size="small">Open</OneUIButton>}
+      />
+    </ActionSection>
   );
 }
 ```
@@ -819,8 +890,11 @@ export function HueApplicationsData(): React.ReactElement {
   const result = useCachedResource<HueApplication[]>({
     engine,
     scope: {
-      app: "hue",
-      resource: "applications"
+      namespace: "hue",
+      key: "applications",
+      segments: {
+        user: "current"
+      }
     },
     fetcher: async () => [
       { id: "app-1", name: "Markets Portal" },
@@ -841,7 +915,15 @@ export function HueApplicationsData(): React.ReactElement {
 }
 ```
 
-Needs verification: confirm the exact `CacheScope` shape in the installed package typings. The source exports `CacheScope` from `@functions-oneui/cache`.
+`CacheScope` is:
+
+```ts
+type CacheScope = {
+  namespace: string;
+  key: string;
+  segments?: Record<string, string | number | boolean | undefined>;
+};
+```
 
 ## 5. Recommended Architecture for a New SPFx Consumer
 
@@ -996,17 +1078,23 @@ Script meanings:
 - `build`: `heft test --clean --production && heft package-solution --production`.
 - `typecheck`: `tsc -p tsconfig.json --noEmit`.
 
-Needs verification in the new RDX/Coder template:
+RDX/Coder notes:
 
-- Whether SPFx generator is available.
-- Whether `gulp` is required by the generated project.
-- Whether the tenant workbench URL is reachable.
-- Whether corporate Nexus install registry differs from publish registry.
-- Whether `pnpm` is available. If not, use `npm` in the external consumer project.
+- If building in this uploaded workspace, prefer creating `consumers/oneui-spfx-hue-dashboard` from the existing consumer pattern. SPFx generator availability is not a blocker in that path.
+- If scaffolding a separate repo from the SPFx generator, verify generator availability in the template first.
+- Use the SPFx 1.22.2 Heft workflow shown above. Do not switch to Gulp unless the generated project explicitly requires it.
+- Verify the tenant workbench URL is reachable.
+- Verify whether the corporate Nexus install registry differs from the publish registry.
+- Verify whether `pnpm` is available. If not, use `npm` in the external consumer project.
 
 ## 7. Nexus Registry Setup
 
 Use the Nexus npm group/proxy for installs if your org provides one. Use the hosted/writable registry only for publishing.
+
+The placeholders below are intentional. Do not commit real Nexus credentials into this repository. Claude needs the user or infrastructure team to provide:
+
+- `NEXUS_NPM_REGISTRY`: the install registry URL visible from RDX/Coder
+- `NEXUS_NPM_TOKEN` or Nexus basic-auth username/password/token credentials
 
 Consumer `.npmrc` example:
 
@@ -1078,7 +1166,7 @@ Yarn:
 
 ## 8. Design Target for New App
 
-The new HUE app should be inspired by the provided screenshot, but it should be implemented as a clean enterprise Fluent/OneUI dashboard rather than a pixel copy.
+The new HUE app should be inspired by the user's HUE screenshot if it is available in the target thread. If no screenshot is attached, build from the textual description below and do not attempt pixel-level fidelity. Implement a clean enterprise Fluent/OneUI dashboard rather than a blind copy.
 
 Target experience:
 
@@ -1141,15 +1229,17 @@ Use Fluent v9 `TabList`, `Tab`, `Table`, `TableHeader`, `TableBody`, etc. for ta
    npm view @functions-oneui/atoms versions --registry https://<nexus-host>/repository/<npm-group-or-hosted>/ --json
    ```
 
-3. Scaffold or inspect the SPFx solution.
+3. Create or inspect the SPFx solution.
 
-   If creating new:
+   Default in this uploaded workspace: create a new sibling consumer at `consumers/oneui-spfx-hue-dashboard` using the existing `consumers/oneui-spfx-enterprise-search` structure as a reference.
+
+   Only use the SPFx generator if the user wants a separate repo or a fully fresh scaffold:
 
    ```bash
    npx @microsoft/generator-sharepoint
    ```
 
-   Needs verification: generator availability in RDX/Coder.
+   Generator availability is an RDX/Coder template concern, not a blocker for the sibling-consumer approach.
 
 4. Add Vite preview harness if the project should run outside Workbench first.
 
