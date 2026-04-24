@@ -25,13 +25,15 @@ const meta = {
       { accentTone: "success", count: 8, id: "people", label: "People", status: "refreshing" },
       { accentTone: "info", id: "resources", label: "Resources", status: "error" },
       { accentTone: "neutral", id: "files", label: "Files", status: "empty" },
-      { accentTone: "warning", id: "sites", label: "Sites", status: "delayed" }
+      { accentTone: "warning", id: "sites", label: "Sites", status: "delayed" },
+      { accentTone: "brand", id: "policies", label: "Policies", status: "success", count: 4 },
+      { accentTone: "info", id: "tickets", label: "Tickets", status: "loading" }
     ],
-    loading: 0,
+    loading: 1,
     mode: "slim",
     percent: 57,
     refreshing: 1,
-    success: 2,
+    success: 3,
     title: "Searching across 7 enterprise systems...",
     total: 7
   },
@@ -118,10 +120,11 @@ export const MixedStates: Story = {
       { accentTone: "brand", id: "servicenow", label: "ServiceNow", status: "delayed" }
     ],
     loading: 0,
-    percent: 50,
+    percent: 60,
     refreshing: 0,
     success: 2,
-    title: "Section progress"
+    title: "Section progress",
+    total: 5
   }
 };
 
@@ -178,9 +181,16 @@ export const HookManagedExample: Story = {
             id: "it",
             label: "IT",
             status: completed < 3 ? "delayed" : "success"
+          },
+          {
+            accentTone: "info",
+            id: "finance",
+            label: "Finance",
+            status: completed < 2 ? "loading" : "success",
+            count: completed < 2 ? undefined : 3
           }
         ]}
-        loading={0}
+        loading={completed < 2 ? 1 : 0}
         percent={Math.round((completed / 3) * 100)}
         success={completed}
         title="Hook-managed status example"
